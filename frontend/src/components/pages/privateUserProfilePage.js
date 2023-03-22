@@ -34,6 +34,7 @@ const PrivateUserProfile = () => {
     <div class="container">
       <div class="col-md-12 text-center">
         <h1>{user && user.username}</h1>
+        <p>Years of experience: 1</p>
         <div class="col-md-12 text-center">
           <>
             <Button className="me-2" onClick={handleShow}>

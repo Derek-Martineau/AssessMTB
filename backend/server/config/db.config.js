@@ -8,8 +8,11 @@ module.exports = () => {
         useUnifiedTopology: true
     }
     try{
-        mongoose.connect(process.env.DB_URL)
+        mongoose.connect("mongodb+srv://AssessMTB:Admin1@cluster0.gdipouo.mongodb.net/?retryWrites=true&w=majority")
         console.log("The backend has connected to the MongoDB database.")
+
+        // TODO: add a class/method that initializes configuration data in mongo database
+        
     } catch(error){
         console.log(`${error} could not connect`)
     }

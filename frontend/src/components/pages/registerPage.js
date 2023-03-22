@@ -44,9 +44,12 @@ const Register = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      
       const { data } = await axios.post(url, data);
       // const {accessToken} = res
       //store token in localStorage
+      
+      console.log('I was called',data);
       navigate("/login");
     } catch (error) {
       if (
@@ -54,6 +57,7 @@ const Register = () => {
         error.response.status >= 400 &&
         error.response.status <= 500
       ) {
+        console.log('I was called error',error.response);
         setError(error.response.data.message);
       }
     }
@@ -78,7 +82,7 @@ const Register = () => {
                     placeholder="Enter username"
                   />
                   <Form.Text className="text-muted">
-                    We just might sell your data
+                    Please enter your username
                   </Form.Text>
                 </Form.Group>
                 <Form.Group className="mb-3" controlId="formBasicEmail">
@@ -90,7 +94,7 @@ const Register = () => {
                     placeholder="Enter Email Please"
                   />
                   <Form.Text className="text-muted">
-                    We just might sell your data
+                    Please enter your password
                   </Form.Text>
                 </Form.Group>
                 <Form.Group className="mb-3" controlId="formBasicPassword">
