@@ -21,9 +21,11 @@ const newUserSchema = new mongoose.Schema(
     date: {
       type: Date,
       default: Date.now,
-    },
-  },
-  { collection: "users" }
+    }
+  
+    /*friends: [{type: mongoose.Schema.Types.ObjectsId, ref: 'Friends'}]
+  }, //{timestamps: true}*/
+  }
 );
 
 module.exports = mongoose.model('users', newUserSchema)

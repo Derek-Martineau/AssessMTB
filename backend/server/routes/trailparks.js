@@ -14,7 +14,8 @@ router.post('/trailparks', async (req, res) => {
     const createTrailPark = new trailParks({
         parkName: req.body.parkName,
         description: req.body.description,
-        address: req.body.description
+        address: req.body.description,
+        photo: req.body.photo
     });
  
     try {
@@ -26,7 +27,7 @@ router.post('/trailparks', async (req, res) => {
 
 })
 
-async function checkIfParkExists(body)  {
+ async function checkIfParkExists(body)  {
     
   const { parkName } = req.body;
 
@@ -38,7 +39,7 @@ async function checkIfParkExists(body)  {
       .status(401)
       .send({ message: "park does not exists, try again" });
   }
-
 }
+ {checkIfParkExists}
 
   module.exports = router;

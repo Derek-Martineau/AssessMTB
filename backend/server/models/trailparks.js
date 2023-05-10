@@ -18,7 +18,16 @@ const trailparks = new mongoose.Schema(
       type: String,
       label: "The location of the trail park"
     },
-  },
+    photo: {
+      name: String,
+      desc: String,
+      
+    Segments: [{
+      segmentID: String,
+      }],
+      link: String
+
+    }},
   { collection: "trailparks" }
 );
 
