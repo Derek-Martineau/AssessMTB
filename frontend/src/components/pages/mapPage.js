@@ -11,13 +11,12 @@ const TrailforksWidget = () => {
       "https://es.pinkbike.org/ttl-86400/sprt/j/trailforks/widget.js"
     );
     document.getElementsByTagName("head")[0].appendChild(script);
+    
   }, []);
 
   return (
     //set background color to grey
-    <div   style={{ backgroundImage: 'url("pexels-photo-14255913.png")',
-    backgroundSize: 'cover',
-    backgroundPosition: 'center',}}>
+    <div   style={{ background: '#5A5A5A' }}>
      
     <div className='container h-100 style'
       style={{

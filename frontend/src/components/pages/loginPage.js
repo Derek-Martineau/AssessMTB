@@ -55,7 +55,8 @@ const Login = () => {
       const { accessToken } = res;
       //store token in localStorage
       localStorage.setItem("accessToken", accessToken);
-      navigate("/home");
+      navigate("/map");
+      window.location.reload();
     } catch (error) {
       if (
         error.response &&
@@ -68,7 +69,7 @@ const Login = () => {
   };
 
   if(user) {
-    navigate('/home')
+    navigate('/map')
     return
   }
 

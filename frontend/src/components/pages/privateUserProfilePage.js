@@ -4,38 +4,35 @@ import Modal from "react-bootstrap/Modal";
 import { useNavigate } from "react-router-dom";
 import getUserInfo from "../../utilities/decodeJwt";
 
-
-//link to service
-//http://localhost:8096/privateUserProfile
-
 const PrivateUserProfile = () => {
   const [show, setShow] = useState(false);
-  const [user, setUser] = useState({})
+  const [user, setUser] = useState({});
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
   const navigate = useNavigate();
 
-
   // handle logout button
-  const handleLogout = (async) => {
+  const handleLogout = () => {
     localStorage.clear();
-    navigate("/");
+    navigate("/map");
+    window.location.reload();
   };
 
   useEffect(() => {
-    setUser(getUserInfo())
+    setUser(getUserInfo());
   }, []);
 
+  if (!user) return <div><h4>Log in to view this page.</h4></div>;
 
-  // 	<span><b>{<FollowerCount username = {username}/>}</b></span>&nbsp;
-  // <span><b>{<FollowingCount username = {username}/>}</b></span>;
-  if (!user) return (<div><h4>Log in to view this page.</h4></div>)
   return (
-    <div class="container">
-      <div class="col-md-12 text-center">
-        <h1>{user && user.username}</h1>
-        <p>Years of experience: 1</p>
-        <div class="col-md-12 text-center">
+    <div className="container">
+      <div className="col-md-12 text-center">
+        <h1>{user.username}</h1>
+        <h3>{user.role}</h3>
+        <h3>Followers: {user.followers}</h3>
+        <h3>Following: {user.following}</h3>
+        <h3>Posts: {user.posts}</h3>
+        <div className="col-md-12 text-center">
           <>
             <Button className="me-2" onClick={handleShow}>
               Log Out
