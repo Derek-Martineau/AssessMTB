@@ -55,7 +55,7 @@ const Login = () => {
       const { accessToken } = res;
       //store token in localStorage
       localStorage.setItem("accessToken", accessToken);
-      navigate("/map");
+      navigate("/willowdale");
       window.location.reload();
     } catch (error) {
       if (
@@ -69,7 +69,7 @@ const Login = () => {
   };
 
   if(user) {
-    navigate('/map')
+    navigate('/willowdale')
     return
   }
 

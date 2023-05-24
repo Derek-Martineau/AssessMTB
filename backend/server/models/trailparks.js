@@ -21,14 +21,11 @@ const trailparks = new mongoose.Schema(
     photo: {
       name: String,
       desc: String,
-      
+     
+  },
     Segments: [{
-      segmentID: String,
+      type : mongoose.Schema.Types.ObjectId, ref: 'segments',
       }],
-      link: String
-
-    }},
-  { collection: "trailparks" }
-);
-
-module.exports = mongoose.model('trailparks', trailparks)
+  },
+  { collection: "trailparks" });
+  module.exports = mongoose.model('trailparks', trailparks);

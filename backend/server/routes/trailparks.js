@@ -3,7 +3,7 @@ const router = express.Router();
 const trailParks = require('../models/trailparks');
 
 router.get('/trailparks', async (req, res) => {
-    const park = await trailparks.find();
+    const park = await trailParks.find();
     return res.json(park)
   })
 
@@ -15,7 +15,10 @@ router.post('/trailparks', async (req, res) => {
         parkName: req.body.parkName,
         description: req.body.description,
         address: req.body.description,
-        photo: req.body.photo
+        photo: req.body.photo,
+        Segments: [{
+            segmentID: req.body.segmentID,
+            }]
     });
  
     try {

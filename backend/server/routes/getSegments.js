@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const segments = require('../models/segments');
+const segments = require('../models/segmentModel');
 
 //get all segments
 router.get('/segments', async (req, res) => {
@@ -32,3 +32,4 @@ router.get('/segments/:park', async (req, res) => {
     const segment = await segments.findOne({park: req.params.park});
     return res.json(segment)
   })
+  module.exports = router;

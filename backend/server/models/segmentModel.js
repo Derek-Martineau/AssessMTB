@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+const mongoose = require("mongoose");
 
 const segmentSchema = new mongoose.Schema({
     segmentName: {
@@ -16,10 +16,10 @@ const segmentSchema = new mongoose.Schema({
         type: String,
         label: "The difficulty of the segment"
     },
+    //friends: [{ type : ObjectId, ref: 'User' }],
     Features: [{
-        name: String,
-        desc: String,
-        link: String
+        required: true,
+        type : mongoose.Schema.Types.ObjectId, ref: 'features'
     }]
 }, { collection: "segments" });
 module.exports = mongoose.model('segments', segmentSchema)

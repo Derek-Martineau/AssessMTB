@@ -7,7 +7,7 @@ const HomePage = () => {
     const handleClick = (e) => {
         e.preventDefault();
         localStorage.removeItem('accessToken')
-        return navigate('/')
+        return navigate('/willowdale')
     }
 
     useEffect(() => {

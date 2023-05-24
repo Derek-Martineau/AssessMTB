@@ -9,7 +9,9 @@ import HomePage from "./components/pages/homePage";
 import Login from "./components/pages/loginPage";
 import Signup from "./components/pages/registerPage";
 import TrailforksWidget from "./components/pages/mapPage";
-
+import EditUserProfile from "./components/pages/editUserPage";
+import GordonCollege from "./components/pages/gordonCollege";
+import LynnWoods from "./components/pages/lynnWoods";
 import PrivateUserProfile from "./components/pages/privateUserProfilePage";
 import { createContext, useState, useEffect } from "react";
 import getUserInfo from "./utilities/decodeJwt";
@@ -34,7 +36,10 @@ const App = () => {
           <Route exact path="/login" element={<Login />} />
           <Route exact path="/signup" element={<Signup />} />
           <Route path="/privateUserProfile" element={<PrivateUserProfile />} />
-          <Route path="/map" element={<TrailforksWidget />} />
+          <Route path="/willowdale" element={<TrailforksWidget />} />
+          <Route path="/gordon" element={<GordonCollege />} />
+          <Route path="/lynnwoods" element={<LynnWoods />} />
+          <Route path="/editUserProfile" element={<EditUserProfile />} />
         </Routes>
       </UserContext.Provider>
     </>

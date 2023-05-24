@@ -53,4 +53,4 @@ POST  http://localhost:8081/user/deleteAll
 
 ###
 //get all trail parks
-GET http://localhost:8081/trailparks/trailparks
+GET http://localhost:8081/parks/trailparks
