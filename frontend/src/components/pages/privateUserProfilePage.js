@@ -19,7 +19,8 @@ const PrivateUserProfile = () => {
     navigate("/willowdale");
     window.location.reload();
   };
-  //handle profile picture upload
+
+  // handle profile picture upload
   const handleProfilePictureUpload = async (event) => {
     const file = event.target.files[0];
     const formData = new FormData();
@@ -60,8 +61,8 @@ const PrivateUserProfile = () => {
           <input type="file" onChange={handleProfilePictureUpload} accept="image/*" />
         </div>
         <div className="col-md-9">
-        {profilePicture && <img src={profilePicture} alt="Profile" width="200" />}
-   
+          {profilePicture && <img src={profilePicture} alt="Profile" width="200" />}
+
           <h1>{user.username}</h1>
           <h3>{user.role}</h3>
           <h3>Followers: {user.followers}</h3>

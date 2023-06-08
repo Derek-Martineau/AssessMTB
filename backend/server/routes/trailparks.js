@@ -46,3 +46,9 @@ router.post('/trailparks', async (req, res) => {
  {checkIfParkExists}
 
   module.exports = router;
+
+  //get park description by id
+  router.get('/trailparks/:id', async (req, res) => {
+    const park = await trailParks.findById(req.params.id);
+    return res.json(park)
+  })
