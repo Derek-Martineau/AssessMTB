@@ -12,6 +12,7 @@ import TrailforksWidget from "./components/pages/mapPage";
 import EditUserProfile from "./components/pages/editUserPage";
 import GordonCollege from "./components/pages/gordonCollege";
 import LynnWoods from "./components/pages/lynnWoods";
+import CallParks from "./components/pages/newAssessment"
 import PrivateUserProfile from "./components/pages/privateUserProfilePage";
 import { createContext, useState, useEffect } from "react";
 import getUserInfo from "./utilities/decodeJwt";
@@ -40,6 +41,7 @@ const App = () => {
           <Route path="/gordon" element={<GordonCollege />} />
           <Route path="/lynnwoods" element={<LynnWoods />} />
           <Route path="/editUserProfile" element={<EditUserProfile />} />
+          <Route path="/newAssessment" element={<CallParks />}/>
         </Routes>
       </UserContext.Provider>
     </>

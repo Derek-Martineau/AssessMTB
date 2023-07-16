@@ -54,6 +54,7 @@ export default function Navbar() {
     //if logged in show profile
     if(user){
       return (      <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-end', color:'#a299a3' }}>
+      <Nav.Link style={{paddingRight:'10px'}} href="/newAssessment">Assess a Segment</Nav.Link>
       <Nav.Link href="/privateUserProfile">Profile</Nav.Link>
     </div>)
     //if not logged in show login and register
