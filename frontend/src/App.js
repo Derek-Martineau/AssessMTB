@@ -16,6 +16,7 @@ import CallParks from "./components/pages/newAssessment"
 import PrivateUserProfile from "./components/pages/privateUserProfilePage";
 import { createContext, useState, useEffect } from "react";
 import getUserInfo from "./utilities/decodeJwt";
+import CallSegments from "./components/pages/selectSegment";
 
 export const UserContext = createContext();
 //test change
@@ -42,6 +43,7 @@ const App = () => {
           <Route path="/lynnwoods" element={<LynnWoods />} />
           <Route path="/editUserProfile" element={<EditUserProfile />} />
           <Route path="/newAssessment" element={<CallParks />}/>
+          <Route path="/newAssessment/selectSegment" element={<CallSegments />}/>
         </Routes>
       </UserContext.Provider>
     </>

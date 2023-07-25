@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, Redirect } from "react";
 import { Card, Button } from "react-bootstrap";
 
 class CallParks extends Component {
@@ -7,6 +7,7 @@ class CallParks extends Component {
     this.state = {
       data: [],
       selectedPark: null,
+      redirectToSegment: false,
     };
   }
 
@@ -25,6 +26,7 @@ class CallParks extends Component {
     if (selectedPark) {
       // Do something with the selected park, e.g., store it in the state or pass it to a parent component.
       console.log("Selected Park:", selectedPark);
+      this.setState({ redirectToSegment: true });
     } else {
       alert("Please select a park first.");
     }
@@ -32,18 +34,24 @@ class CallParks extends Component {
 
   render() {
     const buttonStyle = {
-      margin: "3px 0", // Adjust the vertical padding here
+      margin: "3px 0", // Adjust the vertical padding
     };
 
     const buttonWrapperStyle = {
       display: "flex",
       justifyContent: "space-between",
-      flexDirection: "row-reverse", // Reverse the row
+      flexDirection: "row-reverse",
     };
+
+    const { redirectToSegment } = this.state;
+
+    if (redirectToSegment) {
+      return <Redirect to="http://localhost:8096/newAssessment/selectSegment" />;
+    }
 
     return (
       <div style={{ display: "flex", justifyContent: "center", alignItems: "center", minHeight: "50vh" }}>
-        <Card style={{ width: "18rem" }}>
+        <Card style={{ width: "20rem"}}>
           <Card.Body>
             <Card.Title>Which Park Did You Ride?</Card.Title>
             <div>
