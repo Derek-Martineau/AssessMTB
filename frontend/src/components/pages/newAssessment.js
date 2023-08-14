@@ -1,5 +1,6 @@
-import React, { Component, Redirect } from "react";
+import React, { Component } from "react";
 import { Card, Button } from "react-bootstrap";
+import { Navigate } from "react-router-dom"; 
 
 class CallParks extends Component {
   constructor() {
@@ -46,7 +47,7 @@ class CallParks extends Component {
     const { redirectToSegment } = this.state;
 
     if (redirectToSegment) {
-      return <Redirect to="http://localhost:8096/newAssessment/selectSegment" />;
+      return <Navigate to="/newAssessment/selectSegment" />;
     }
 
     return (
