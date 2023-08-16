@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Card, Button } from "react-bootstrap";
-import { Navigate } from "react-router-dom"; 
+import { Navigate } from "react-router-dom";
 
 class CallSegments extends Component {
   constructor() {
@@ -8,17 +8,17 @@ class CallSegments extends Component {
     this.state = {
       data: [],
       selectedSegment: null,
-      redirectToFeat1: false
+      redirectToFeat1: false,
     };
   }
 
   async componentDidMount() {
     try {
-      const response = await fetch('http://localhost:8081/api/segments');
+      const response = await fetch("http://localhost:8081/api/segments");
       const json = await response.json();
       this.setState({ data: json });
     } catch (error) {
-      console.error("Error fetching segments:", error);
+      console.error("Error fetching data:", error);
     }
   }
 
@@ -50,9 +50,11 @@ class CallSegments extends Component {
     const { redirectToFeat1 } = this.state;
 
     if (redirectToFeat1) {
-      // Update Redirect to feat1
-      return <Navigate to="http://localhost:8096/newAssessment/selectSegment" />;
+      // Redirect to feat1
+      return <Navigate to="/selectSegment/selectFeature" />;
     }
+
+    console.log("Data:", this.state.data); // Troubleshooting step
 
     return (
       <div style={{ display: "flex", justifyContent: "center", alignItems: "center", minHeight: "50vh" }}>
@@ -61,17 +63,21 @@ class CallSegments extends Component {
             <Card.Title>Which Segment Did You Ride?</Card.Title>
             <div>
               <ul>
-                {this.state.data.map(segment => (
-                  <li key={segment.id}>
-                    <Button
-                      variant={this.state.selectedSegment === segment ? "success" : "primary"}
-                      style={buttonStyle}
-                      onClick={() => this.handleSegmentSelection(segment)}
-                    >
-                      {segment.SegmentName} {/* Check the property name */}
-                    </Button>
-                  </li>
-                ))}
+                {this.state.data.map(el => {
+                  console.log("ID:", el.id); 
+                  return (
+                    <li key={el.id}>
+                      <Button
+                        variant={this.state.selectedSegment === el ? "success" : "primary"}
+                        style={buttonStyle}
+                        onClick={() => this.handleSegmentSelection(el)}
+                      >
+                        
+                        {el.segmentName}
+                      </Button>
+                    </li>
+                  );
+                })}
               </ul>
             </div>
             <div style={buttonWrapperStyle}>
