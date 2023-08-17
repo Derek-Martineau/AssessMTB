@@ -56,7 +56,7 @@ class CallFeature extends Component {
                 Next
               </Button>
               <Button
-                variant={activeButtonIndex === 0 ? "success" : "primary"} // Apply "success" variant for the selected button
+                variant={activeButtonIndex === 0 ? "success" : "primary"}
                 onClick={() => this.handleLineSelection("Walked", 0)}
               >
                 Walked

@@ -18,6 +18,7 @@ import { createContext, useState, useEffect } from "react";
 import getUserInfo from "./utilities/decodeJwt";
 import CallSegments from "./components/pages/selectSegment";
 import CallFeature from "./components/pages/selectFeature";
+import PostResults from "./components/pages/assessResultPage";
 
 export const UserContext = createContext();
 //test change
@@ -46,6 +47,7 @@ const App = () => {
           <Route path="/newAssessment" element={<CallParks />}/>
           <Route path="/newAssessment/selectSegment" element={<CallSegments />}/>
           <Route path="/selectSegment/selectFeature" element={<CallFeature />}/>
+          <Route path="/results" element={<PostResults />}/>
         </Routes>
       </UserContext.Provider>
     </>
