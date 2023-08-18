@@ -9,6 +9,7 @@ class CallSegments extends Component {
       data: [],
       selectedSegment: null,
       redirectToFeat1: false,
+      redirectToPreviousPage: false, // Go Back
     };
   }
 
@@ -36,6 +37,13 @@ class CallSegments extends Component {
     }
   };
 
+  handleBackClick = () => {
+    const shouldGoBack = window.confirm("Are you sure you want to change the park?");
+    if (shouldGoBack) {
+      this.setState({ redirectToPreviousPage: true });
+    }
+  };
+
   render() {
     const buttonStyle = {
       margin: "3px 0", // vertical padding
@@ -47,14 +55,17 @@ class CallSegments extends Component {
       flexDirection: "row-reverse",
     };
 
-    const { redirectToFeat1 } = this.state;
+    const { redirectToFeat1, redirectToPreviousPage } = this.state;
 
     if (redirectToFeat1) {
       // Redirect to feat1
       return <Navigate to="/selectSegment/selectFeature" />;
     }
+    if (redirectToPreviousPage) {
+      return <Navigate to="/newAssessment" />;
+    }
 
-    console.log("Data:", this.state.data); // Troubleshooting step
+    console.log("Data:", this.state.data);
 
     return (
       <div style={{ display: "flex", justifyContent: "center", alignItems: "center", minHeight: "50vh" }}>
@@ -72,7 +83,6 @@ class CallSegments extends Component {
                         style={buttonStyle}
                         onClick={() => this.handleSegmentSelection(el)}
                       >
-                        
                         {el.segmentName}
                       </Button>
                     </li>
@@ -81,9 +91,12 @@ class CallSegments extends Component {
               </ul>
             </div>
             <div style={buttonWrapperStyle}>
-              <Button variant="primary" onClick={this.handleNextClick} disabled={!this.state.selectedSegment}>
-                Next
-              </Button>
+              <div style={{ display: "flex", justifyContent: "center" }}>
+              <Button variant="danger" onClick={this.handleBackClick}>Change Park</Button>
+                <Button variant="primary" onClick={this.handleNextClick} disabled={!this.state.selectedSegment}>
+                  Next
+                </Button>
+              </div>
             </div>
           </Card.Body>
         </Card>
