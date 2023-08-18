@@ -40,8 +40,7 @@ class CallParks extends Component {
 
     const buttonWrapperStyle = {
       display: "flex",
-      justifyContent: "space-between",
-      flexDirection: "row-reverse",
+      justifyContent: "center", // Center the button horizontally
     };
 
     const { redirectToSegment } = this.state;
@@ -51,7 +50,7 @@ class CallParks extends Component {
     }
 
     return (
-      <div style={{ display: "flex", justifyContent: "center", alignItems: "center", minHeight: "50vh" }}>
+      <div style={{ background: '#5A5A5A', minHeight: "100vh", display: "flex", justifyContent: "center", alignItems: "center" }}>
         <Card style={{ width: "20rem"}}>
           <Card.Body>
             <Card.Title>Which Park Did You Ride?</Card.Title>

@@ -9,7 +9,7 @@ class CallSegments extends Component {
       data: [],
       selectedSegment: null,
       redirectToFeat1: false,
-      redirectToPreviousPage: false, // Go Back
+      redirectToPreviousPage: false,
     };
   }
 
@@ -58,7 +58,6 @@ class CallSegments extends Component {
     const { redirectToFeat1, redirectToPreviousPage } = this.state;
 
     if (redirectToFeat1) {
-      // Redirect to feat1
       return <Navigate to="/selectSegment/selectFeature" />;
     }
     if (redirectToPreviousPage) {
@@ -68,7 +67,7 @@ class CallSegments extends Component {
     console.log("Data:", this.state.data);
 
     return (
-      <div style={{ display: "flex", justifyContent: "center", alignItems: "center", minHeight: "50vh" }}>
+      <div style={{ background: '#5A5A5A', minHeight: "100vh", display: "flex", justifyContent: "center", alignItems: "center" }}>
         <Card style={{ width: "18rem" }}>
           <Card.Body>
             <Card.Title>Which Segment Did You Ride?</Card.Title>
@@ -92,7 +91,7 @@ class CallSegments extends Component {
             </div>
             <div style={buttonWrapperStyle}>
               <div style={{ display: "flex", justifyContent: "center" }}>
-              <Button variant="danger" onClick={this.handleBackClick}>Change Park</Button>
+                <Button variant="danger" onClick={this.handleBackClick}>Change Park</Button>
                 <Button variant="primary" onClick={this.handleNextClick} disabled={!this.state.selectedSegment}>
                   Next
                 </Button>

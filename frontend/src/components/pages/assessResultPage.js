@@ -46,7 +46,10 @@ class PostResults extends Component {
   };
 
   handleDiscardClick = () => {
-    this.setState({ redirectToWillowdale: true });
+    const shouldDiscard = window.confirm("Are you sure you want to change the segment?");
+    if (shouldDiscard) {
+      this.setState({ redirectToWillowdale: true });
+    }
   };
 
   render() {
@@ -61,7 +64,7 @@ class PostResults extends Component {
     }
 
     return (
-      <div style={{ display: "flex", justifyContent: "center", alignItems: "center", minHeight: "50vh" }}>
+      <div style={{ background: '#5A5A5A', minHeight: "100vh", display: "flex", justifyContent: "center", alignItems: "center" }}>
         <Card style={{ width: "45rem" }}>
           <Card.Body>
             <div style={{ display: "flex", justifyContent: "center" }}>

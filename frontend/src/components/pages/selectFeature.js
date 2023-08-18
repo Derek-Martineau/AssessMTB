@@ -10,6 +10,7 @@ class CallFeature extends Component {
       selectedLine: null,
       activeButtonIndex: -1,
       redirectToFeat2: false,
+      redirectToNewAssessment: false,
     };
   }
 
@@ -27,6 +28,13 @@ class CallFeature extends Component {
     }
   };
 
+  handleDiscardClick = () => {
+    const shouldDiscard = window.confirm("Are you sure you want to change the segment?");
+    if (shouldDiscard) {
+      this.setState({ redirectToNewAssessment: true });
+    }
+  };
+
   render() {
     const buttonWrapperStyle = {
       display: "flex",
@@ -34,27 +42,25 @@ class CallFeature extends Component {
       flexDirection: "row-reverse",
     };
 
-    const { redirectToFeat2, activeButtonIndex } = this.state;
+    const { redirectToFeat2, activeButtonIndex, redirectToNewAssessment } = this.state;
 
     if (redirectToFeat2) {
+      return <Navigate to="/results" />;
+    }
+
+    if(redirectToNewAssessment) {
       return <Navigate to="/newAssessment/selectSegment" />;
     }
 
     return (
-      <div style={{ display: "flex", justifyContent: "center", alignItems: "center", minHeight: "150vh" }}>
+      <div style={{ background: '#5A5A5A', minHeight: "100vh", display: "flex", justifyContent: "center", alignItems: "center" }}>
         <Card style={{ width: "45rem" }}>
           <Card.Body>
             <div style={{ display: "flex", justifyContent: "center" }}>
               <Card.Title>Which line did you choose?</Card.Title>
             </div>
+            <br></br>
             <div style={buttonWrapperStyle}>
-              <Button
-                variant="primary"
-                onClick={this.handleNextClick}
-                disabled={activeButtonIndex === -1}
-              >
-                Next
-              </Button>
               <Button
                 variant={activeButtonIndex === 0 ? "success" : "primary"}
                 onClick={() => this.handleLineSelection("Walked", 0)}
@@ -78,6 +84,17 @@ class CallFeature extends Component {
                 onClick={() => this.handleLineSelection("A", 3)}
               >
                 A
+              </Button>
+            </div>
+            <br></br>
+            <div style={{ display: "flex", justifyContent: "flex-end", padding: '5px' }}>
+              <Button variant="danger" onClick={this.handleDiscardClick}>Change Segment</Button>
+              <Button
+                variant="primary"
+                onClick={this.handleNextClick}
+                disabled={activeButtonIndex === -1}
+              >
+                Next
               </Button>
             </div>
           </Card.Body>
