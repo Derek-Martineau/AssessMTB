@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Card, Button } from "react-bootstrap";
+import { Card, Button, Modal } from "react-bootstrap";
 import { Navigate } from "react-router-dom";
 
 class CallSegments extends Component {
@@ -10,6 +10,7 @@ class CallSegments extends Component {
       selectedSegment: null,
       redirectToFeat1: false,
       redirectToPreviousPage: false,
+      showModal: false,
     };
   }
 
@@ -38,10 +39,23 @@ class CallSegments extends Component {
   };
 
   handleBackClick = () => {
-    const shouldGoBack = window.confirm("Are you sure you want to change the park?");
-    if (shouldGoBack) {
-      this.setState({ redirectToPreviousPage: true });
-    }
+    this.setState({ showModal: true });
+  };
+
+  handleModalConfirm = () => {
+    this.setState({ redirectToPreviousPage: true, showModal: false });
+  };
+
+  handleModalCancel = () => {
+    this.setState({ showModal: false });
+  };
+
+  handleInstructionsShow = () => {
+    this.setState({ showInstructionsModal: true });
+  };
+
+  handleInstructionsClose = () => {
+    this.setState({ showInstructionsModal: false });
   };
 
   render() {
@@ -55,7 +69,7 @@ class CallSegments extends Component {
       flexDirection: "row-reverse",
     };
 
-    const { redirectToFeat1, redirectToPreviousPage } = this.state;
+    const { redirectToFeat1, redirectToPreviousPage, showModal, showInstructionsModal } = this.state;
 
     if (redirectToFeat1) {
       return <Navigate to="/selectSegment/selectFeature" />;
@@ -91,6 +105,7 @@ class CallSegments extends Component {
             </div>
             <div style={buttonWrapperStyle}>
               <div style={{ display: "flex", justifyContent: "center" }}>
+                <Button variant="info" onClick={this.handleInstructionsShow}>Help</Button>
                 <Button variant="danger" onClick={this.handleBackClick}>Change Park</Button>
                 <Button variant="primary" onClick={this.handleNextClick} disabled={!this.state.selectedSegment}>
                   Next
@@ -99,6 +114,33 @@ class CallSegments extends Component {
             </div>
           </Card.Body>
         </Card>
+        {/* Custom modal */}
+        <Modal show={showModal} onHide={this.handleModalCancel}>
+          <Modal.Header closeButton>
+            <Modal.Title>Change Park Confirmation</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            Are you sure you want to change the park?
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={this.handleModalCancel}>Cancel</Button>
+            <Button variant="danger" onClick={this.handleModalConfirm}>Confirm</Button>
+          </Modal.Footer>
+        </Modal>
+        <Modal show={showInstructionsModal} onHide={this.handleInstructionsClose}>
+          <Modal.Header closeButton>
+            <Modal.Title>Assessment Instructions</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <p><strong>Step 1:</strong> Select the park you would like to assess a segment in. Press the "Next" button to confirm and continue.</p>
+            <p><strong>Step 2:</strong> Select the segment you would like to assess your technical ability on.</p>
+            <p><strong>Step 3:</strong> Follow through the features displayed. Select the line that you traveled over. Lines are ranked in alphapbetical order descending. This means that the A line is the hardest line to complete and results in the most points possible per feature. You can also select walked if you had failed/missed the feature.</p>
+            <p><strong>Step 4:</strong> View your assessment score and decide to delete or share the segment. The Assessment score can also be saved to only your personal records if you wish not to share the results.</p>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={this.handleInstructionsClose}>Close</Button>
+          </Modal.Footer>
+        </Modal>
       </div>
     );
   }

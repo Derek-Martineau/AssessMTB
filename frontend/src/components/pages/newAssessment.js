@@ -1,6 +1,6 @@
 import React, { Component } from "react";
-import { Card, Button } from "react-bootstrap";
-import { Navigate } from "react-router-dom"; 
+import { Card, Button, Modal } from "react-bootstrap";
+import { Navigate } from "react-router-dom";
 
 class CallParks extends Component {
   constructor() {
@@ -9,6 +9,9 @@ class CallParks extends Component {
       data: [],
       selectedPark: null,
       redirectToSegment: false,
+      showHelpModal: false,
+      loadingBarFillWidth: "100%", // Start the loading bar full
+      showInstructionsModal: false, 
     };
   }
 
@@ -16,6 +19,27 @@ class CallParks extends Component {
     const response = await fetch(`http://localhost:8081/parks/trailparks`);
     const json = await response.json();
     this.setState({ data: json });
+
+    // Show the help notification after 10 seconds
+    setTimeout(() => {
+      this.setState({ showHelpModal: true });
+      // Automatically close the notification after 10 seconds
+      setTimeout(() => {
+        this.setState({ showHelpModal: false });
+      }, 10000);
+
+      // Update the loading bar fill width over 10 seconds
+      let loadingProgress = 100; // Start the loading bar full
+      const interval = setInterval(() => {
+        loadingProgress -= 1;
+        const fillWidth = `${loadingProgress}%`;
+        this.setState({ loadingBarFillWidth: fillWidth });
+
+        if (loadingProgress <= 0) {
+          clearInterval(interval);
+        }
+      }, 100);
+    }, 0);
   }
 
   handleParkSelection = (park) => {
@@ -25,12 +49,23 @@ class CallParks extends Component {
   handleNextClick = () => {
     const { selectedPark } = this.state;
     if (selectedPark) {
-      // Do something with the selected park, e.g., store it in the state or pass it to a parent component.
       console.log("Selected Park:", selectedPark);
       this.setState({ redirectToSegment: true });
     } else {
       alert("Please select a park first.");
     }
+  };
+
+  handleHelpYesClick = () => {
+    this.setState({ showInstructionsModal: true, showHelpModal: false });
+  };
+
+  handleInstructionsShow = () => {
+    this.setState({ showInstructionsModal: true });
+  };
+
+  handleInstructionsClose = () => {
+    this.setState({ showInstructionsModal: false });
   };
 
   render() {
@@ -43,7 +78,40 @@ class CallParks extends Component {
       justifyContent: "center", // Center the button horizontally
     };
 
-    const { redirectToSegment } = this.state;
+    const cardStyle = {
+      width: "25rem", // Adjust card width
+      padding: "20px", // Add padding
+    };
+
+    const notificationStyle = {
+      position: "fixed",
+      top: "12.2%",
+      right: 0,
+      transform: "translateY(-50%)",
+      padding: "10px",
+      backgroundColor: "#f8f9fa",
+      boxShadow: "0px 2px 5px rgba(0, 0, 0, 0.2)",
+      display: "flex",
+      flexDirection: "column",
+      alignItems: "center",
+    };
+
+    const loadingBarStyle = {
+      width: "100%",
+      height: "10px",
+      backgroundColor: "#ccc",
+      position: "relative",
+      marginTop: "5px",
+    };
+
+    const loadingBarFillStyle = {
+      width: this.state.loadingBarFillWidth,
+      height: "100%",
+      backgroundColor: "#007bff",
+      position: "absolute",
+    };
+
+    const { redirectToSegment, showHelpModal, showInstructionsModal } = this.state;
 
     if (redirectToSegment) {
       return <Navigate to="/newAssessment/selectSegment" />;
@@ -51,9 +119,11 @@ class CallParks extends Component {
 
     return (
       <div style={{ background: '#5A5A5A', minHeight: "100vh", display: "flex", justifyContent: "center", alignItems: "center" }}>
-        <Card style={{ width: "20rem"}}>
+        <Card style={cardStyle}>
           <Card.Body>
             <Card.Title>Which Park Did You Ride?</Card.Title>
+            <Card.Subtitle>Please select the park you would like to assess a segment on.</Card.Subtitle>
+            <br></br>
             <div>
               <ul>
                 {this.state.data.map(el => (
@@ -70,12 +140,38 @@ class CallParks extends Component {
               </ul>
             </div>
             <div style={buttonWrapperStyle}>
+            <Button variant="info" onClick={this.handleInstructionsShow}>Help</Button>
               <Button variant="primary" onClick={this.handleNextClick} disabled={!this.state.selectedPark}>
                 Next
               </Button>
             </div>
           </Card.Body>
         </Card>
+        {/* Help notification */}
+        {showHelpModal && (
+          <div style={notificationStyle}>
+            <p>Would you like assistance on how to take the assessment?</p>
+            <Button variant="primary" onClick={this.handleHelpYesClick}>Yes</Button>
+            <div style={loadingBarStyle}>
+              <div style={loadingBarFillStyle}></div>
+            </div>
+          </div>
+        )}
+        {/* Instructions Modal */}
+        <Modal show={showInstructionsModal} onHide={this.handleInstructionsClose}>
+          <Modal.Header closeButton>
+            <Modal.Title>Assessment Instructions</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <p><strong>Step 1:</strong> Select the park you would like to assess a segment in. Press the "Next" button to confirm and continue.</p>
+            <p><strong>Step 2:</strong> Select the segment you would like to assess your technical ability on.</p>
+            <p><strong>Step 3:</strong> Follow through the features displayed. Select the line that you traveled over. Lines are ranked in alphapbetical order descending. This means that the A line is the hardest line to complete and results in the most points possible per feature. You can also select walked if you had failed/missed the feature.</p>
+            <p><strong>Step 4:</strong> View your assessment score and decide to delete or share the segment. The Assessment score can also be saved to only your personal records if you wish not to share the results.</p>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={this.handleInstructionsClose}>Close</Button>
+          </Modal.Footer>
+        </Modal>
       </div>
     );
   }

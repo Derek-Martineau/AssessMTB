@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Card, Button } from "react-bootstrap";
+import { Card, Button, Modal } from "react-bootstrap";
 import { Navigate } from "react-router-dom";
 
 class PostResults extends Component {
@@ -11,6 +11,7 @@ class PostResults extends Component {
       activeButtonIndex: -1,
       redirectToFeat2: false,
       redirectToWillowdale: false,
+      showModal: false,
     };
   }
 
@@ -46,14 +47,19 @@ class PostResults extends Component {
   };
 
   handleDiscardClick = () => {
-    const shouldDiscard = window.confirm("Are you sure you want to change the segment?");
-    if (shouldDiscard) {
-      this.setState({ redirectToWillowdale: true });
-    }
+    this.setState({ showModal: true });
+  };
+
+  handleModalConfirm = () => {
+    this.setState({ redirectToWillowdale: true, showModal: false });
+  };
+
+  handleModalCancel = () => {
+    this.setState({ showModal: false });
   };
 
   render() {
-    const { redirectToFeat2, redirectToWillowdale } = this.state;
+    const { redirectToFeat2, redirectToWillowdale, showModal } = this.state;
 
     if (redirectToFeat2) {
       return <Navigate to="/feat2" />;
@@ -77,6 +83,19 @@ class PostResults extends Component {
             </div>
           </Card.Body>
         </Card>
+        {/* Alert styling */}
+        <Modal show={showModal} onHide={this.handleModalCancel}>
+          <Modal.Header closeButton>
+            <Modal.Title>Discard Assessment</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            Are you sure you want to discard the assessment?
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={this.handleModalCancel}>Cancel</Button>
+            <Button variant="danger" onClick={this.handleModalConfirm}>Discard</Button>
+          </Modal.Footer>
+        </Modal>
       </div>
     );
   }
