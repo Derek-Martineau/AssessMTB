@@ -1,7 +1,8 @@
-import React, { useEffect } from 'react';
-
+import React, { useEffect, useState } from 'react';
 
 const GordonCollege = () => {
+  const [parkDescription, setParkDescription] = useState('');
+
   useEffect(() => {
     const script = document.createElement("script");
     script.setAttribute(
@@ -9,7 +10,29 @@ const GordonCollege = () => {
       "https://es.pinkbike.org/ttl-86400/sprt/j/trailforks/widget.js"
     );
     document.getElementsByTagName("head")[0].appendChild(script);
+
+    fetchData();
   }, []);
+
+  async function fetchData() {
+    try {
+      //Fetch data
+      const response = await fetch("http://localhost:8081/parks/trailparks");
+      const data = await response.json();
+
+      //Find description for Gordon College
+      const park = data.find(park => park.parkName === "Gordon College");
+
+      if (park) {
+        //Set description
+        setParkDescription(park.description || 'No description available');
+      } else {
+        setParkDescription('Park not found');
+      }
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  }
 
   return (
     <div style={{ background: '#5A5A5A' }}>
@@ -50,6 +73,12 @@ const GordonCollege = () => {
             data-lon=""
             data-hideunsanctioned="0"
           ></div>
+          <div>
+            <h2>Description</h2>
+            <div style={{ backgroundColor: '#333', padding: '15px', borderRadius: '5px', marginBottom: '20px' }}>
+              <p style={{ color: '#FFF', fontSize: '16px', lineHeight: '1.5' }}>{parkDescription}</p>
+            </div>
+          </div>
         </div>
       </div>
     </div>

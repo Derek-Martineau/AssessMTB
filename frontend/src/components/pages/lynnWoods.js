@@ -1,6 +1,8 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 
 const LynnWoods = () => {
+  const [parkDescription, setParkDescription] = useState('');
+
   useEffect(() => {
     const script = document.createElement("script");
     script.setAttribute(
@@ -8,7 +10,29 @@ const LynnWoods = () => {
       "https://es.pinkbike.org/ttl-86400/sprt/j/trailforks/widget.js"
     );
     document.getElementsByTagName("head")[0].appendChild(script);
+
+    fetchData();
   }, []);
+
+  async function fetchData() {
+    try {
+      //Fetch data 
+      const response = await fetch("http://localhost:8081/parks/trailparks");
+      const data = await response.json();
+
+      //Find the description for Lynn Woods
+      const park = data.find(park => park.parkName === "Lynn Woods");
+
+      if (park) {
+        // Set description
+        setParkDescription(park.description || 'No description available');
+      } else {
+        setParkDescription('Park not found');
+      }
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  }
 
   return (
     <div style={{ background: '#5A5A5A'}}>
@@ -50,57 +74,10 @@ const LynnWoods = () => {
             data-hideunsanctioned="0"
           ></div>
           <div>
-            <p>
-              Why would anyone want to ride in the Willowdale State Forest when right across the street is the much better-known Bradley Palmer State Forest? Well, maybe it's because the forest's 2400 acres hold over 40 miles of trails. Or maybe it's because you normally have the entire place to yourself. Whatever the reason, Willowdale State Forest should be high on everyone's list for exploration.
-            </p>
-
-            <p>
-              Willowdale State Forest is located mostly in the town of Ipswich. Many of the forest's trails are easy doubletracks, which makes Willowdale an excellent place for family-friendly riding. And there are three color-coded marked loops to follow.
-            </p>
-
-            <p>
-              The forest's singletrack trails are some of the most enjoyable trails that I have ever ridden. The best of these lay in the northern section of the Pine Swamp area. The forest is divided up into two main parcels: the aforementioned Pine Swamp area and the Hood Pond area. Most people park on Ipswich Road alongside the Ipswich River. You'll find numbered markers at all of the forest's main intersections. Bring a copy of the maps, and you'll always know where you are. The Bay Circuit Trail runs through Willowdale and is marked by white blazes.
-            </p>
-
-            <p>
-              Plan to spend more than one day exploring Willowdale's many trails. Looking for more riding? Well, just across that bridge on the Ipswich River, you'll find Bradley Palmer State Park, and Georgetown-Rowley State Forest is also nearby. And for a truly epic ride, you can link all three together.
-            </p>
-
-            <p>
-              For a good exploratory ride, print out the Pine Swamp MAP. Then take a highlighter and outline the following route: Head north into the forest from the parking area and turn left at marker 31. Follow that trail to 35 and then to 33, 36, 45, 49, 30, 12, 11, 40, 43, 41, 39, 38, 37, 27, 26, 25, 24, and then take the Bay Circuit Path down through 4, 5, 60, 30, 32, 22 & 42. At that point, you'll have over 9 miles on your clock and will have sampled some of Willowdale's best trails. Oh, and remember all those trails leading off from this ride? They are just more reasons to head out again.
-            </p>
-
-            <p>
-              Want something else to do while you're there? Check out the Willowdale Estate in the contiguous Bradley Palmer State Forest. Or rent a kayak or a canoe a half mile away at Foote Brothers.
-            </p>
-
-            <p>
-              Looking for even more trails? Check out the "Discover Hamilton" trail MAP.
-            </p>
-
-            <p>
-              The GPS File available for download is a nice 2.5-hour intermediate loop at Willowdale. Please note that it crosses a busy road from one section of Willowdale to the other side. It also comes out on Ipswich Road for a short bit before it comes back into the park.
-            </p>
-
-            <p>
-              Source: NEMBA<br />
-              Primary Trail Type: Cross-Country<br />
-              eBikes Allowed: No<br />
-              Land Status: State Forest
-            </p>
-
-            <p>
-              Access Info:<br />
-              Note that there are two parking locations for Willowdale: one on 259 Linebrook Rd. in Ipswich and the other at 280 Ipswich Rd in Topsfield. The most common for mountain bikers is Linebrook.
-            </p>
-
-            <p>
-              Disclaimer:<br />
-              No alcohol<br />
-              No motorized vehicles<br />
-              No hunting east of Route 1<br />
-              Stay on designated trails and roads.
-            </p>
+            <h2>Description</h2>
+            <div style={{ backgroundColor: '#333', padding: '15px', borderRadius: '5px', marginBottom: '20px' }}>
+              <p style={{ color: '#FFF', fontSize: '16px', lineHeight: '1.5' }}>{parkDescription}</p>
+            </div>
           </div>
         </div>
       </div>
