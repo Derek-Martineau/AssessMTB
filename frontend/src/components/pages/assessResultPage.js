@@ -15,10 +15,6 @@ class PostResults extends Component {
     };
   }
 
-  handleLineSelection = (line, index) => {
-    this.setState({ selectedLine: line, activeButtonIndex: index });
-  };
-
   handleNextClick = async () => {
     const { selectedLine } = this.state;
     if (selectedLine) {
@@ -83,7 +79,7 @@ class PostResults extends Component {
             </div>
           </Card.Body>
         </Card>
-        {/* Alert styling */}
+        {/* Alert Modal */}
         <Modal show={showModal} onHide={this.handleModalCancel}>
           <Modal.Header closeButton>
             <Modal.Title>Discard Assessment</Modal.Title>

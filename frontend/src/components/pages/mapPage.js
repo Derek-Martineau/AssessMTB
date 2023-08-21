@@ -32,19 +32,10 @@ const TrailforksWidget = () => {
   }
 
   return (
-    <div style={{ background: '#5A5A5A' }}>
-      <div
-        className='container h-100 style'
-        style={{
-          color: 'white',
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          height: '300px',
-          width: '2000px',
-        }}
-      >
+    <div style={{ background: '#5A5A5A', minHeight: '100vh', overflowX: 'hidden' }}>
+      <div className='container' style={{ color: 'white' }}>
         <div className='col'>
+          {/* Trailforks Widget Region Info */}
           <div
             className="TrailforksRegionInfo"
             data-w="100%"
@@ -53,6 +44,7 @@ const TrailforksWidget = () => {
             data-counts="1"
             data-stats="1"
           ></div>
+          {/* Trailforks Widget Map */}
           <div
             className="TrailforksWidgetMap"
             data-w="100%"
@@ -70,9 +62,9 @@ const TrailforksWidget = () => {
             data-lon="-70.91758500000003"
             data-hideunsanctioned="0"
           ></div>
-          <div>
+          {/* Description */}
+          <div style={{ marginTop: '30px' }}>
             <h2>Description</h2>
-           
             <div style={{ backgroundColor: '#333', padding: '15px', borderRadius: '5px', marginBottom: '20px' }}>
               <p style={{ color: '#FFF', fontSize: '16px', lineHeight: '1.5' }}>{parkDescription}</p>
             </div>
