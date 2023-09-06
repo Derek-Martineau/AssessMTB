@@ -42,7 +42,7 @@ const PrivateUserProfile = () => {
   };
 
   const handleEditProfile = () => {
-    navigate("/edit-profile");
+    navigate("/editUserProfile");
   };
 
   useEffect(() => {
