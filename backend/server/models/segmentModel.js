@@ -12,14 +12,16 @@ const segmentSchema = new mongoose.Schema({
         label: "The description and facts about the segment",
     },
     difficulty: {
-        required: true,
         type: String,
-        label: "The difficulty of the segment"
-    },
-    //friends: [{ type : ObjectId, ref: 'User' }],
-    Features: [{
         required: true,
-        type : mongoose.Schema.Types.ObjectId, ref: 'features'
+        label: "The difficulty of the segment",
+    },
+    features: [{
+        required: true,
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'features'
     }]
 }, { collection: "segments" });
-module.exports = mongoose.model('segments', segmentSchema)
+
+module.exports = mongoose.model('Segment', segmentSchema);
+    

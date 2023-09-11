@@ -166,7 +166,7 @@ class CallParks extends Component {
             <p><strong>Step 1:</strong> Select the park you would like to assess a segment in. Press the "Next" button to confirm and continue.</p>
             <p><strong>Step 2:</strong> Select the segment you would like to assess your technical ability on.</p>
             <p><strong>Step 3:</strong> Follow through the features displayed. Select the line that you traveled over. Lines are ranked in alphapbetical order descending. This means that the A line is the hardest line to complete and results in the most points possible per feature. You can also select walked if you had failed/missed the feature.</p>
-            <p><strong>Step 4:</strong> View your assessment score and decide to delete or share the segment. The Assessment score can also be saved to only your personal records if you wish not to share the results.</p>
+            <p><strong>Step 4:</strong> View your assessment score and decide to delete or share the assessment results. The assessment score can also be saved to only your personal records if you wish not to share the results.</p>
           </Modal.Body>
           <Modal.Footer>
             <Button variant="secondary" onClick={this.handleInstructionsClose}>Close</Button>

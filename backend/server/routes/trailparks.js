@@ -1,54 +1,68 @@
 const express = require("express");
 const router = express.Router();
+const mongoose = require("mongoose");
 const trailParks = require('../models/trailparks');
 
+// Middleware to parse JSON request bodies
+router.use(express.json());
+
 router.get('/trailparks', async (req, res) => {
-    const park = await trailParks.find();
-    return res.json(park)
-  })
+    const parks = await trailParks.find();
+    return res.json(parks);
+});
 
 router.post('/trailparks', async (req, res) => {
     console.log(req.body);
-    
-    // creates a new trail park
+
+    // Extract segmentIDs from the request payload
+    const segmentIDs = req.body.segments.map(segment => segment.segmentID);
+
+    // Creates a new trail park with the associated segmentIDs
     const createTrailPark = new trailParks({
         parkName: req.body.parkName,
         description: req.body.description,
-        address: req.body.description,
+        address: req.body.address,
         photo: req.body.photo,
-        Segments: [{
-            segmentID: req.body.segmentID,
-            }]
+        segments: segmentIDs
     });
- 
+
     try {
         const saveTrailpark = await createTrailPark.save();
         res.send(saveTrailpark);
     } catch (error) {
-        res.status(400).send({ message: "Error trying to create new trail park", message: error.message });
+        res.status(400).send({ message: "Error trying to create a new trail park", error: error.message });
     }
+});
 
-})
+// Middleware function to check if a park with the same name already exists
+async function checkIfParkExists(req, res, next) {
+    const { parkName } = req.body;
 
- async function checkIfParkExists(body)  {
-    
-  const { parkName } = req.body;
+    try {
+        const park = await trailParks.findOne({ parkName: parkName });
 
-  const park = await trailparks.findOne({ parkname: parkName });
+        // Checks if the park exists
+        if (park) {
+            return res.status(401).send({ message: "Park already exists, please try a different name" });
+        }
 
-  //checks if the park exists
-  if (park) {
-    return res
-      .status(401)
-      .send({ message: "park does not exists, try again" });
-  }
+        next();
+    } catch (error) {
+        res.status(500).json({ message: "Error checking for park existence", error: error.message });
+    }
 }
- {checkIfParkExists}
 
-  module.exports = router;
+// Use the middleware in the post route
+router.post('/trailparks', checkIfParkExists);
 
-  //get park description by id
-  router.get('/trailparks/:id', async (req, res) => {
-    const park = await trailParks.findById(req.params.id);
-    return res.json(park)
-  })
+// Get park description by id
+router.get('/trailparks/:id', async (req, res) => {
+    try {
+        const park = await trailParks.findById(req.params.id);
+        return res.json(park);
+    } catch (error) {
+        return res.status(500).json({ message: "Error getting trail park by ID", error: error.message });
+    }
+});
+
+module.exports = router;
