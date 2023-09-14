@@ -11,7 +11,6 @@ router.get('/trailparks', async (req, res) => {
     const parks = await TrailPark.find();
     return res.json(parks);
 });
-
 router.post('/trailparks', async (req, res) => {
     console.log(req.body);
 
@@ -24,7 +23,7 @@ router.post('/trailparks', async (req, res) => {
         description: req.body.description,
         address: req.body.address,
         photo: req.body.photo,
-        segments: segmentIDs
+        segments: segmentIDs // Assigns the extracted segmentIDs
     });
 
     try {

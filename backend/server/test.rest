@@ -57,18 +57,19 @@ POST http://localhost:8081/parks/trailparks
 Content-Type: application/json 
 
 {
-    "parkName": "TestPark",
-    "description": "This is a test",
-    "address": "43 Test Street",
+    "parkName": "manyTest",
+    "description": "This is a many test",
+    "address": "43 many Test Street",
     "photo": {
         "name": "Your Photo Name",
         "desc": "Your Photo Description",
         "link": "Your Photo Link"
     },
     "segments": [
-        {
-            "segmentID": "64b8503fa0a8c7f345b67ee4"
-        }
+        {"segmentID": "64b8503fa0a8c7f345b67ee4"},
+        {"segmentID": "64b85012a0a8c7f345b67ee2"},
+        {"segmentID": "64b84f77a0a8c7f345b67ede"},
+        {"segmentID": "64b8507da0a8c7f345b67ee6"}
     ]
 }
 
@@ -99,7 +100,8 @@ GET http://localhost:8081/parks/segments/64b8503fa0a8c7f345b67ee4
 
 ###
 //get all segments associated to a park _id
-GET http://localhost:8081/parks/trailparks/getsegments/64ff991bb3f613079eee5445
+GET http://localhost:8081/parks/trailparks/getsegments/65038a78021afb7c4d9ba0d9
+
 ###
 //get all trail parks
 GET http://localhost:8081/parks/trailparks
@@ -112,3 +114,20 @@ GET http://localhost:8081/api/segments
 //get all segments NOT WORKING
 GET http://localhost:8081/feature/features
  
+###
+//create segment
+POST http://localhost:8081/api/segments
+Content-Type: application/json
+
+{
+    "segmentName": "Sample Segment",
+    "description": "This is a sample segment.",
+    "difficulty": "Intermediate",
+    "park": "Sample Park",
+    "Features": [
+        {
+            "featureName": "Sample Feature",
+            "description": "This is a sample feature."
+        }
+    ]
+}
