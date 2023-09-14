@@ -93,10 +93,13 @@ Content-Type: application/json
         }
     ]
 }
+###
+//get segment info by _id
+GET http://localhost:8081/parks/segments/64b8503fa0a8c7f345b67ee4
 
-
-
-
+###
+//get all segments associated to a park _id
+GET http://localhost:8081/parks/trailparks/getsegments/64ff991bb3f613079eee5445
 ###
 //get all trail parks
 GET http://localhost:8081/parks/trailparks

@@ -23,7 +23,7 @@ const trailparksSchema = new mongoose.Schema(
         },
         segments: [{
           type: mongoose.Schema.Types.ObjectId,
-          ref: 'segments'
+          ref: 'Segment'
       }]      
     },
     { collection: "trailparks" }
