@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import { Card, Button, Modal } from "react-bootstrap";
-import { Navigate } from "react-router-dom";
 
 class CallParks extends Component {
   constructor() {
@@ -8,10 +7,10 @@ class CallParks extends Component {
     this.state = {
       data: [],
       selectedPark: null,
-      redirectToSegment: false,
+      selectedParkSegments: [],
       showHelpModal: false,
-      loadingBarFillWidth: "100%", // Start the loading bar full
-      showInstructionsModal: false, 
+      loadingBarFillWidth: "100%",
+      showInstructionsModal: false,
     };
   }
 
@@ -29,7 +28,7 @@ class CallParks extends Component {
       }, 10000);
 
       // Update the loading bar fill width over 10 seconds
-      let loadingProgress = 100; // Start the loading bar full
+      let loadingProgress = 100;
       const interval = setInterval(() => {
         loadingProgress -= 1;
         const fillWidth = `${loadingProgress}%`;
@@ -43,14 +42,21 @@ class CallParks extends Component {
   }
 
   handleParkSelection = (park) => {
-    this.setState({ selectedPark: park });
+    this.setState({ selectedPark: park, selectedParkSegments: [] });
   };
 
-  handleNextClick = () => {
+  handleNextClick = async () => {
     const { selectedPark } = this.state;
     if (selectedPark) {
-      console.log("Selected Park:", selectedPark);
-      this.setState({ redirectToSegment: true });
+      try {
+        const response = await fetch(
+          `http://localhost:8081/parks/trailparks/getsegments/${selectedPark._id}`
+        );
+        const json = await response.json();
+        this.setState({ selectedParkSegments: json });
+      } catch (error) {
+        console.error("Error fetching segments:", error);
+      }
     } else {
       alert("Please select a park first.");
     }
@@ -70,17 +76,17 @@ class CallParks extends Component {
 
   render() {
     const buttonStyle = {
-      margin: "3px 0", // Adjust the vertical padding
+      margin: "3px 0",
     };
 
     const buttonWrapperStyle = {
       display: "flex",
-      justifyContent: "center", // Center the button horizontally
+      justifyContent: "center",
     };
 
     const cardStyle = {
-      width: "25rem", // Adjust card width
-      padding: "20px", // Add padding
+      width: "25rem",
+      padding: "20px",
     };
 
     const notificationStyle = {
@@ -111,23 +117,17 @@ class CallParks extends Component {
       position: "absolute",
     };
 
-    const { redirectToSegment, showHelpModal, showInstructionsModal } = this.state;
-
-    if (redirectToSegment) {
-      return <Navigate to="/newAssessment/selectSegment" />;
-    }
-
     return (
-      <div style={{ background: '#5A5A5A', minHeight: "100vh", display: "flex", justifyContent: "center", alignItems: "center" }}>
+      <div style={{ background: "#5A5A5A", minHeight: "100vh", display: "flex", justifyContent: "center", alignItems: "center" }}>
         <Card style={cardStyle}>
           <Card.Body>
             <Card.Title>Which Park Did You Ride?</Card.Title>
             <Card.Subtitle>Please select the park you would like to assess a segment on.</Card.Subtitle>
-            <br></br>
+            <br />
             <div>
               <ul>
-                {this.state.data.map(el => (
-                  <li key={el.id}>
+                {this.state.data.map((el) => (
+                  <li key={el._id}>
                     <Button
                       variant={this.state.selectedPark === el ? "success" : "primary"}
                       style={buttonStyle}
@@ -140,36 +140,65 @@ class CallParks extends Component {
               </ul>
             </div>
             <div style={buttonWrapperStyle}>
-            <Button variant="info" onClick={this.handleInstructionsShow}>Help</Button>
-              <Button variant="primary" onClick={this.handleNextClick} disabled={!this.state.selectedPark}>
+              <Button variant="info" onClick={this.handleInstructionsShow}>
+                Help
+              </Button>
+              <Button
+                variant="primary"
+                onClick={this.handleNextClick}
+                disabled={!this.state.selectedPark}
+              >
                 Next
               </Button>
             </div>
           </Card.Body>
         </Card>
+        {/* Show selected park's segments */}
+        {this.state.selectedParkSegments.length > 0 && (
+          <div>
+            <h2>Segments for {this.state.selectedPark.parkName}</h2>
+            <ul>
+              {this.state.selectedParkSegments.map((segment) => (
+                <li key={segment._id}>{segment.segmentName}</li>
+              ))}
+            </ul>
+          </div>
+        )}
         {/* Help notification */}
-        {showHelpModal && (
+        {this.state.showHelpModal && (
           <div style={notificationStyle}>
             <p>Would you like assistance on how to take the assessment?</p>
-            <Button variant="primary" onClick={this.handleHelpYesClick}>Yes</Button>
+            <Button variant="primary" onClick={this.handleHelpYesClick}>
+              Yes
+            </Button>
             <div style={loadingBarStyle}>
               <div style={loadingBarFillStyle}></div>
             </div>
           </div>
         )}
         {/* Instructions Modal */}
-        <Modal show={showInstructionsModal} onHide={this.handleInstructionsClose}>
+        <Modal show={this.state.showInstructionsModal} onHide={this.handleInstructionsClose}>
           <Modal.Header closeButton>
             <Modal.Title>Assessment Instructions</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            <p><strong>Step 1:</strong> Select the park you would like to assess a segment in. Press the "Next" button to confirm and continue.</p>
-            <p><strong>Step 2:</strong> Select the segment you would like to assess your technical ability on.</p>
-            <p><strong>Step 3:</strong> Follow through the features displayed. Select the line that you traveled over. Lines are ranked in alphapbetical order descending. This means that the A line is the hardest line to complete and results in the most points possible per feature. You can also select walked if you had failed/missed the feature.</p>
-            <p><strong>Step 4:</strong> View your assessment score and decide to delete or share the assessment results. The assessment score can also be saved to only your personal records if you wish not to share the results.</p>
+            <p>
+              <strong>Step 1:</strong> Select the park you would like to assess a segment in. Press the "Next" button to confirm and continue.
+            </p>
+            <p>
+              <strong>Step 2:</strong> Select the segment you would like to assess your technical ability on.
+            </p>
+            <p>
+              <strong>Step 3:</strong> Follow through the features displayed. Select the line that you traveled over. Lines are ranked in alphabetical order descending. This means that the A line is the hardest line to complete and results in the most points possible per feature. You can also select "walked" if you had failed/missed the feature.
+            </p>
+            <p>
+              <strong>Step 4:</strong> View your assessment score and decide to delete or share the assessment results. The assessment score can also be saved to only your personal records if you wish not to share the results.
+            </p>
           </Modal.Body>
           <Modal.Footer>
-            <Button variant="secondary" onClick={this.handleInstructionsClose}>Close</Button>
+            <Button variant="secondary" onClick={this.handleInstructionsClose}>
+              Close
+            </Button>
           </Modal.Footer>
         </Modal>
       </div>
