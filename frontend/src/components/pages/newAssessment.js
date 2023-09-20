@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Card, Button, Modal } from "react-bootstrap";
+import { Card, Button, Modal, Dropdown } from "react-bootstrap";
 
 class CallParks extends Component {
   constructor() {
@@ -11,6 +11,7 @@ class CallParks extends Component {
       showHelpModal: false,
       loadingBarFillWidth: "100%",
       showInstructionsModal: false,
+      showSegmentDropdown: false, // Added state for dropdown visibility
     };
   }
 
@@ -42,7 +43,7 @@ class CallParks extends Component {
   }
 
   handleParkSelection = (park) => {
-    this.setState({ selectedPark: park, selectedParkSegments: [] });
+    this.setState({ selectedPark: park, selectedParkSegments: [], showSegmentDropdown: false });
   };
 
   handleNextClick = async () => {
@@ -53,7 +54,10 @@ class CallParks extends Component {
           `http://localhost:8081/parks/trailparks/getsegments/${selectedPark._id}`
         );
         const json = await response.json();
-        this.setState({ selectedParkSegments: json });
+        const sortedSegments = json.sort((a, b) =>
+          a.segmentName.localeCompare(b.segmentName)
+        );
+        this.setState({ selectedParkSegments: sortedSegments, showSegmentDropdown: true });
       } catch (error) {
         console.error("Error fetching segments:", error);
       }
@@ -139,6 +143,19 @@ class CallParks extends Component {
                 ))}
               </ul>
             </div>
+            {/* Show dropdown menu for selected park's segments */}
+            {this.state.showSegmentDropdown && (
+              <Dropdown style={{ marginTop: "10px" }}>
+                <Dropdown.Toggle variant="success" id="segment-dropdown">
+                  Select a Segment
+                </Dropdown.Toggle>
+                <Dropdown.Menu style={{ maxHeight: "200px", overflowY: "scroll" }}>
+                  {this.state.selectedParkSegments.map((segment) => (
+                    <Dropdown.Item key={segment._id}>{segment.segmentName}</Dropdown.Item>
+                  ))}
+                </Dropdown.Menu>
+              </Dropdown>
+            )}
             <div style={buttonWrapperStyle}>
               <Button variant="info" onClick={this.handleInstructionsShow}>
                 Help
@@ -153,17 +170,6 @@ class CallParks extends Component {
             </div>
           </Card.Body>
         </Card>
-        {/* Show selected park's segments */}
-        {this.state.selectedParkSegments.length > 0 && (
-          <div>
-            <h2>Segments for {this.state.selectedPark.parkName}</h2>
-            <ul>
-              {this.state.selectedParkSegments.map((segment) => (
-                <li key={segment._id}>{segment.segmentName}</li>
-              ))}
-            </ul>
-          </div>
-        )}
         {/* Help notification */}
         {this.state.showHelpModal && (
           <div style={notificationStyle}>
