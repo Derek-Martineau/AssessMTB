@@ -1,9 +1,8 @@
-import React, { Component, createContext, useContext, useState } from "react";
+import React, { Component } from "react";
 import { Card, Button, Modal, Dropdown } from "react-bootstrap";
+import { Navigate } from "react-router-dom"; // Import Navigate for navigation
 
 class CallParks extends Component {
-
-
   constructor() {
     super();
     this.state = {
@@ -14,6 +13,7 @@ class CallParks extends Component {
       loadingBarFillWidth: "100%",
       showInstructionsModal: false,
       showSegmentDropdown: false, // state for dropdown visibility
+      redirectToSelectSegments: false, // state for redirection
     };
   }
 
@@ -80,6 +80,10 @@ class CallParks extends Component {
     this.setState({ showInstructionsModal: false });
   };
 
+  handleNavigateToSelectSegment = () => {
+    this.setState({ redirectToSelectSegments: true });
+  };
+
   render() {
     const buttonStyle = {
       margin: "3px 0",
@@ -122,6 +126,11 @@ class CallParks extends Component {
       backgroundColor: "#007bff",
       position: "absolute",
     };
+
+    // Check if redirectToSelectSegments is true, then redirect to /selectSegments
+    if (this.state.redirectToSelectSegments) {
+      return <Navigate to="/selectSegment" />;
+    }
 
     return (
       <div style={{ background: "#5A5A5A", minHeight: "100vh", display: "flex", justifyContent: "center", alignItems: "center" }}>
@@ -168,6 +177,10 @@ class CallParks extends Component {
                 disabled={!this.state.selectedPark}
               >
                 Next
+              </Button>
+              {/* Second "Next" button using Navigate */}
+              <Button variant="primary" onClick={this.handleNavigateToSelectSegment}>
+                Next (to selectSegment)
               </Button>
             </div>
           </Card.Body>
