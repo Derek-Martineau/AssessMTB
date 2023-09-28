@@ -1,7 +1,9 @@
-import React, { Component } from "react";
+import React, { Component, createContext, useContext, useState } from "react";
 import { Card, Button, Modal, Dropdown } from "react-bootstrap";
 
 class CallParks extends Component {
+
+
   constructor() {
     super();
     this.state = {
@@ -11,7 +13,7 @@ class CallParks extends Component {
       showHelpModal: false,
       loadingBarFillWidth: "100%",
       showInstructionsModal: false,
-      showSegmentDropdown: false, // Added state for dropdown visibility
+      showSegmentDropdown: false, // state for dropdown visibility
     };
   }
 

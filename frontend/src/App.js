@@ -46,7 +46,7 @@ const App = () => {
           <Route path="/lynnwoods" element={<LynnWoods />} />
           <Route path="/editUserProfile" element={<EditUserProfile />} />
           <Route path="/newAssessment" element={<CallParks />}/>
-          <Route path="/newAssessment/selectSegment" element={<CallSegments />}/>
+          <Route path="/selectSegment" element={<CallSegments />}/>
           <Route path="/selectSegment/selectFeature" element={<CallFeature />}/>
           <Route path="/results" element={<PostResults />}/>
           <Route path="/assessmentHome" element={<ViewOrCreateAssessment />}/>
