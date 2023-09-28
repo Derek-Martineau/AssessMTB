@@ -19,7 +19,7 @@ const TrailforksWidget = () => {
       const response = await fetch("http://localhost:8081/parks/trailparks");
       const data = await response.json();
 
-      const willowdalePark = data.find(park => park.parkName === "Willowdale");
+      const willowdalePark = data.find(park => park.parkName === "Willowdale State Forest");
 
       if (willowdalePark) {
         setParkDescription(willowdalePark.description || 'No description available');
