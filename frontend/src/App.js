@@ -2,6 +2,7 @@ import React from "react";
 // We use Route in order to define the different routes of our application
 import { Route, Routes } from "react-router-dom";
 
+
 // We import all the components we need in our app
 import Navbar from "./components/navbar";
 import LandingPage from "./components/pages/landingPage";
@@ -46,7 +47,7 @@ const App = () => {
           <Route path="/lynnwoods" element={<LynnWoods />} />
           <Route path="/editUserProfile" element={<EditUserProfile />} />
           <Route path="/newAssessment" element={<CallParks />}/>
-          <Route path="/selectSegment" element={<CallSegments />}/>
+          <Route path="/selectSegment/:trailparkId" element={<CallSegments />}/>
           <Route path="/selectSegment/selectFeature" element={<CallFeature />}/>
           <Route path="/results" element={<PostResults />}/>
           <Route path="/assessmentHome" element={<ViewOrCreateAssessment />}/>
