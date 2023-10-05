@@ -12,8 +12,35 @@ class CallFeature extends Component {
       redirectToFeat2: false,
       redirectToNewAssessment: false,
       showModal: false,
+      photos: [], // Array to store photos associated with the segment
+      photoFilePaths: [
+        "/images/Gordon_Walls_F1.JPG",
+        "/images/Gordon_Walls_F2.JPG",
+        "/images/Gordon_Walls_F3.JPG",
+        "/images/Gordon_Walls_F4.JPG",
+        "/images/Gordon_Walls_F5.JPG",
+        "/images/Gordon_Walls_F6.JPG",
+      ],      
+      currentPhotoIndex: 0, // Added property to keep track of the currently displayed photo
     };
   }
+
+  componentDidMount() {
+    // Fetch photos associated with the segment here
+    this.fetchPhotosForSegment();
+  }
+
+  fetchPhotosForSegment = async () => {
+    const { segmentId } = this.props.match.params; // Assuming you receive segmentId via route params
+
+    try {
+      const response = await fetch(`http://localhost:8081/api/segments/getphotos/${segmentId}`);
+      const photos = await response.json();
+      this.setState({ photos });
+    } catch (error) {
+      console.error("Error fetching photos:", error);
+    }
+  };
 
   handleLineSelection = (line, index) => {
     this.setState({ selectedLine: line, activeButtonIndex: index });
@@ -49,6 +76,23 @@ class CallFeature extends Component {
     this.setState({ showInstructionsModal: false });
   };
 
+  handleNextPhoto = () => {
+    // Increment the currentPhotoIndex, and loop back to the first photo if at the end
+    this.setState((prevState) => ({
+      currentPhotoIndex:
+        (prevState.currentPhotoIndex + 1) % this.state.photoFilePaths.length,
+    }));
+  };
+
+  handlePreviousPhoto = () => {
+    // Decrement the currentPhotoIndex, and loop to the last photo if at the beginning
+    this.setState((prevState) => ({
+      currentPhotoIndex:
+        (prevState.currentPhotoIndex - 1 + this.state.photoFilePaths.length) %
+        this.state.photoFilePaths.length,
+    }));
+  };
+
   render() {
     const buttonWrapperStyle = {
       display: "flex",
@@ -70,6 +114,29 @@ class CallFeature extends Component {
       <div style={{ background: '#5A5A5A', minHeight: "100vh", display: "flex", justifyContent: "center", alignItems: "center",}}>
         <Card style={{ width: "45rem" }}>
           <Card.Body>
+            {/* Display the currently selected photo */}
+            <div>
+              <h3>Photo for Segment</h3>
+              <div>
+              <img
+                key={this.state.currentPhotoIndex}
+                src={this.state.photoFilePaths[this.state.currentPhotoIndex]}
+                alt={`Photo ${this.state.currentPhotoIndex + 1}`}
+                style={{ maxWidth: "100%", maxHeight: "100%" }}
+              />
+
+              </div>
+            </div>
+            
+            {/* Add Next and Previous buttons for photo navigation */}
+            <div style={{ display: "flex", justifyContent: "center" }}>
+              <Button variant="secondary" onClick={this.handlePreviousPhoto}>
+                Previous
+              </Button>
+              <Button variant="secondary" onClick={this.handleNextPhoto}>
+                Next
+              </Button>
+            </div>
             <div style={{ display: "flex", justifyContent: "center" }}>
               <Card.Title>Which line did you choose?</Card.Title>
             </div>
