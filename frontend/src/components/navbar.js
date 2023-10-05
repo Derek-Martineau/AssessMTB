@@ -73,7 +73,7 @@ export default function Navbar() {
   };
 
   return (
-    <ReactNavbar bg="dark" variant="dark">
+    <ReactNavbar bg="dark" variant="dark" style={{ position: 'sticky', top: 0, zIndex: 100 }}>
       <Container>
         <Nav >
           {publicUser()}
