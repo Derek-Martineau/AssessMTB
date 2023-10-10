@@ -11,7 +11,8 @@ const deleteUser = require('./routes/userDeleteAll')
 const getTrailParks = require('./routes/trailparks')
 const createSegments = require('./routes/createSegments')
 const createFeature = require('./routes/createFeature')
-const getSegments = require('./routes/getSegments');
+const getSegments = require('./routes/getSegments')
+const updateFeature = require('./routes/updateFeature');
 
 require('dotenv').config();
 const SERVER_PORT = 8081
@@ -29,6 +30,7 @@ app.use('/parks', getTrailParks)
 app.use('/api', getSegments)
 app.use('/api', createSegments)
 app.use('/api', createFeature)
+app.use('/api', updateFeature)
 
 
 app.listen(SERVER_PORT, (req, res) => {

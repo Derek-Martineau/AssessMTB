@@ -131,3 +131,43 @@ Content-Type: application/json
         }
     ]
 }
+
+###
+# Update Feature
+PUT http://localhost:8081/api/features/:feature_id
+Content-Type: application/json
+
+{
+  "featureName": "Updated Feature Name",
+  "description": "Updated Feature Description",
+  "photo": {
+    "name": "Updated Photo Name",
+    "desc": "Updated Photo Description",
+    "link": "https://example.com/updated-photo.jpg"
+  }
+}
+
+###
+# Create a new feature
+POST http://localhost:8081/api/features
+Content-Type: application/json
+
+{
+  "featureName": "New Feature",
+  "description": "This is a test feature",
+  "photo": {
+    "name": "Test Photo",
+    "desc": "A test photo",
+    "link": "https://example.com/test.jpg"
+  },
+  "userLineChoices": [
+    {
+      "users": "User1",
+      "lineChoice": "Choice1"
+    },
+    {
+      "users": "User2",
+      "lineChoice": "Choice2"
+    }
+  ]
+}

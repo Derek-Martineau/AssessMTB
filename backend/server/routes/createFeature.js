@@ -13,7 +13,8 @@ router.post('/features', async (req, res) => {
             name: req.body.name,
             desc: req.body.desc,
             link: req.body.link
-            }]
+            }],
+            userLineChoices: req.body.userLineChoices || []
     });
  
     try {
