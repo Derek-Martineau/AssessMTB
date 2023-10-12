@@ -11,11 +11,15 @@ const featureSchema = new mongoose.Schema({
         required: true,
         label: "The description and facts about the feature",
     },
-    photo: {
+    photos: [{
         name: String,
         desc: String,
-        link: String,
-    }, 
+        base64Data: String,
+        img: {
+            data: Buffer,
+            contentType: String
+        }
+    }]
 }, { collection: "features" });
 
 module.exports = mongoose.model('features', featureSchema);
