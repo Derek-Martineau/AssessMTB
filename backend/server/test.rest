@@ -1,3 +1,5 @@
+@baseurl = http://localhost:8081
+
 ###
 POST  http://localhost:8081/user/deleteAll
 
@@ -134,7 +136,7 @@ Content-Type: application/json
 
 ###
 # Update Feature
-PUT http://localhost:8081/api/features/:feature_id
+PUT http://localhost:8081/api/features/652589d43c47bb139f820ec9
 Content-Type: application/json
 
 {
@@ -160,14 +162,40 @@ Content-Type: application/json
     "desc": "A test photo",
     "link": "https://example.com/test.jpg"
   },
-  "userLineChoices": [
-    {
-      "users": "User1",
-      "lineChoice": "Choice1"
-    },
-    {
-      "users": "User2",
-      "lineChoice": "Choice2"
-    }
-  ]
+} 
+###
+# Create a new assessment result
+POST {{baseurl}}/api/results
+Content-Type: application/json
+
+{
+    "User": "640e316ceebb6807bae74c7b",
+    "Segment": "64694d4eebcfe8e7f004dfc8",
+    "lineChoice": ["Choice1", "Choice2"],
+    "Score": 85
 }
+
+###
+# Get all assessment results
+GET {{baseurl}}/api/results
+
+###
+# Get a specific assessment result by ID
+GET {{baseurl}}/api/results/6528253a90360848d61e0372
+
+###
+# Update an assessment result by ID
+PUT {{baseurl}}/api/results/6528253a90360848d61e0372  
+Content-Type: application/json
+
+{
+    "User": "640e316ceebb6807bae74c7b",
+    "Segment": "64694d4eebcfe8e7f004dfc8",
+    "lineChoice": ["Choice1", "Choice2"],
+    "Score": 90
+}
+
+###
+# Delete an assessment result by ID
+DELETE {{baseurl}}/api/results/:resultId
+
