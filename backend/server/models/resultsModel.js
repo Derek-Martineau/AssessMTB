@@ -22,13 +22,7 @@ const resultsSchema = new mongoose.Schema({
         label: "Segment being assessed"
     },
     //array of referenced photo and chosen line
-    featurePhotos: [{
-        photo: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'features.photos',
-            required: true,
-            label: "Reference to a feature photo",
-        },
+    featureLines: [{
         lineChoice: {
             type: String,
             required: true,
