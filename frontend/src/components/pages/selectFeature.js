@@ -89,6 +89,8 @@ class CallFeature extends Component {
     console.log("Simulating saving result to MongoDB...");
     return new Promise((resolve) => {
       setTimeout(() => {
+        // Save selectedLines to the database before navigating to results
+        this.saveSelectedLinesToDatabase();
         resolve();
       }, 2000);
     });
@@ -131,6 +133,37 @@ class CallFeature extends Component {
     }));
   };
 
+  // Function to save selected lines to the database
+  saveSelectedLinesToDatabase = () => {
+    const { selectedLines } = this.state;
+
+    // Prepare the data to be sent to the server
+    const requestData = {
+      User: "640e316ceebb6807bae74c7b", 
+      Segment: "64694d4eebcfe8e7f004dfc8",
+      featureLines: selectedLines.map(lineChoice => ({ lineChoice })),
+    };
+
+    // Make a POST request to save the selectedLines data
+    fetch("http://localhost:8081/api/results", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(requestData),
+    })
+      .then((response) => {
+        if (response.status === 200) {
+          console.log("Selected lines saved to the database successfully.");
+        } else {
+          console.error("Failed to save selected lines to the database.");
+        }
+      })
+      .catch((error) => {
+        console.error("Error while saving selected lines:", error);
+      });
+  };
+
   render() {
     const buttonWrapperStyle = {
       display: "flex",
@@ -141,10 +174,14 @@ class CallFeature extends Component {
     const { redirectToFeat2, selectedLines, currentPhotoIndex, redirectToNewAssessment, showModal, showInstructionsModal } = this.state;
 
     if (redirectToFeat2) {
+      // Save selected lines to the database before navigating to results
+      this.saveSelectedLinesToDatabase();
       return <Navigate to="/results" />;
     }
 
     if (redirectToNewAssessment) {
+      // Save selected lines to the database before navigating to the new assessment page
+      this.saveSelectedLinesToDatabase();
       return <Navigate to="/newAssessment/selectSegment" />;
     }
 
