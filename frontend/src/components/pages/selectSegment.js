@@ -61,7 +61,7 @@ const CallSegments = () => {
   };
 
   if (redirectToFeat1) {
-    return <Navigate to="/selectSegment/selectFeature" />;
+    return <Navigate to="/selectSegment/:segmentId/selectFeature" />;
   }
   if (redirectToPreviousPage) {
     return <Navigate to="/newAssessment" />;

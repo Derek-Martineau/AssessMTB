@@ -6,12 +6,10 @@ class CallFeature extends Component {
   constructor() {
     super();
     this.state = {
-      data: [],
       selectedLines: Array(6).fill(null), // Store selected lines for each photo
       redirectToFeat2: false,
       redirectToNewAssessment: false,
       showModal: false,
-      photos: [],
       photoFilePaths: [
         "/images/Gordon_Walls_F1.JPG",
         "/images/Gordon_Walls_F2.JPG",
@@ -25,7 +23,7 @@ class CallFeature extends Component {
   }
 
   componentDidMount() {
-    this.fetchPhotosForSegment();
+    // this.fetchPhotosForSegment();
   }
 
   fetchPhotosForSegment = async () => {
@@ -39,6 +37,34 @@ class CallFeature extends Component {
       console.error("Error fetching photos:", error);
     }
   }
+
+  calculateAssessmentScore = (selectedLines) => {
+    // Replace this with your actual scoring logic
+    return 42; // Placeholder score
+  };
+
+  // Function to send data to the server
+  sendDataToServer = (requestData) => {
+    // Make an HTTP POST request to send data to the server
+    fetch("http://localhost:8081/api/results", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(requestData),
+    })
+      .then((response) => {
+        if (response.status === 200) {
+          console.log("Data sent to the server successfully.");
+          // You may want to handle the response here
+        } else {
+          console.error("Failed to send data to the server.");
+        }
+      })
+      .catch((error) => {
+        console.error("Error while sending data to the server:", error);
+      });
+  };
 
   // Create a mapping object for line values
   lineValues = {
@@ -64,40 +90,32 @@ class CallFeature extends Component {
 
   handleNextClick = () => {
     const { selectedLines, currentPhotoIndex, photoFilePaths } = this.state;
-
-    // Use lineValues to get the value for the selected line
     const lineValue = selectedLines[currentPhotoIndex];
 
     if (lineValue !== null) {
-      this.storeSelectedLine(lineValue);
-
       if (currentPhotoIndex < photoFilePaths.length - 1) {
         this.setState((prevState) => ({
           currentPhotoIndex: prevState.currentPhotoIndex + 1,
         }));
       } else {
-        this.saveResultToMongoDB().then(() => {
-          this.setState({ redirectToFeat2: true });
-        });
+        // Calculate the assessment score based on selectedLines (you'll need to implement this)
+        const assessmentScore = this.calculateAssessmentScore(selectedLines);
+        // Now, prepare the data to be sent to the server
+        const requestData = {
+          User: "640e316ceebb6807bae74c7b", // Replace with the actual user ID
+          Segment: "64694d4eebcfe8e7f004dfc8", // Replace with the actual segment ID
+          featureLines: selectedLines.map((line) => ({
+            lineChoice: line,
+          })),
+          score: assessmentScore, // Replace with the calculated score
+        };
+
+        // Send the data to the server using the sendDataToServer function
+        this.sendDataToServer(requestData);
       }
     } else {
       alert("Please select a line first.");
     }
-  };
-
-  saveResultToMongoDB = async () => {
-    console.log("Simulating saving result to MongoDB...");
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        // Save selectedLines to the database before navigating to results
-        this.saveSelectedLinesToDatabase();
-        resolve();
-      }, 2000);
-    });
-  };
-
-  storeSelectedLine = (selectedLine) => {
-    console.log(`Storing selected line in the database: ${selectedLine}`);
   };
 
   handleDiscardClick = () => {
@@ -120,28 +138,16 @@ class CallFeature extends Component {
     this.setState({ showInstructionsModal: false });
   };
 
-  handleNextPhoto = () => {
-    this.setState((prevState) => ({
-      currentPhotoIndex: (prevState.currentPhotoIndex + 1) % this.state.photoFilePaths.length,
-    }));
-  };
-
-  handlePreviousPhoto = () => {
-    this.setState((prevState) => ({
-      currentPhotoIndex: (prevState.currentPhotoIndex - 1 + this.state.photoFilePaths.length) %
-        this.state.photoFilePaths.length,
-    }));
-  };
-
   // Function to save selected lines to the database
   saveSelectedLinesToDatabase = () => {
     const { selectedLines } = this.state;
 
     // Prepare the data to be sent to the server
     const requestData = {
-      User: "640e316ceebb6807bae74c7b", 
+      User: "640e316ceebb6807bae74c7b",
       Segment: "64694d4eebcfe8e7f004dfc8",
-      featureLines: selectedLines.map(lineChoice => ({ lineChoice })),
+      featureLines: selectedLines.map((lineChoice) => ({ lineChoice })),
+      score: 54,
     };
 
     // Make a POST request to save the selectedLines data
@@ -171,19 +177,7 @@ class CallFeature extends Component {
       flexDirection: "row-reverse",
     };
 
-    const { redirectToFeat2, selectedLines, currentPhotoIndex, redirectToNewAssessment, showModal, showInstructionsModal } = this.state;
-
-    if (redirectToFeat2) {
-      // Save selected lines to the database before navigating to results
-      this.saveSelectedLinesToDatabase();
-      return <Navigate to="/results" />;
-    }
-
-    if (redirectToNewAssessment) {
-      // Save selected lines to the database before navigating to the new assessment page
-      this.saveSelectedLinesToDatabase();
-      return <Navigate to="/newAssessment/selectSegment" />;
-    }
+    const { selectedLines, currentPhotoIndex, showModal, showInstructionsModal } = this.state;
 
     return (
       <div style={{ background: '#5A5A5A', minHeight: "100vh", display: "flex", justifyContent: "center", alignItems: "center" }}>
@@ -263,7 +257,7 @@ class CallFeature extends Component {
           <Modal.Body>
             <p><strong>Step 1:</strong> Select the park you would like to assess a segment in. Press the "Next" button to confirm and continue.</p>
             <p><strong>Step 2:</strong> Select the segment you would like to assess your technical ability on.</p>
-            <p><strong>Step 3:</strong> Follow through the features displayed. Select the line that you traveled over. Lines are ranked in alphapbetical order descending. This means that the A line is the hardest line to complete and results in the most points possible per feature. You can also select "Walked" if you had failed/missed the feature.</p>
+            <p><strong>Step 3:</strong> Follow through the features displayed. Select the line that you traveled over. Lines are ranked in alphabetical order descending. This means that the A line is the hardest line to complete and results in the most points possible per feature. You can also select "Walked" if you had failed/missed the feature.</p>
             <p><strong>Step 4:</strong> View your assessment score and decide to delete or share the segment. The assessment score can also be saved to only your personal records if you wish not to share the results.</p>
           </Modal.Body>
           <Modal.Footer>

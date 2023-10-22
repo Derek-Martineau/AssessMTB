@@ -32,7 +32,7 @@ const resultsSchema = new mongoose.Schema({
     //score of assessment
     Score: {
         type: Number,
-        required: true,
+        //required: true,
         label: "result of assessment"
     }
 });
