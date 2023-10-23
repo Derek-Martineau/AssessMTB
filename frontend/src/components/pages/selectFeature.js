@@ -9,6 +9,7 @@ class CallFeature extends Component {
       selectedLines: Array(6).fill(null), // Store selected lines for each photo
       redirectToFeat2: false,
       redirectToNewAssessment: false,
+      redirectToResults: false,
       showModal: false,
       photoFilePaths: [
         "/images/Gordon_Walls_F1.JPG",
@@ -54,17 +55,25 @@ class CallFeature extends Component {
       body: JSON.stringify(requestData),
     })
       .then((response) => {
-        if (response.status === 200) {
-          console.log("Data sent to the server successfully.");
-          // You may want to handle the response here
+        if (response.ok) {
+          // Request was successful
+          return response.json();
         } else {
-          console.error("Failed to send data to the server.");
+          // Request failed, handle the error
+          throw new Error(`Failed to send data to the server. Status: ${response.status}`);
         }
+      })
+      .then((data) => {
+        console.log("Response Data:", data);
+        // Handle successful response data here
+        // After sending data to the server, navigate to "/results"
+        this.setState({ redirectToResults: true });
       })
       .catch((error) => {
         console.error("Error while sending data to the server:", error);
       });
   };
+  
 
   // Create a mapping object for line values
   lineValues = {
@@ -98,26 +107,28 @@ class CallFeature extends Component {
           currentPhotoIndex: prevState.currentPhotoIndex + 1,
         }));
       } else {
-        // Calculate the assessment score based on selectedLines (you'll need to implement this)
+        // Array is full, perform necessary actions
         const assessmentScore = this.calculateAssessmentScore(selectedLines);
-        // Now, prepare the data to be sent to the server
+
         const requestData = {
-          User: "640e316ceebb6807bae74c7b", // Replace with the actual user ID
-          Segment: "64694d4eebcfe8e7f004dfc8", // Replace with the actual segment ID
+          User: "640e316ceebb6807bae74c7b",
+          Segment: "64694d4eebcfe8e7f004dfc8",
           featureLines: selectedLines.map((line) => ({
             lineChoice: line,
           })),
-          score: assessmentScore, // Replace with the calculated score
+          score: assessmentScore,
         };
 
         // Send the data to the server using the sendDataToServer function
         this.sendDataToServer(requestData);
+
+        // After sending data to the server, navigate to "/results"
+        return <Navigate to="/results" />;
       }
     } else {
       alert("Please select a line first.");
     }
   };
-
   handleDiscardClick = () => {
     this.setState({ showModal: true });
   };
@@ -149,26 +160,7 @@ class CallFeature extends Component {
       featureLines: selectedLines.map((lineChoice) => ({ lineChoice })),
       score: 54,
     };
-
-    // Make a POST request to save the selectedLines data
-    fetch("http://localhost:8081/api/results", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(requestData),
-    })
-      .then((response) => {
-        if (response.status === 200) {
-          console.log("Selected lines saved to the database successfully.");
-        } else {
-          console.error("Failed to save selected lines to the database.");
-        }
-      })
-      .catch((error) => {
-        console.error("Error while saving selected lines:", error);
-      });
-  };
+  }
 
   render() {
     const buttonWrapperStyle = {
@@ -177,8 +169,12 @@ class CallFeature extends Component {
       flexDirection: "row-reverse",
     };
 
-    const { selectedLines, currentPhotoIndex, showModal, showInstructionsModal } = this.state;
+    const { selectedLines, currentPhotoIndex, showModal, showInstructionsModal, redirectToResults } = this.state;
 
+    if (redirectToResults) {
+      return <Navigate to="/results" />;
+    }
+    
     return (
       <div style={{ background: '#5A5A5A', minHeight: "100vh", display: "flex", justifyContent: "center", alignItems: "center" }}>
         <Card style={{ width: "45rem" }}>
