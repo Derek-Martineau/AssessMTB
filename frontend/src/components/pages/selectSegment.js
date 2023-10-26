@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Card, Button, Modal } from "react-bootstrap";
 import { Navigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import getUserInfo from "../../utilities/decodeJwt";
 
 const CallSegments = () => {
   const { trailparkId } = useParams();
@@ -10,6 +12,8 @@ const CallSegments = () => {
   const [redirectToPreviousPage, setRedirectToPreviousPage] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [showInstructionsModal, setShowInstructionsModal] = useState(false);
+  const [user, setUser] = useState({});
+  const navigate = useNavigate();
 
   useEffect(() => {
     // Fetch data specific to the park using trailparkId
@@ -39,6 +43,21 @@ const CallSegments = () => {
     }
   };
 
+  useEffect(() => {
+    console.log("useEffect for getUserInfo is running in CallSegments");
+    const user = getUserInfo();
+    console.log("User Info:", user);
+    setUser(user);
+  
+    // Check if redirectToFeat1 is true and user information is available
+    if (redirectToFeat1 && user.userId && selectedSegment) {
+      navigate(`/selectSegment/${selectedSegment._id}/${user.userId}/selectFeature`);
+    }
+  }, [redirectToFeat1]);
+  
+  
+  
+
   const handleBackClick = () => {
     setShowModal(true);
   };
@@ -61,7 +80,8 @@ const CallSegments = () => {
   };
 
   if (redirectToFeat1) {
-    return <Navigate to="/selectSegment/:segmentId/selectFeature" />;
+    //return <Navigate to=`/selectSegment/:segmentId/${user.userId}/selectFeature` />;  
+    navigate(`/selectSegment/${selectedSegment._id}/${user.id}/selectFeature`);
   }
   if (redirectToPreviousPage) {
     return <Navigate to="/newAssessment" />;
