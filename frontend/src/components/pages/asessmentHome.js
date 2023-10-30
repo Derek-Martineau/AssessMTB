@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import getUserInfo from "../../utilities/decodeJwt";
 
 const ViewOrCreateAssessment = () => {
+  const [user, setUser] = useState({});
 
   const cardStyle = {
     width: '400px',
@@ -16,6 +18,11 @@ const ViewOrCreateAssessment = () => {
     color: 'white',
     textAlign: 'center',
   };
+
+  useEffect(() => {
+    const user = getUserInfo();
+    setUser(user);
+  }, []);
 
   const createAssessmentCard = {
     ...cardStyle,
@@ -34,7 +41,7 @@ const ViewOrCreateAssessment = () => {
           <h2>Create an Assessment</h2>
         </div>
       </Link>
-      <Link to="/viewPreviousAssessments" style={{ textDecoration: 'none', color: 'inherit' }}>
+      <Link to={`/assessmentLibrary/${user.username}`} style={{ textDecoration: 'none', color: 'inherit' }}>
         <div style={viewAssessmentsCard}>
           <h2>Assessment Records</h2>
         </div>

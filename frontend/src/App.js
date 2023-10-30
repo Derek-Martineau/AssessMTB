@@ -1,7 +1,7 @@
 import React from "react";
 // We use Route in order to define the different routes of our application
 import { Route, Routes } from "react-router-dom";
-
+import { createContext, useState, useEffect } from "react";
 
 // We import all the components we need in our app
 import Navbar from "./components/navbar";
@@ -15,12 +15,12 @@ import GordonCollege from "./components/pages/gordonCollege";
 import LynnWoods from "./components/pages/lynnWoods";
 import CallParks from "./components/pages/newAssessment"
 import PrivateUserProfile from "./components/pages/privateUserProfilePage";
-import { createContext, useState, useEffect } from "react";
 import getUserInfo from "./utilities/decodeJwt";
 import CallSegments from "./components/pages/selectSegment";
 import CallFeature from "./components/pages/selectFeature";
 import PostResults from "./components/pages/assessResultPage";
 import ViewOrCreateAssessment from "./components/pages/asessmentHome";
+import ViewLibrary from "./components/pages/assessmentLibrary";
 
 export const UserContext = createContext();
 //test change
@@ -51,6 +51,7 @@ const App = () => {
           <Route path="/selectSegment/:segmentId/:userId/selectFeature" element={<CallFeature />}/>
           <Route path="/results" element={<PostResults />}/>
           <Route path="/assessmentHome" element={<ViewOrCreateAssessment />}/>
+          <Route path="/assessmentLibrary/:username" element={<ViewLibrary />}/>
         </Routes>
       </UserContext.Provider>
     </>
