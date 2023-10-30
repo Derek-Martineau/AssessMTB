@@ -199,3 +199,9 @@ Content-Type: application/json
 # Delete an assessment result by ID
 DELETE {{baseurl}}/api/results/:resultId
 
+### Get All Assessments for a User
+# Set the username you want to search for
+
+GET {{baseurl}}/api/results/user/testbikes
+
+

@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const Result = require('../models/resultsModel');
+const User = require('../models/userModel');
 
 // Create a new assessment result
 router.post('/results', async (req, res) => {
@@ -52,5 +53,26 @@ router.delete('/results/:resultId', async (req, res) => {
     res.status(404).json({ message: 'Result not found' });
   }
 });
+//get all results by username
+// get all results by username
+router.get('/results/user/:username', async (req, res) => {
+  try {
+    const username = req.params.username;
+
+    // First, find the user with the provided username
+    const user = await User.findOne({ username });
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    // Now, use the user's _id to query the assessments
+    const results = await Result.find({ User: user._id });
+    res.status(200).json(results);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 
 module.exports = router;
