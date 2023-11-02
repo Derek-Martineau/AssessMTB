@@ -4,6 +4,7 @@ import { useParams } from 'react-router-dom';
 const ViewLibrary = () => {
   const [assessments, setAssessments] = useState([]);
   const { username } = useParams(); // Get the username from the URL
+  const [segment, setSegment] = useState([]);
 
   useEffect(() => {
     // Use the 'username' variable to customize the API route
@@ -32,10 +33,11 @@ const ViewLibrary = () => {
           assessments.map((assessment) => (
             <div key={assessment._id} style={assessmentCardStyle}>
               <h2>Assessment Date: {new Date(assessment.Date).toDateString()}</h2>
-              <p>User: {assessment.User}</p>
-              <p>Segment: {assessment.Segment}</p>
-              <p>Score: {assessment.Score}</p>
+              <p>User: {username}</p>
+              <p>Segment: {assessment.Segment.segmentName}</p>
+              <p>Difficulty: {}</p>
               <p>Line Choices: {assessment.featureLines.map((line) => line.lineChoice).join(', ')}</p>
+              <p>Score: {assessment.Score}</p>
             </div>
           ))
         ) : (
