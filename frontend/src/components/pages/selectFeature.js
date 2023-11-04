@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { Card, Button, Modal } from "react-bootstrap";
-import { Navigate, useParams } from "react-router-dom";
+import { Navigate, useParams, useNavigate } from "react-router-dom";
 
 function CallFeature() {
   const [selectedLines, setSelectedLines] = useState(Array(6).fill(null));
   const [redirectToNewAssessment, setRedirectToNewAssessment] = useState(false);
-  const [redirectToResults, setRedirectToResults] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [showInstructionsModal, setShowInstructionsModal] = useState(false);
   const [photoFilePaths] = useState([
@@ -19,15 +18,39 @@ function CallFeature() {
   const [currentPhotoIndex, setCurrentPhotoIndex] = useState(0);
 
   const { segmentId, userId } = useParams();
+  const navigate = useNavigate();
 
   const [user, setUser] = useState(userId);
   const [segment, setSegment] = useState(segmentId);
+  const [assessmentId, setAssessmentId] = useState(null);
+  const [redirectToResults, setRedirectToResults] = useState(false);
 
   useEffect(() => {
     console.log("User:", user);
     console.log("Segment:", segment);
-    // You may want to use these values in your fetchPhotosForSegment and saveSelectedLinesToDatabase functions.
+  
+    // Parse the query parameter "assessmentId" from the URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const assessmentIdParam = urlParams.get("assessmentId");
+  
+    // Set assessmentId based on the query parameter
+    setAssessmentId(assessmentIdParam);
+  
+    if (segmentId && userId && assessmentIdParam) {
+      // Wait for assessmentId to be set, and then navigate to the results page
+      setTimeout(() => {
+        setRedirectToResults(true);
+      }, 0);
+    }
   }, [user, segment]);
+  
+  if (redirectToResults) {
+    // Ensure that the newly created assessmentId is in the URL
+    if (assessmentId) {
+      return <Navigate to={`/results/${assessmentId}`} />;
+    }
+  }
+  
 
   const calculateAssessmentScore = (selectedLines) => {
     // Replace this with your actual scoring logic
@@ -45,23 +68,25 @@ function CallFeature() {
     })
       .then((response) => {
         if (response.ok) {
-          // Request was successful
           return response.json();
         } else {
-          // Request failed, handle the error
           throw new Error(`Failed to send data to the server. Status: ${response.status}`);
         }
       })
       .then((data) => {
         console.log("Response Data:", data);
-        // Handle successful response data here
-        // After sending data to the server, navigate to "/results"
-        setRedirectToResults(true);
+  
+        // Set the assessmentId received from the server
+        setAssessmentId(data._id);
+  
+        // After setting the assessmentId, navigate to the next page with assessmentId
+        navigate(`/results/${data._id}`);
       })
       .catch((error) => {
         console.error("Error while sending data to the server:", error);
       });
   };
+  
 
   // Create a mapping object for line values
   const lineValues = {
@@ -134,8 +159,8 @@ function CallFeature() {
     alignItems: "center"
   };
   
-    if (redirectToResults) {
-      return <Navigate to="/results" />;
+  if (redirectToResults) {
+    return <Navigate to={`/results/${assessmentId}`} />;
     }
 
   return (
