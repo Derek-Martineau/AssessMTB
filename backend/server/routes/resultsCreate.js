@@ -44,15 +44,20 @@ router.put('/results/:resultId', async (req, res) => {
   }
 });
 
-// Delete an assessment result by ID
+// DELETE route to delete an assessment by ID
 router.delete('/results/:resultId', async (req, res) => {
-  const result = await Result.findByIdAndRemove(req.params.resultId);
-  if (result) {
-    res.status(204).end();
-  } else {
-    res.status(404).json({ message: 'Result not found' });
+  try {
+    const result = await Result.findByIdAndRemove(req.params.resultId);
+    if (result) {
+      res.status(204).end(); // Success: 204 No Content
+    } else {
+      res.status(404).json({ message: 'Result not found' }); // Not Found: 404
+    }
+  } catch (error) {
+    res.status(500).json({ message: 'Server error' }); // Internal Server Error: 500
   }
 });
+
 //get all results by username
 // get all results by username
 router.get('/results/user/:username', async (req, res) => {
