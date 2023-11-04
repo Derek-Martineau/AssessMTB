@@ -14,15 +14,29 @@ const ViewLibrary = () => {
         }
         return response.json();
       })
-      .then((data) => {
-        console.log(data); // Log the data to the console
-        setAssessments(data);
+      .then(async (data) => {
+        // Create an array to store the updated assessments
+        const updatedAssessments = [];
+
+        for (const assessment of data) {
+          // Fetch the Segment data for each assessment
+          const segmentResponse = await fetch(`http://localhost:8081/api/segments/${assessment.Segment}`);
+          if (segmentResponse.ok) {
+            const segmentData = await segmentResponse.json();
+            assessment.segmentName = segmentData.segmentName;
+            assessment.difficulty = segmentData.difficulty;
+          }
+
+          updatedAssessments.push(assessment);
+        }
+
+        setAssessments(updatedAssessments);
       })
       .catch((error) => {
         console.error('Error fetching data:', error);
-        setAssessments([]); // Set assessments to an empty array to handle the error
+        setAssessments([]);
       });
-  }, [username]); // Add 'username' as a dependency to re-fetch data when the username changes
+  }, [username]);
 
   return (
     <div style={{ background: '#5A5A5A', minHeight: '100vh', overflowX: 'hidden' }}>
@@ -32,10 +46,11 @@ const ViewLibrary = () => {
           assessments.map((assessment) => (
             <div key={assessment._id} style={assessmentCardStyle}>
               <h2>Assessment Date: {new Date(assessment.Date).toDateString()}</h2>
-              <p>User: {assessment.User}</p>
-              <p>Segment: {assessment.Segment}</p>
-              <p>Score: {assessment.Score}</p>
+              <p>User: {username}</p>
+              <p>Segment: {assessment.segmentName}</p>
+              <p>Difficulty: {assessment.difficulty}</p>
               <p>Line Choices: {assessment.featureLines.map((line) => line.lineChoice).join(', ')}</p>
+              <p>Score: {assessment.Score}</p>
             </div>
           ))
         ) : (
