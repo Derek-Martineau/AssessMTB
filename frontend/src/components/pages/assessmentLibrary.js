@@ -1,8 +1,11 @@
 import React, { useEffect, useState } from 'react';
+import { Button, Modal } from 'react-bootstrap';
 import { useParams } from 'react-router-dom';
 
 const ViewLibrary = () => {
   const [assessments, setAssessments] = useState([]);
+  const [showDeleteModal, setShowDeleteModal] = useState(false); // State to control the modal
+  const [assessmentToDelete, setAssessmentToDelete] = useState(null); // State to store the assessment to delete
   const { username } = useParams(); // Get the username from the URL
 
   useEffect(() => {
@@ -38,10 +41,43 @@ const ViewLibrary = () => {
       });
   }, [username]);
 
+  const handleDeleteAssessment = (assessmentId) => {
+    setAssessmentToDelete(assessmentId);
+    setShowDeleteModal(true);
+  };
+
+  const confirmDelete = () => {
+    if (assessmentToDelete) {
+      // Send a request to your backend API to delete the assessment
+      fetch(`http://localhost:8081/api/results/${assessmentToDelete}`, {
+        method: 'DELETE',
+      })
+        .then((response) => {
+          if (response.ok) {
+            // If the delete request is successful, update the UI by filtering out the deleted assessment
+            setAssessments((currentAssessments) =>
+              currentAssessments.filter((assessment) => assessment._id !== assessmentToDelete)
+            );
+          } else {
+            console.error('Error deleting assessment:', response.statusText);
+          }
+        })
+        .catch((error) => {
+          console.error('Error deleting assessment:', error);
+        });
+    }
+    setShowDeleteModal(false);
+  };
+
+  const closeDeleteModal = () => {
+    setAssessmentToDelete(null);
+    setShowDeleteModal(false);
+  };
+
   return (
     <div style={{ background: '#5A5A5A', minHeight: '100vh', overflowX: 'hidden' }}>
       <h1 style={{ textAlign: 'center', color: 'white' }}>Assessment Library</h1>
-      <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center' }}>
+      <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', fontFamily: "sans-serif", fontSize: "18px" }}>
         {assessments.length > 0 ? (
           assessments.map((assessment) => (
             <div key={assessment._id} style={assessmentCardStyle}>
@@ -51,12 +87,35 @@ const ViewLibrary = () => {
               <p>Difficulty: {assessment.difficulty}</p>
               <p>Line Choices: {assessment.featureLines.map((line) => line.lineChoice).join(', ')}</p>
               <p>Score: {assessment.Score}</p>
+              <div style={{ display: 'flex', justifyContent: 'space-between', padding: '0px' }}>
+                <Button variant="danger" onClick={() => handleDeleteAssessment(assessment._id)}>Delete</Button>
+                <div style={{ marginLeft: '10px' }}>
+                  <Button>Set Public</Button>
+                </div>
+              </div>
             </div>
           ))
         ) : (
           <p>No assessments found for the specified user.</p>
         )}
       </div>
+
+      <Modal show={showDeleteModal} onHide={closeDeleteModal}>
+        <Modal.Header closeButton>
+          <Modal.Title>Confirm Deletion</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          Are you sure you want to delete this assessment?
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={closeDeleteModal}>
+            Cancel
+          </Button>
+          <Button variant="danger" onClick={confirmDelete}>
+            Delete
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </div>
   );
 };
