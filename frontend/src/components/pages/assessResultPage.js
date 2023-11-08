@@ -65,27 +65,6 @@ function PostResults() {
     setMovingTime(e.target.value);
   };
 
-  
-  const updateAssessment = async (score) => {
-    try {
-      const response = await fetch(`http://localhost:8081/api/results/${assessmentId}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ Score: score }),
-      });
-
-      if (response.ok) {
-        console.log("Assessment updated successfully!");
-      } else {
-        console.error("Error updating assessment:", response.status);
-      }
-    } catch (error) {
-      console.error("Error updating assessment:", error);
-    }
-  };
-
   const convertMovingTimeToSeconds = (time) => {
     const [minutes, seconds] = time.split(":");
     return parseInt(minutes, 10) * 60 + parseInt(seconds, 10);
@@ -99,25 +78,41 @@ function PostResults() {
   
 
   const handleNextClick = async () => {
-    if (selectedLine.length > 0) {
-      if (confirmedMovingTime) {
-        const scoreToSend = parseFloat(score);
-        try {
-          // Update the assessment using the "updateAssessment" function
-          await updateAssessment(scoreToSend);
-
-          // Set redirectToFeat2 to navigate to the next page
-          setRedirectToFeat2(true);
-        } catch (error) {
-          console.error("Error updating assessment:", error);
+    if (confirmedMovingTime) {
+      const scoreToSend = parseFloat(score);
+  
+      try {
+        // Send the score to the server and update the MongoDB document
+        const response = await fetch(`http://localhost:8081/api/results/${assessmentId}`, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ Score: scoreToSend }),
+        });
+  
+        if (response.ok) {
+          console.log("Assessment updated successfully!");
+  
+          // Show a success notification
+          alert("Assessment updated successfully!");
+  
+          // Navigate to /willowdale immediately after the alert is closed
+          window.location.href = "/willowdale";
+        } else {
+          console.error("Error updating assessment:", response.status);
           // Handle the error, e.g., show an error message to the user.
         }
-      } else {
-        alert("Please enter and confirm the average moving time.");
+      } catch (error) {
+        console.error("Error updating assessment:", error);
+        // Handle the error, e.g., show an error message to the user.
       }
+    } else {
+      alert("Please enter and confirm the average moving time.");
     }
   };
-
+  
+  
   const handleDiscardClick = () => {
     setShowModal(true);
   };
