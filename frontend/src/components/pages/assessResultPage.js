@@ -8,11 +8,8 @@ function PostResults() {
   const [score, setScore] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const { assessmentId } = useParams();
-  const [redirectToFeat2, setRedirectToFeat2] = useState(false);
   const [redirectToWillowdale, setRedirectToWillowdale] = useState(false);
   const [featureLines, setFeatureLines] = useState([]); // Define featureLines in the component's state
-  const [selectedLine, setSelectedLine] = useState([]);
-
 
   const calculateScore = () => {
     if (confirmedMovingTime && featureLines.length > 0) {
@@ -75,7 +72,6 @@ function PostResults() {
     console.log("Confirmed Moving Time:", movingTime);
     calculateScore(); // Calculate the score when the user confirms moving time.
   };
-  
 
   const handleNextClick = async () => {
     if (confirmedMovingTime) {
@@ -112,31 +108,53 @@ function PostResults() {
     }
   };
   
-  
   const handleDiscardClick = () => {
     setShowModal(true);
   };
 
-  const handleModalConfirm = () => {
-    setRedirectToWillowdale(true);
-    setShowModal(false);
+  const handleModalConfirm = async () => {
+    try {
+      // Send a DELETE request to delete the assessment
+      const response = await fetch(`http://localhost:8081/api/results/${assessmentId}`, {
+        method: "DELETE",
+      });
+  
+      if (response.status === 204) {
+        // The assessment was successfully deleted
+        console.log("Assessment deleted successfully!");
+  
+        // Show a success notification (you can use a different message here)
+        alert("Assessment deleted successfully!");
+  
+        // Navigate to /willowdale after deleting the assessment
+        setRedirectToWillowdale(true);
+        setShowModal(false);
+      } else if (response.status === 404) {
+        // Assessment not found
+        console.error("Result not found");
+        alert("Assessment not found");
+        setShowModal(false);
+      } else {
+        // Server error
+        console.error("Server error");
+        alert("Server error");
+        setShowModal(false);
+      }
+    } catch (error) {
+      // Handle any other errors that occur during the DELETE request
+      console.error("Error deleting assessment:", error);
+      alert("Error deleting assessment");
+      setShowModal(false);
+    }
   };
-
+  
   const handleModalCancel = () => {
     setShowModal(false);
   };
 
-  if (redirectToFeat2) {
-    return <Navigate to="/feat2" />;
-  }
-
   if (redirectToWillowdale) {
     return <Navigate to="/willowdale" />;
   }
-  
-  
-  
-  
 
   return (
     <div style={{ background: "#5A5A5A", minHeight: "100vh", display: "flex", justifyContent: "center", alignItems: "center" }}>
