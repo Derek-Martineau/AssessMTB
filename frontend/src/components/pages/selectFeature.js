@@ -59,7 +59,7 @@ function CallFeature() {
 
   const sendDataToServer = (requestData) => {
     // Make an HTTP POST request to send data to the server
-    return fetch("http://localhost:8081/api/results", {
+    return fetch(`${process.env.REACT_APP_BACKEND_SERVER_URI}/api/results`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

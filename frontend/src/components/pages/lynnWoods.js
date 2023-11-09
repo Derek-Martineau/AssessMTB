@@ -17,7 +17,7 @@ const LynnWoods = () => {
   async function fetchData() {
     try {
       //Fetch data 
-      const response = await fetch("http://localhost:8081/parks/trailparks");
+      const response = await fetch(`${process.env.REACT_APP_BACKEND_SERVER_URI}/parks/trailparks`);
       const data = await response.json();
 
       //Find the description for Lynn Woods

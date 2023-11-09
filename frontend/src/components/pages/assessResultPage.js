@@ -40,7 +40,7 @@ function PostResults() {
   useEffect(() => {
     async function fetchAssessmentData() {
       try {
-        const response = await fetch(`http://localhost:8081/api/results/${assessmentId}`);
+        const response = await fetch(`${process.env.REACT_APP_BACKEND_SERVER_URI}/api/results/${assessmentId}`);
         if (response.ok) {
           const assessmentData = await response.json();
           if (assessmentData.featureLines) {
@@ -79,7 +79,7 @@ function PostResults() {
   
       try {
         // Send the score to the server and update the MongoDB document
-        const response = await fetch(`http://localhost:8081/api/results/${assessmentId}`, {
+        const response = await fetch(`${process.env.REACT_APP_BACKEND_SERVER_URI}/api/results/${assessmentId}`, {
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
@@ -115,7 +115,7 @@ function PostResults() {
   const handleModalConfirm = async () => {
     try {
       // Send a DELETE request to delete the assessment
-      const response = await fetch(`http://localhost:8081/api/results/${assessmentId}`, {
+      const response = await fetch(`${process.env.REACT_APP_BACKEND_SERVER_URI}/api/results/${assessmentId}`, {
         method: "DELETE",
       });
   

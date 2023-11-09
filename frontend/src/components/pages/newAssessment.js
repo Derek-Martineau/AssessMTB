@@ -16,7 +16,7 @@ const CallParks = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(`http://localhost:8081/parks/trailparks`);
+        const response = await fetch(`${process.env.REACT_APP_BACKEND_SERVER_URI}/parks/trailparks`);
         const json = await response.json();
         setData(json);
 
@@ -49,7 +49,7 @@ const CallParks = () => {
     if (selectedPark) {
       try {
         const response = await fetch(
-          `http://localhost:8081/parks/trailparks/getsegments/${selectedPark._id}`
+          `${process.env.REACT_APP_BACKEND_SERVER_URI}/parks/trailparks/getsegments/${selectedPark._id}`
         );
         const json = await response.json();
         const sortedSegments = json.sort((a, b) =>

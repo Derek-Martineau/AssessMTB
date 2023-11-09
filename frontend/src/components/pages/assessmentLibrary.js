@@ -10,7 +10,7 @@ const ViewLibrary = () => {
 
   useEffect(() => {
     // Use the 'username' variable to customize the API route
-    fetch(`http://localhost:8081/api/results/user/${username}`)
+    fetch(`${process.env.REACT_APP_BACKEND_SERVER_URI}/api/results/user/${username}`)
       .then((response) => {
         if (!response.ok) {
           throw new Error('Network response was not ok');
@@ -23,7 +23,7 @@ const ViewLibrary = () => {
 
         for (const assessment of data) {
           // Fetch the Segment data for each assessment
-          const segmentResponse = await fetch(`http://localhost:8081/api/segments/${assessment.Segment}`);
+          const segmentResponse = await fetch(`${process.env.REACT_APP_BACKEND_SERVER_URI}/api/segments/${assessment.Segment}`);
           if (segmentResponse.ok) {
             const segmentData = await segmentResponse.json();
             assessment.segmentName = segmentData.segmentName;
@@ -49,7 +49,7 @@ const ViewLibrary = () => {
   const confirmDelete = () => {
     if (assessmentToDelete) {
       // Send a request to your backend API to delete the assessment
-      fetch(`http://localhost:8081/api/results/${assessmentToDelete}`, {
+      fetch(`${process.env.REACT_APP_BACKEND_SERVER_URI}/api/results/${assessmentToDelete}`, {
         method: 'DELETE',
       })
         .then((response) => {

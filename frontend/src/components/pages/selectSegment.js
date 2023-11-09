@@ -19,7 +19,7 @@ const CallSegments = () => {
     // Fetch data specific to the park using trailparkId
     const fetchData = async () => {
       try {
-        const response = await fetch(`http://localhost:8081/parks/trailparks/getsegments/${trailparkId}`);
+        const response = await fetch(`${process.env.REACT_APP_BACKEND_SERVER_URI}/parks/trailparks/getsegments/${trailparkId}`);
         const json = await response.json();
         setData(json);
       } catch (error) {
