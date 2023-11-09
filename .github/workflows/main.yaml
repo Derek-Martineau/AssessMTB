@@ -1,6 +1,6 @@
 name: Backend Node.JS CI/CD
 
-on:
+on: 
   push:
     branches: [main]
 
