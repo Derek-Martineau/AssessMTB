@@ -2,12 +2,10 @@ name: Backend Node.JS CI/CD
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
-
   test:
-
     name: Test
     runs-on: ubuntu-latest
 
@@ -41,8 +39,8 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-     - name: Deploy to production
-       uses: johnbeynon/render-deploy-action@v0.0.8
-       with:
-        serviceid: ${{ secrets.SERVICE_ID }}  
-        api-key: ${{ secrets.RENDER_API_KEY }}  
+      - name: Deploy to production
+        uses: johnbeynon/render-deploy-action@v0.0.8
+        with:
+          serviceid: ${{ secrets.SERVICE_ID }}  
+          api-key: ${{ secrets.RENDER_API_KEY }}
