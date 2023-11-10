@@ -20,18 +20,36 @@ function PostResults() {
       const lineTotal = featureLines.reduce((total, line) => total + parseInt(line.lineChoice, 10), 0);
       console.log("Total Line Choice Score:", lineTotal);
   
-      const maxMovingTime = 300; // You can adjust this value
+      const maxMovingTime = 600; // Increased maxMovingTime for a broader range
       const maxLineTotal = 48; // Maximum total for lineChoice
   
       // Calculate scores based on your criteria
-      const movingTimeScore = 100 - (movingTimeInSeconds / maxMovingTime) * 100;
+      // Calculate the moving time score with a more aggressive non-linear transformation
+      let movingTimeScore = 100 - Math.pow((movingTimeInSeconds / maxMovingTime) * 100, 1.3);
+  
+      // Ensure that the score does not go below 0 or over 100
+      movingTimeScore = Math.min(Math.max(movingTimeScore, 0), 100);
+  
       console.log("Moving Time Score:", movingTimeScore);
   
-      const lineTotalScore = (lineTotal / maxLineTotal) * 100;
-      console.log("Line Choice Score:", lineTotalScore);
+      // Calculate the line total score with a more aggressive non-linear transformation
+      const lineTotalScore = Math.pow((lineTotal / maxLineTotal) * 100, 1.5);
+  
+      // Ensure that the score does not go below 0 or over 100
+      const clampedLineTotalScore = Math.min(Math.max(lineTotalScore, 0), 100);
+      console.log("Line Choice Score:", clampedLineTotalScore);
   
       // Calculate the final score by summing the two scores
-      const finalScore = movingTimeScore + lineTotalScore;
+      let finalScore = movingTimeScore + clampedLineTotalScore;
+  
+      // Ensure that the final score does not go below 0 or over 100
+      finalScore = Math.min(Math.max(finalScore, 0), 100);
+  
+      // If lineTotal is less than 40, reduce the final score to avoid scores too close to 100
+      if (lineTotal < 40) {
+        finalScore = finalScore * (lineTotal / 40);
+      }
+  
       setScore(finalScore.toFixed(2)); // Convert to a string with 2 decimal places
       console.log("Calculated Score:", finalScore); // Log the final score here
     }
@@ -88,10 +106,10 @@ function PostResults() {
         });
   
         if (response.ok) {
-          console.log("Assessment updated successfully!");
+          console.log("Assessment saved successfully!");
   
           // Show a success notification
-          alert("Assessment updated successfully!");
+          alert("Assessment saved successfully!");
   
           // Navigate to /willowdale immediately after the alert is closed
           window.location.href = "/willowdale";
@@ -171,7 +189,12 @@ function PostResults() {
             <Form>
               <Form.Group controlId="movingTime">
                 <Form.Label>Enter The Total Moving Time</Form.Label>
-                <Form.Control type="text" value={movingTime} onChange={handleMovingTimeChange} />
+                <Form.Control
+                  type="text"
+                  value={movingTime}
+                  onChange={handleMovingTimeChange}
+                  placeholder="e.g., 2:00"
+                />
               </Form.Group>
             </Form>
           )}
