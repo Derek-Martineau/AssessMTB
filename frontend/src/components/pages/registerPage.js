@@ -44,22 +44,25 @@ const Register = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      
-      const { data } = await axios.post(url, data);
+      alert(`Do not leave this page until registration is confirmed. ${url}`);
+      const { data: res } = await axios.post(url, data);
+      alert("Your account has been created.");
+
       // const {accessToken} = res
       //store token in localStorage
-      
-      console.log('I was called',data);
       navigate("/login");
     } catch (error) {
-      if (
-        error.response &&
-        error.response.status >= 400 &&
-        error.response.status <= 500
-      ) {
-        console.log('I was called error',error.response);
-        setError(error.response.data.message);
+      if (error.response) {
+        // The request was made and the server responded with a status code
+        // that falls out of the range of 2xx
+        alert(`Error: ${JSON.stringify(error.response.data)}  ${error.response.status} ${url}`);
+        console.log(error.response.data);
+      } else {
+        // Something happened in setting up the request that triggered an Error
+        alert(`${error.message}.  An error occured contacting ${url}`);
+        console.log('Error', error.message);
       }
+      setError("Something went wrong. Please try again.");
     }
   };
 
