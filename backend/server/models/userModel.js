@@ -21,6 +21,9 @@ const newUserSchema = new mongoose.Schema(
     date: {
       type: Date,
       default: Date.now,
+    },
+    role: {
+      type: String,
     }
   
     /*friends: [{type: mongoose.Schema.Types.ObjectsId, ref: 'Friends'}]

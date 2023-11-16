@@ -24,7 +24,7 @@ const upload = multer({ storage: storage });
 // Route to retreive all images stored on the server.
 // It returns the images in JSON format.
 // The routs is /images  (maybe we move this to a different file).)
-router.get('/images/getAll', async (req, res) => {
+router.get('/getAll', async (req, res) => {
     imageSchema.find({})
     .then((data, err)=>{
         if(err){
@@ -44,18 +44,19 @@ router.get('/images/getAll', async (req, res) => {
     })
     
 });
+
+  
 // Define a route to retrieve a specific image by its unique ID.
-router.get('/images/:id', async (req, res) => {
+router.get('/:id', async (req, res) => {
   const imageId = req.params.id;
 
   try {
     // Use Mongoose to find the image by its ID
-    const image = await imageSchema.findOne({ id: imageId });
+    const image = await imageSchema.findById(imageId);
 
     if (image) {
       // Image found, set the appropriate content type
       res.setHeader('Content-Type', image.img.contentType);
-
       // Send the image data as the response
       return res.send(image.img.data);
     } else {
@@ -68,50 +69,62 @@ router.get('/images/:id', async (req, res) => {
     return res.status(500).json({ message: 'Internal server error' });
   }
 });
+
+router.delete('/:id', async (req, res) => {
+  const objectId = req.params.id; // objectId is the _id
+
+  try {
+    await imageSchema.findByIdAndRemove(objectId);
+    return res.json({ message: 'Image removed successfully' });
+  } catch (error) {
+    console.error('Error deleting image:', error);
+    return res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
  
 
 // This is the route that should save the given image.
-router.post('/images/create', upload.single('image'),  async (req, res, next) => {
-    // At this point, the image is saved on the server.
+router.post('/create', upload.single('image'), async (req, res, next) => {
+  const directoryAbove = path.resolve(__dirname, '..');
+  const pathToUploadedFile = path.resolve(directoryAbove, 'uploads', req.file.filename);
+  const base64Data = fs.readFileSync(pathToUploadedFile, { encoding: 'base64' });
 
-    // We need to get the path to the image.
-    // We expect there to be a folder
-    // called uploads in the root (parallel to routes folder)
-    const directoryAbove = path.resolve(__dirname, '..');
-    const pathToUploadedFile = path.resolve(directoryAbove, 'uploads', req.file.filename);
-
-    // Read the image file as base64 data
-    const base64Data = fs.readFileSync(pathToUploadedFile, { encoding: 'base64' });
-
-
-    // We are building the image model to store on the server.
-    // The img field contains the image data.
-    // Notice: that we have the image saved twice: once on the server and once in the database.
-    const imageToStore = imageSchema({
-        name: req.body.name,
-        desc: req.body.desc,
-        base64Data: base64Data,  // Add the base64 data to the image schema
-        img: {
-            data: fs.readFileSync(path.join(pathToUploadedFile)),
-            contentType: 'image/png'
-        }
-    });
-   
-  
-    try {
-      const response = await imageSchema.create(imageToStore);
-      res.json({ msg: 'Image created successfully.' });
-    } catch (err) {
-      console.error('Error creating post:', err);
-      res.status(500).json({ msg: 'Could not create image.' });
+  const imageToStore = imageSchema({
+    name: req.body.name,
+    base64Data: base64Data,
+    img: {
+      data: fs.readFileSync(path.join(pathToUploadedFile)),
+      contentType: 'image/png'
     }
-    fs.unlink(pathToUploadedFile, (err) => {
-      if (err) {
-        console.error('Error deleting file:', err);
-      } else {
-        console.log('File deleted successfully.');
-      }
-    });
+  });
+
+  try {
+    const response = await imageSchema.create(imageToStore);
+    
+    if (response && response._id) {
+      const imageId = response._id; // Getting the ID of the newly created image
+      res.json({ msg: 'Image created successfully.', imageId });
+    } else {
+      // If there's an issue with the response, log an error or send a specific message
+      console.error('Invalid response or _id not found in the response');
+      res.status(500).json({ msg: 'Invalid response from image creation' });
+    }
+  } catch (err) {
+    console.error('Error creating image:', err);
+    res.status(500).json({ msg: 'Could not create image', error: err.message }); // Include the error message in the response
+  }
+
+  fs.unlink(pathToUploadedFile, (err) => {
+    if (err) {
+      console.error('Error deleting file:', err);
+    } else {
+      console.log('File deleted successfully.');
+    }
+  });
+
+    // This site was used to help write this code:
+    // https://www.geeksforgeeks.org/upload-and-retrieve-image-on-mongodb-using-mongoose/
 });
  
 module.exports = router;
