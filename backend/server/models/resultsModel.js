@@ -34,6 +34,12 @@ const resultsSchema = new mongoose.Schema({
         type: Number,
         //required: true,
         label: "result of assessment"
+    },
+
+    PublicStatus: {
+        type: Boolean,
+        required: true,
+        label: "If set to true the assessment will be public to all users"
     }
 });
 

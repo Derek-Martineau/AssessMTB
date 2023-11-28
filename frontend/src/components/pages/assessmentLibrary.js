@@ -84,6 +84,7 @@ const ViewLibrary = () => {
               <h2>Assessment Date: {new Date(assessment.Date).toDateString()}</h2>
               <p>User: {username}</p>
               <p>Segment: {assessment.segmentName}</p>
+              <p>Public Status: {assessment.PublicStatus ? 'Public' : 'Private'}</p>
               <p>Difficulty: {assessment.difficulty}</p>
               <p>Line Choices: {assessment.featureLines.map((line) => line.lineChoice).join(', ')}</p>
               <p>Score: {assessment.Score}</p>

@@ -122,6 +122,7 @@ function CallFeature() {
             lineChoice: line,
           })),
           score: assessmentScore,
+          PublicStatus: false,
         };
 
         // Send the data to the server using the sendDataToServer function
