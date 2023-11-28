@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import getUserInfo from '../../utilities/decodeJwt'
 
-const darkMode = true;
+const darkMode = false;
 
 export default function UploadImages() {
   const [user, setUser] = useState({});
