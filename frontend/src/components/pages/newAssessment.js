@@ -82,17 +82,24 @@ const CallParks = () => {
   };
 
   const buttonStyle = {
-    margin: "3px 0",
+    margin: "5px 0",
+    width: "100%",
+    whiteSpace: "nowrap",
+    overflow: "hidden",
+    textOverflow: "ellipsis",
   };
 
   const buttonWrapperStyle = {
     display: "flex",
     justifyContent: "center",
+    marginTop: "10px",
   };
 
   const cardStyle = {
-    width: "25rem",
-    padding: "20px",
+    width: "30rem",
+    borderRadius: "10px",
+    boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+    background: "#f4f4f4",
   };
 
   const notificationStyle = {
@@ -127,23 +134,20 @@ const CallParks = () => {
     <div style={{ background: "#5A5A5A", minHeight: "100vh", display: "flex", justifyContent: "center", alignItems: "center" }}>
       <Card style={cardStyle}>
         <Card.Body>
-          <Card.Title>Which Park Did You Ride?</Card.Title>
-          <Card.Subtitle>Please select the park you would like to assess a segment on.</Card.Subtitle>
-          <br />
-          <div>
-            <ul>
-              {data.map((el) => (
-                <li key={el._id}>
-                  <Button
-                    variant={selectedPark === el ? "success" : "primary"}
-                    style={buttonStyle}
-                    onClick={() => handleParkSelection(el)}
-                  >
-                    {el.parkName}
-                  </Button>
-                </li>
-              ))}
-            </ul>
+          <Card.Title style={{ fontSize: "1.5rem", marginBottom: "15px", textAlign: "center", color: "#333" }}>Which Park Did You Ride?</Card.Title>
+          <Card.Subtitle style={{ marginBottom: "15px", textAlign: "center", color: "#555" }}>Please select the park you would like to assess a segment on.</Card.Subtitle>
+          <div style={{ listStyleType: 'none', padding: 0 }}>
+            {data.map((el) => (
+              <li key={el._id}>
+                <Button
+                  variant={selectedPark === el ? "success" : "primary"}
+                  style={buttonStyle}
+                  onClick={() => handleParkSelection(el)}
+                >
+                  {el.parkName}
+                </Button>
+              </li>
+            ))}
           </div>
           {/* Show dropdown menu for selected park's segments */}
           {showSegmentDropdown && (
@@ -187,9 +191,9 @@ const CallParks = () => {
       {/* Instructions Modal */}
       <Modal show={showInstructionsModal} onHide={handleInstructionsClose}>
         <Modal.Header closeButton>
-          <Modal.Title>Assessment Instructions</Modal.Title>
+          <Modal.Title style={{ color: "#333" }}>Assessment Instructions</Modal.Title>
         </Modal.Header>
-        <Modal.Body>
+        <Modal.Body style={{ color: "#555" }}>
           <p>
             <strong>Step 1:</strong> Select the park you would like to assess a segment in. Press the "Next" button to confirm and continue.
           </p>
