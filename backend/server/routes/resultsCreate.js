@@ -79,5 +79,15 @@ router.get('/results/user/:username', async (req, res) => {
   }
 });
 
+// GET public assessments
+router.get('/public-assessments', async (req, res) => {
+  try {
+    const publicAssessments = await Result.find({ PublicStatus: true });
+    res.json(publicAssessments);
+  } catch (error) {
+    console.error('Error fetching public assessments:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
 
 module.exports = router;
