@@ -74,6 +74,32 @@ const ViewLibrary = () => {
     setShowDeleteModal(false);
   };
 
+  const handleSetPublic = (assessmentId) => {
+    // Send a request to your backend API to update the PublicStatus
+    fetch(`${process.env.REACT_APP_BACKEND_SERVER_URI}/api/results/${assessmentId}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ PublicStatus: true }),
+    })
+      .then((response) => {
+        if (response.ok) {
+          // If the update request is successful, update the UI by setting the PublicStatus to true
+          setAssessments((currentAssessments) =>
+            currentAssessments.map((assessment) =>
+              assessment._id === assessmentId ? { ...assessment, PublicStatus: true } : assessment
+            )
+          );
+        } else {
+          console.error('Error updating PublicStatus:', response.statusText);
+        }
+      })
+      .catch((error) => {
+        console.error('Error updating PublicStatus:', error);
+      });
+  };
+
   return (
     <div style={{ background: '#5A5A5A', minHeight: '100vh', overflowX: 'hidden' }}>
       <h1 style={{ textAlign: 'center', color: 'white' }}>Assessment Library</h1>
@@ -90,8 +116,10 @@ const ViewLibrary = () => {
               <p>Score: {assessment.Score}</p>
               <div style={{ display: 'flex', justifyContent: 'space-between', padding: '0px' }}>
                 <Button variant="danger" onClick={() => handleDeleteAssessment(assessment._id)}>Delete</Button>
-                <div style={{ marginLeft: '10px' }}>
-                  <Button>Set Public</Button>
+                 <div style={{ marginLeft: '10px' }}>
+                  <Button variant="primary" onClick={() => handleSetPublic(assessment._id)}>
+                    Set Public
+                 </Button>
                 </div>
               </div>
             </div>
