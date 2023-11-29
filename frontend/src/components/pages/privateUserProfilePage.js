@@ -5,12 +5,9 @@ import { useNavigate } from "react-router-dom";
 import getUserInfo from "../../utilities/decodeJwt";
 
 const PrivateUserProfile = () => {
-  const [show, setShow] = useState(false);
   const [user, setUser] = useState({});
   const [profilePicture, setProfilePicture] = useState("");
   const [publicAssessments, setPublicAssessments] = useState([]);
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
   const navigate = useNavigate();
 
   // handle logout button
@@ -47,17 +44,17 @@ const PrivateUserProfile = () => {
 
   useEffect(() => {
     setUser(getUserInfo());
-  
+
     // Fetch public assessments
     const fetchPublicAssessments = async () => {
       try {
         const response = await axios.get(`${process.env.REACT_APP_BACKEND_SERVER_URI}/api/public-assessments`);
         // Log the data to the console for debugging
         console.log("Response data:", response.data);
-  
+
         // Fetch segment data for each assessment and update the state
         const updatedPublicAssessments = [];
-  
+
         for (const assessment of response.data) {
           const segmentResponse = await axios.get(`${process.env.REACT_APP_BACKEND_SERVER_URI}/api/segments/${assessment.Segment}`);
           if (segmentResponse.data) {
@@ -65,40 +62,33 @@ const PrivateUserProfile = () => {
             assessment.segmentName = segmentData.segmentName;
             assessment.difficulty = segmentData.difficulty;
           }
-  
+
           updatedPublicAssessments.push(assessment);
         }
-  
+
         setPublicAssessments(updatedPublicAssessments);
       } catch (error) {
         console.error("Error fetching public assessments:", error);
       }
     };
-  
+
     fetchPublicAssessments();
   }, []);
+
   
 
   if (!user) return <div><h4>Log in to view this page.</h4></div>;
 
   return (
     <div style={{ background: "#5A5A5A", minHeight: "100vh", overflowX: "hidden" }}>
-      {/* Profile Picture */}
-      <div style={{ width: "300px", padding: "20px", margin: "20px", background: "white", borderRadius: "10px", boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "space-between", textAlign: "center" }}>
-        {profilePicture && (
-          <img src={profilePicture} alt="Profile" width="200" />
-        )}
-        <input type="file" onChange={handleProfilePictureUpload} accept="image/*" />
-      </div>
-
-      {/* User Info */}
+      
       <div style={{ width: "300px", padding: "20px", margin: "20px", background: "white", borderRadius: "10px", boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "space-between", textAlign: "center" }}>
         {profilePicture && <img src={profilePicture} alt="Profile" width="200" />}
         <h1>{user.username}</h1>
         <h3>{user.role}</h3>
         <h3>Followers: 0{user.followers}</h3>
         <h3>Following: 0{user.following}</h3>
-        <h3>Posts: {user.posts}</h3>
+        <h3>Posts: {publicAssessments.length}</h3>
         <div style={{ display: "flex", justifyContent: "space-between", padding: "0px" }}>
           <Button className="me-2" onClick={handleLogout}>
             Log Out
@@ -108,7 +98,10 @@ const PrivateUserProfile = () => {
           </Button>
         </div>
       </div>
-
+      
+      {/* Divider and Header */}
+      <hr style={{ margin: "20px 0", border: "4px solid #000000", width: "100%" }} />
+      <h1 style={{ color: "#fff", textAlign: "center" }}>Assessments</h1>
       {/* Public Assessments */}
       <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", fontFamily: "sans-serif", fontSize: "18px" }}>
         {publicAssessments.length > 0 ? (
