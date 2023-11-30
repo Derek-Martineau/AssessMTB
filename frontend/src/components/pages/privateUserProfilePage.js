@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Button, Modal } from "react-bootstrap";
+import { Button } from "react-bootstrap";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import getUserInfo from "../../utilities/decodeJwt";
@@ -75,21 +75,18 @@ const PrivateUserProfile = () => {
     fetchPublicAssessments();
   }, []);
 
-  
-
   if (!user) return <div><h4>Log in to view this page.</h4></div>;
 
   return (
     <div style={{ background: "#5A5A5A", minHeight: "100vh", overflowX: "hidden" }}>
-      
-      <div style={{ width: "300px", padding: "20px", margin: "20px", background: "white", borderRadius: "10px", boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "space-between", textAlign: "center" }}>
+      <div style={{ textAlign: "center", padding: "20px", color: "#fff" }}>
         {profilePicture && <img src={profilePicture} alt="Profile" width="200" />}
         <h1>{user.username}</h1>
         <h3>{user.role}</h3>
         <h3>Followers: 0{user.followers}</h3>
         <h3>Following: 0{user.following}</h3>
         <h3>Posts: {publicAssessments.length}</h3>
-        <div style={{ display: "flex", justifyContent: "space-between", padding: "0px" }}>
+        <div style={{ display: "flex", justifyContent: "flex-end", padding: "0px" }}>
           <Button className="me-2" onClick={handleLogout}>
             Log Out
           </Button>
@@ -98,7 +95,7 @@ const PrivateUserProfile = () => {
           </Button>
         </div>
       </div>
-      
+
       {/* Divider and Header */}
       <hr style={{ margin: "20px 0", border: "4px solid #000000", width: "100%" }} />
       <h1 style={{ color: "#fff", textAlign: "center" }}>Assessments</h1>
