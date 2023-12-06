@@ -164,6 +164,13 @@ function CallFeature() {
     return <Navigate to={`/results/${assessmentId}`} />;
     }
 
+    const buttonStyle = (lineValue) => {
+      const isSelected = selectedLines[currentPhotoIndex] === lineValue;
+      return isSelected
+        ? { backgroundColor: "darkgrey", color: "white", boxShadow: "0 0 5px rgba(0, 0, 0, 0.3)" }
+        : {};
+    };
+    
   return (
     <div style={{ background: '#5A5A5A', minHeight: "100vh", display: "flex", justifyContent: "center", alignItems: "center" }}>
       <Card style={{ width: "45rem" }}>
@@ -185,32 +192,32 @@ function CallFeature() {
           <br />
           <div style={buttonWrapperStyle}>
   <Button
-   style={{ margin: "0 25px" }}
-    variant={selectedLines[currentPhotoIndex] === 8 ? "success" : "primary"}
+    style={buttonStyle(8)}
+    variant={selectedLines[currentPhotoIndex] === 8 ? "success" : "danger"}
     onClick={() => handleLineSelection("A")}
   >
-    A 
+    A
   </Button>
   <Button
-     style={{ margin: "0 25px" }}
-    variant={selectedLines[currentPhotoIndex] === 6 ? "success" : "primary"}
+    style={buttonStyle(6)}
+    variant={selectedLines[currentPhotoIndex] === 6 ? "success" : "warning"}
     onClick={() => handleLineSelection("B")}
   >
-    B 
+    B
   </Button>
   <Button
-     style={{ margin: "0 25px" }}
-    variant={selectedLines[currentPhotoIndex] === 4 ? "success" : "primary"}
+    style={buttonStyle(4)}
+    variant={selectedLines[currentPhotoIndex] === 4 ? "success" : "success"}
     onClick={() => handleLineSelection("C")}
   >
-    C 
+    C
   </Button>
   <Button
-   style={{ margin: "0 25px" }}
+    style={buttonStyle(1)}
     variant={selectedLines[currentPhotoIndex] === 1 ? "success" : "primary"}
     onClick={() => handleLineSelection("Walked")}
   >
-    Walked 
+    Walked
   </Button>
 </div>
 <br />

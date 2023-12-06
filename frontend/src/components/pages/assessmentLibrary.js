@@ -74,21 +74,22 @@ const ViewLibrary = () => {
     setShowDeleteModal(false);
   };
 
-  const handleSetPublic = (assessmentId) => {
+  const handleSetPublic = (assessmentId, currentPublicStatus) => {
     // Send a request to your backend API to update the PublicStatus
+    const newPublicStatus = !currentPublicStatus; // Toggle the PublicStatus
     fetch(`${process.env.REACT_APP_BACKEND_SERVER_URI}/api/results/${assessmentId}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ PublicStatus: true }),
+      body: JSON.stringify({ PublicStatus: newPublicStatus }),
     })
       .then((response) => {
         if (response.ok) {
-          // If the update request is successful, update the UI by setting the PublicStatus to true
+          // If the update request is successful, update the UI by setting the PublicStatus
           setAssessments((currentAssessments) =>
             currentAssessments.map((assessment) =>
-              assessment._id === assessmentId ? { ...assessment, PublicStatus: true } : assessment
+              assessment._id === assessmentId ? { ...assessment, PublicStatus: newPublicStatus } : assessment
             )
           );
         } else {
@@ -117,9 +118,12 @@ const ViewLibrary = () => {
               <div style={{ display: 'flex', justifyContent: 'space-between', padding: '0px' }}>
                 <Button variant="danger" onClick={() => handleDeleteAssessment(assessment._id)}>Delete</Button>
                  <div style={{ marginLeft: '10px' }}>
-                  <Button variant="primary" onClick={() => handleSetPublic(assessment._id)}>
-                    Set Public
-                 </Button>
+                 <Button
+                    variant={assessment.PublicStatus ? "warning" : "warning"}
+                    onClick={() => handleSetPublic(assessment._id, assessment.PublicStatus)}
+                    >
+                    {assessment.PublicStatus ? "Set Private" : "Set Public"}
+                </Button>
                 </div>
               </div>
             </div>
