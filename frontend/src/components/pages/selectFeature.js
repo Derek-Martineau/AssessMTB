@@ -6,17 +6,19 @@ function CallFeature() {
   const [selectedLines, setSelectedLines] = useState(Array(6).fill(null));
   const [redirectToNewAssessment, setRedirectToNewAssessment] = useState(false);
   const [showModal, setShowModal] = useState(false);
+  const [segmentData, setSegmentData] = useState(false);
   const [showInstructionsModal, setShowInstructionsModal] = useState(false);
-  const [photoFilePaths] = useState([
-    "/images/Gordon_Walls_F1.JPG",
-    "/images/Gordon_Walls_F2.JPG",
-    "/images/Gordon_Walls_F3.JPG",
-    "/images/Gordon_Walls_F4.JPG",
-    "/images/Gordon_Walls_F5.JPG",
-    "/images/Gordon_Walls_F6.JPG",
-  ]);
+  // const [photoFilePaths] = useState([
+  //   "/images/Gordon_Walls_F1.JPG",
+  //   "/images/Gordon_Walls_F2.JPG",
+  //   "/images/Gordon_Walls_F3.JPG",
+  //   "/images/Gordon_Walls_F4.JPG",
+  //   "/images/Gordon_Walls_F5.JPG",
+  //   "/images/Gordon_Walls_F6.JPG",
+  // ]);
   const [currentPhotoIndex, setCurrentPhotoIndex] = useState(0);
-
+  const [photoFilePaths, setPhotoFilePaths] = useState([]);
+  const [photos, setPhotos] = useState([]);
   const { segmentId, userId } = useParams();
   const navigate = useNavigate();
 
@@ -24,7 +26,20 @@ function CallFeature() {
   const [segment, setSegment] = useState(segmentId);
   const [assessmentId, setAssessmentId] = useState(null);
   const [redirectToResults, setRedirectToResults] = useState(false);
+// Effect to fetch image data from the server
+useEffect(() => {
+  const fetchImages = async () => {
+    try {
+      const response = await fetch(`${process.env.REACT_APP_BACKEND_SERVER_URI}/images/${segmentId}`);
+      const data = await response.json();
+      setPhotos(data); // Assuming the API returns an array of image data
+    } catch (error) {
+      console.error("Error fetching images:", error);
+    }
+  };
 
+  fetchImages();
+}, [segmentId]);
   useEffect(() => {
     console.log("User:", user);
     console.log("Segment:", segment);
@@ -110,7 +125,7 @@ function CallFeature() {
     const lineValue = selectedLines[currentPhotoIndex];
 
     if (lineValue !== null) {
-      if (currentPhotoIndex < photoFilePaths.length - 1) {
+      if (currentPhotoIndex < photoFilePaths.length - 1) { // this could be photoIDs
         setCurrentPhotoIndex(currentPhotoIndex + 1);
       } else {
         // Array is full, perform necessary actions
@@ -178,12 +193,14 @@ function CallFeature() {
           <div>
             <h3>Photo for Segment</h3>
             <div>
-              <img
-                key={currentPhotoIndex}
-                src={photoFilePaths[currentPhotoIndex]}
-                alt={`Photo ${currentPhotoIndex + 1}`}
-                style={{ maxWidth: "100%", maxHeight: "100%" }}
-              />
+              {photos.length > 0 && photos[currentPhotoIndex] && photos[currentPhotoIndex].base64Data && (
+                <img
+                  key={currentPhotoIndex}
+                  src={`data:image/png;base64,${photos[currentPhotoIndex].base64Data}`}
+                  alt={`Photo ${currentPhotoIndex + 1}`}
+                  style={{ maxWidth: "100%", maxHeight: "100%" }}
+                />
+              )}
             </div>
           </div>
           <div style={{ display: "flex", justifyContent: "center" }}>
