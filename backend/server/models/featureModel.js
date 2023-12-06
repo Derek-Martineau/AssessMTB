@@ -11,6 +11,13 @@ const featureSchema = new mongoose.Schema({
         required: true,
         label: "The description and facts about the feature",
     },
+
+    photoID: {
+        type: String,
+        required: false,
+        label: "The feature photo",
+    },
+
     photos: [{
         name: String,
         desc: String,

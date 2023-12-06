@@ -16,10 +16,15 @@ const segmentSchema = new mongoose.Schema({
         required: true,
         label: "The difficulty of the segment",
     },
-    features: [{
+    park: {
+        type: String,
+        required: true,
+        label: "park the segment lives in",
+    },
+    Features: [{
         required: true,
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'features'
+        ref: 'Image'
     }]
 }, { collection: "segments" });
 
