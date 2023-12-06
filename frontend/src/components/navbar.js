@@ -5,7 +5,6 @@ import Nav from 'react-bootstrap/Nav';
 import ReactNavbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 
-// display our Navbar
 export default function Navbar() {
   const [user, setUser] = useState({});
 
@@ -14,73 +13,51 @@ export default function Navbar() {
   }, []);
 
   const publicUser = () => {
-    
-    const parks = <NavDropdown title="View Parks" id="nav-dropdown">
-    <NavDropdown.Item href="/willowdale">Willowdale State Park</NavDropdown.Item>
-    <NavDropdown.Item href="/gordon">Gordon College</NavDropdown.Item>
-    <NavDropdown.Item href="/lynnwoods">Lynn Woods</NavDropdown.Item>
-  </NavDropdown>;
-  //logged in user
-    if (user) {
-      return (
-        <div is="outerContainer" style={{ display: 'flex', flexDirection: 'row', alignItems: 'end' }}>
-          <nav>
-            <NavDropdown title="View Parks" id="nav-dropdown">
-            <NavDropdown.Item href="/willowdale">Willowdale State Park</NavDropdown.Item>
-            <NavDropdown.Item href="/gordon">Gordon College</NavDropdown.Item>
-            <NavDropdown.Item href="/lynnwoods">Lynn Woods</NavDropdown.Item>
-          </NavDropdown>
-          </nav>
+    const parks = (
+      <NavDropdown title="View Parks" id="nav-dropdown">
+        <NavDropdown.Item href="/willowdale">Willowdale State Park</NavDropdown.Item>
+        <NavDropdown.Item href="/gordon">Gordon College</NavDropdown.Item>
+        <NavDropdown.Item href="/lynnwoods">Lynn Woods</NavDropdown.Item>
+      </NavDropdown>
+    );
 
-        </div>
-      );
-      //not logged in user
-    } else {
-      return (
-          <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-end' }}>
-          <nav>
-          ${parks}
-          </nav>
-            <Nav.Link href="/login">Login</Nav.Link>
-            <Nav.Link href="/signup">Register</Nav.Link>
-            
-          </div>
-        
-      );
-    }
-  }
+    return (
+      <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'end' }}>
+        <nav>
+          {parks}
+        </nav>
+      </div>
+    );
+  };
 
   const getBarDetails = () => {
-    //if logged in show profile
-    if(user){
-      return (      <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-end', color:'#a299a3' }}>
-      <Nav.Link style={{paddingRight:'10px'}} href="/assessmentHome">Assess</Nav.Link>
-      <Nav.Link href="/privateUserProfile">Profile</Nav.Link>
-    </div>)
-    //if not logged in show login and register
-    }else {
+    if (user) {
+      // If logged in, show "Assess," "Profile," and "Logout" links
       return (
- 
-        <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-end' }}>
-        
-          <Nav.Link href="/login">Login</Nav.Link>
-          <Nav.Link href="/signup">Register</Nav.Link>
-
+        <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-end', color: '#a299a3' }}>
+          <Nav.Link style={{ paddingRight: '10px' }} href="/assessmentHome">Assess</Nav.Link>
+          <Nav.Link href="/privateUserProfile">Profile</Nav.Link>
         </div>
-      
-    );
+      );
+    } else {
+      // If not logged in, show "Login" and "Register" links
+      return (
+        <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-end', color: '#a299a3' }}>
+          <Nav.Link href="/login" style={{ marginRight: '10px' }}>Login</Nav.Link>
+          <Nav.Link href="/signup">Register</Nav.Link>
+        </div>
+      );
     }
   };
 
   return (
     <ReactNavbar bg="dark" variant="dark" style={{ position: 'sticky', top: 0, zIndex: 100 }}>
       <Container>
-        <Nav >
+        <Nav>
           {publicUser()}
         </Nav>
-       {getBarDetails()}
+        {getBarDetails()}
       </Container>
-
     </ReactNavbar>
   );
 }
