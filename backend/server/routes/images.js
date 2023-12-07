@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const SegmentModel = require('../models/segmentModel');
+const Segments = require('../models/segmentModel');
 const mongoose = require('mongoose');
 const imageSchema = require('../models/imageModel');
 const fs = require('fs');
@@ -127,32 +127,33 @@ router.post('/create', upload.single('image'), async (req, res, next) => {
     // https://www.geeksforgeeks.org/upload-and-retrieve-image-on-mongodb-using-mongoose/
 });
  
-// Endpoint to get all images for a specific segment
-router.get('/:segmentId', async (req, res) => {
-  const { segmentId } = req.params;
-
+// Route to fetch images by segment _id
+router.get("/getImages/:segment_id", async (req, res) => {
   try {
-    // Assuming you have a model named 'Segment' with a field 'Features'
-    const segment = await SegmentModel.findById(segmentId).populate('Features');
+    const segment = await Segments.findById(req.params.segment_id).populate('features');
 
+    // Check if the segment with the given ID exists
     if (!segment) {
-      return res.status(404).json({ error: 'Segment not found' });
+      return res.status(404).json({ message: "Segment not found for the specified ID" });
     }
 
-    // Extract relevant data for response
-    const imageData = segment.Features.map((image) => ({
-      _id: image._id,
-      base64Data: image.base64Data, // Adjust field names accordingly
-      // Add other relevant fields if needed
-    }));
+    // Access the features associated with the segment
+    const images = segment.features;
 
-    res.json(imageData);
+    // Convert the image data to base64-encoded strings
+    const imagePaths = images.map(img => {
+      const base64Data = img.img.data.toString('base64');
+      return `data:${img.img.contentType};base64,${base64Data}`;
+    });
+
+    // Send the image paths to the client
+    return res.json({ imagePaths });
   } catch (error) {
-    console.error('Error fetching images:', error);
-    res.status(500).json({ error: 'Internal Server Error' });
+    return res.status(500).json({ message: "Error getting images by segment ID", error: error.message });
   }
 });
 
-
-
 module.exports = router;
+
+
+
