@@ -21,12 +21,12 @@ const segmentSchema = new mongoose.Schema({
         required: true,
         label: "park the segment lives in",
     },
-    Features: [{
+    features: [{
         required: true,
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Image'
+        ref: 'Image' 
     }]
+    
 }, { collection: "segments" });
 
 module.exports = mongoose.model('Segment', segmentSchema);
-    

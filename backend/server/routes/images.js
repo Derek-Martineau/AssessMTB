@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-
+const SegmentModel = require('../models/segmentModel');
 const mongoose = require('mongoose');
 const imageSchema = require('../models/imageModel');
 const fs = require('fs');
@@ -127,4 +127,32 @@ router.post('/create', upload.single('image'), async (req, res, next) => {
     // https://www.geeksforgeeks.org/upload-and-retrieve-image-on-mongodb-using-mongoose/
 });
  
+// Endpoint to get all images for a specific segment
+router.get('/:segmentId', async (req, res) => {
+  const { segmentId } = req.params;
+
+  try {
+    // Assuming you have a model named 'Segment' with a field 'Features'
+    const segment = await SegmentModel.findById(segmentId).populate('Features');
+
+    if (!segment) {
+      return res.status(404).json({ error: 'Segment not found' });
+    }
+
+    // Extract relevant data for response
+    const imageData = segment.Features.map((image) => ({
+      _id: image._id,
+      base64Data: image.base64Data, // Adjust field names accordingly
+      // Add other relevant fields if needed
+    }));
+
+    res.json(imageData);
+  } catch (error) {
+    console.error('Error fetching images:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+
+
 module.exports = router;
