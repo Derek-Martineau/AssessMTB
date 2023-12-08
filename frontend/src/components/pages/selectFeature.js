@@ -3,54 +3,49 @@ import { Card, Button, Modal } from "react-bootstrap";
 import { Navigate, useParams, useNavigate } from "react-router-dom";
 
 function CallFeature() {
-  const [selectedLines, setSelectedLines] = useState(Array(6).fill(null));
+  const [selectedLines, setSelectedLines] = useState([]);
   const [redirectToNewAssessment, setRedirectToNewAssessment] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [segmentData, setSegmentData] = useState(false);
   const [showInstructionsModal, setShowInstructionsModal] = useState(false);
-  // const [photoFilePaths] = useState([
-  //   "/images/Gordon_Walls_F1.JPG",
-  //   "/images/Gordon_Walls_F2.JPG",
-  //   "/images/Gordon_Walls_F3.JPG",
-  //   "/images/Gordon_Walls_F4.JPG",
-  //   "/images/Gordon_Walls_F5.JPG",
-  //   "/images/Gordon_Walls_F6.JPG",
-  // ]);
   const [currentPhotoIndex, setCurrentPhotoIndex] = useState(0);
   const [photoFilePaths, setPhotoFilePaths] = useState([]);
-  const [photos, setPhotos] = useState([]);
+  const [images, setImages] = useState([]);
   const { segmentId, userId } = useParams();
   const navigate = useNavigate();
-
   const [user, setUser] = useState(userId);
   const [segment, setSegment] = useState(segmentId);
   const [assessmentId, setAssessmentId] = useState(null);
   const [redirectToResults, setRedirectToResults] = useState(false);
-// Effect to fetch image data from the server
-useEffect(() => {
+  // Effect to fetch image data from the server
+  useEffect(() => {
+    fetchImages();
+  }, [segmentId]);
+  useEffect(() => {
+    // Initialize selectedLines based on the length of photoFilePaths
+    setSelectedLines(Array(photoFilePaths.length).fill(null));
+  }, [photoFilePaths]);
   const fetchImages = async () => {
     try {
-      const response = await fetch(`${process.env.REACT_APP_BACKEND_SERVER_URI}/images/${segmentId}`);
+      const response = await fetch(`${process.env.REACT_APP_BACKEND_SERVER_URI}/images/getImages/${segmentId}`);
       const data = await response.json();
-      setPhotos(data); // Assuming the API returns an array of image data
+      setPhotoFilePaths(data.imagePaths || []);
     } catch (error) {
-      console.error("Error fetching images:", error);
+      console.error('Error fetching images:', error);
     }
   };
 
-  fetchImages();
-}, [segmentId]);
   useEffect(() => {
     console.log("User:", user);
     console.log("Segment:", segment);
-  
+
     // Parse the query parameter "assessmentId" from the URL
     const urlParams = new URLSearchParams(window.location.search);
     const assessmentIdParam = urlParams.get("assessmentId");
-  
+
     // Set assessmentId based on the query parameter
     setAssessmentId(assessmentIdParam);
-  
+
     if (segmentId && userId && assessmentIdParam) {
       // Wait for assessmentId to be set, and then navigate to the results page
       setTimeout(() => {
@@ -58,14 +53,14 @@ useEffect(() => {
       }, 0);
     }
   }, [user, segment]);
-  
+
   if (redirectToResults) {
     // Ensure that the newly created assessmentId is in the URL
     if (assessmentId) {
       return <Navigate to={`/results/${assessmentId}`} />;
     }
   }
-  
+
 
   const calculateAssessmentScore = (selectedLines) => {
     // Replace this with your actual scoring logic
@@ -90,10 +85,10 @@ useEffect(() => {
       })
       .then((data) => {
         console.log("Response Data:", data);
-  
+
         // Set the assessmentId received from the server
         setAssessmentId(data._id);
-  
+
         // After setting the assessmentId, navigate to the next page with assessmentId
         navigate(`/results/${data._id}`);
       })
@@ -101,7 +96,7 @@ useEffect(() => {
         console.error("Error while sending data to the server:", error);
       });
   };
-  
+
 
   // Create a mapping object for line values
   const lineValues = {
@@ -174,70 +169,65 @@ useEffect(() => {
     justifyContent: "space-between",
     alignItems: "center"
   };
-  
+
   if (redirectToResults) {
     return <Navigate to={`/results/${assessmentId}`} />;
-    }
+  }
 
-    const buttonStyle = (lineValue) => {
-      const isSelected = selectedLines[currentPhotoIndex] === lineValue;
-      return isSelected
-        ? { backgroundColor: "darkgrey", color: "white", boxShadow: "0 0 5px rgba(0, 0, 0, 0.3)" }
-        : {};
-    };
-    
+  const buttonStyle = (lineValue) => {
+    const isSelected = selectedLines[currentPhotoIndex] === lineValue;
+    return isSelected
+      ? { backgroundColor: "darkgrey", color: "white", boxShadow: "0 0 5px rgba(0, 0, 0, 0.3)" }
+      : {};
+  };
+
   return (
     <div style={{ background: '#5A5A5A', minHeight: "100vh", display: "flex", justifyContent: "center", alignItems: "center" }}>
-      <Card style={{ width: "45rem" }}>
+      <Card style={{ width: "60rem" }}>
         <Card.Body>
-          <div>
-            <h3>Photo for Segment</h3>
-            <div>
-              {photos.length > 0 && photos[currentPhotoIndex] && photos[currentPhotoIndex].base64Data && (
-                <img
-                  key={currentPhotoIndex}
-                  src={`data:image/png;base64,${photos[currentPhotoIndex].base64Data}`}
-                  alt={`Photo ${currentPhotoIndex + 1}`}
-                  style={{ maxWidth: "100%", maxHeight: "100%" }}
-                />
-              )}
-            </div>
+          <h3>Photo {currentPhotoIndex + 1}/{photoFilePaths.length}</h3>
+          <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', margin: 'auto', width: '400px', height: '400px' }}>
+            <img
+              src={photoFilePaths[currentPhotoIndex]}
+              alt={`Image ${currentPhotoIndex + 1}`}
+              style={{ width: '100%', height: '100%', objectFit: 'contain', borderRadius: '8px' }}
+            />
           </div>
           <div style={{ display: "flex", justifyContent: "center" }}>
             <Card.Title>Which line did you choose?</Card.Title>
           </div>
           <br />
           <div style={buttonWrapperStyle}>
-  <Button
-    style={buttonStyle(8)}
-    variant={selectedLines[currentPhotoIndex] === 8 ? "success" : "danger"}
-    onClick={() => handleLineSelection("A")}
-  >
-    A
-  </Button>
-  <Button
-    style={buttonStyle(6)}
-    variant={selectedLines[currentPhotoIndex] === 6 ? "success" : "warning"}
-    onClick={() => handleLineSelection("B")}
-  >
-    B
-  </Button>
-  <Button
-    style={buttonStyle(4)}
-    variant={selectedLines[currentPhotoIndex] === 4 ? "success" : "success"}
-    onClick={() => handleLineSelection("C")}
-  >
-    C
-  </Button>
-  <Button
-    style={buttonStyle(1)}
-    variant={selectedLines[currentPhotoIndex] === 1 ? "success" : "primary"}
-    onClick={() => handleLineSelection("Walked")}
-  >
-    Walked
-  </Button>
-</div>
-<br />
+            <Button
+              style={buttonStyle(8)}
+              variant={selectedLines[currentPhotoIndex] === 8 ? "success" : "danger"}
+              onClick={() => handleLineSelection("A")}
+            >
+              A
+            </Button>
+            <Button
+              style={buttonStyle(6)}
+              variant={selectedLines[currentPhotoIndex] === 6 ? "success" : "warning"}
+              onClick={() => handleLineSelection("B")}
+            >
+              B
+            </Button>
+            <Button
+              style={buttonStyle(4)}
+              variant={selectedLines[currentPhotoIndex] === 4 ? "success" : "success"}
+              onClick={() => handleLineSelection("C")}
+            >
+              C
+            </Button>
+            <Button
+              style={buttonStyle(1)}
+              variant={selectedLines[currentPhotoIndex] === 1 ? "success" : "primary"}
+              onClick={() => handleLineSelection("Walked")}
+            >
+              Walked
+            </Button>
+          </div>
+          <br />
 
           <div style={{ display: "flex", justifyContent: "flex-end", padding: '5px' }}>
             <Button variant="info" onClick={handleInstructionsShow}>Help</Button>
