@@ -101,6 +101,25 @@ const ViewLibrary = () => {
       });
   };
 
+// Function to map numbers to letters
+const mapNumberToLetter = (number) => {
+  // Parse the number as an integer
+  const parsedNumber = parseInt(number, 10);
+
+  switch (parsedNumber) {
+    case 8:
+      return 'A';
+    case 6:
+      return 'B';
+    case 4:
+      return 'C';
+    case 1:
+      return 'Walked';
+    default:
+      return '';
+  }
+};
+
   return (
     <div style={{ background: '#5A5A5A', minHeight: '100vh', overflowX: 'hidden' }}>
       <h1 style={{ textAlign: 'center', color: 'white' }}>Assessment Library</h1>
@@ -113,7 +132,14 @@ const ViewLibrary = () => {
               <p>Segment: {assessment.segmentName}</p>
               <p>Public Status: {assessment.PublicStatus ? 'Public' : 'Private'}</p>
               <p>Difficulty: {assessment.difficulty}</p>
-              <p>Line Choices: {assessment.featureLines.map((line) => line.lineChoice).join(', ')}</p>
+              <p>
+              Line Choices: {assessment.featureLines.map((line) => {
+                console.log('line', line); // Add this console log
+                const letter = mapNumberToLetter(line.lineChoice);
+                console.log('letter', letter); // Add this console log
+                return letter;
+              }).join(', ')}
+            </p>
               <p>Score: {assessment.Score}</p>
               <div style={{ display: 'flex', justifyContent: 'space-between', padding: '0px' }}>
                 <Button variant="danger" onClick={() => handleDeleteAssessment(assessment._id)}>Delete</Button>
