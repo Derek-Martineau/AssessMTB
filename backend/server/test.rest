@@ -122,17 +122,22 @@ POST http://localhost:8081/api/segments
 Content-Type: application/json
 
 {
-    "segmentName": "Sample Segment",
-    "description": "This is a sample segment.",
+    "segmentName": "Walls",
+    "description": "Chunky gravel doubletrack down until the trail thins at a rocky ledge and then passes over a board to avoid an often swampy pit. You can do a nice drop off either of the loamy edges at the top of the downhill.",
     "difficulty": "Intermediate",
-    "park": "Sample Park",
-    "Features": [
-        {
-            "featureName": "Sample Feature",
-            "description": "This is a sample feature."
-        }
+    "park": "Gordon College",
+    "features": [
+        {"featureID":"656f862d19113e0adce02c80"},
+        {"featureID":"656f863219113e0adce02c82"},
+        {"featureID":"656f863719113e0adce02c84"},
+        {"featureID":"656f862d19113e0adce02c86"},
+        {"featureID":"656f862d19113e0adce02c88"},
+        {"featureID":"656f862d19113e0adce02c8a"}
     ]
 }
+
+
+
 
 ###
 # Update Feature
@@ -197,11 +202,17 @@ Content-Type: application/json
 
 ###
 # Delete an assessment result by ID
-DELETE {{baseurl}}/api/results/:resultId
+DELETE {{baseurl}}/api/results/657344d3789b77f2ae8d236a
 
 ### Get All Assessments for a User
 # Set the username you want to search for
-
 GET {{baseurl}}/api/results/user/testbikes
 
+### get photos
+GET {{baseurl}}/images/getAll
 
+### Get photo by id
+GET {{baseurl}}/images/656f872b19113e0adce02c8a
+
+### Get photo by segementID
+{{baseurl}}/images/getImages/65721b5a21ec846e04be6bf7

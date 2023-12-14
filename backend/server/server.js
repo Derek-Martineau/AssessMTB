@@ -15,6 +15,7 @@ const getSegments = require('./routes/getSegments')
 const updateFeature = require('./routes/updateFeature');
 const resultsCreate = require('./routes/resultsCreate');
 const imagesRoute = require('./routes/images');
+const followerRoutes = require('./routes/following');
 
 require('dotenv').config();
 const SERVER_PORT = 8081
@@ -35,6 +36,7 @@ app.use('/api', createFeature)
 app.use('/api', updateFeature)
 app.use('/api', resultsCreate)
 app.use('/images', imagesRoute)
+app.use('/following', followerRoutes);
 
 
 app.listen(SERVER_PORT, (req, res) => {
