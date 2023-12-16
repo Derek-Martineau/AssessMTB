@@ -23,6 +23,7 @@ import ViewOrCreateAssessment from "./components/pages/asessmentHome";
 import ViewLibrary from "./components/pages/assessmentLibrary";
 import UploadImages from "./components/images/uploadImages";
 import ViewImages from "./components/images/viewImages";
+import PublicProfilePage from "./components/pages/publicProfilePage";
 
 export const UserContext = createContext();
 //test change
@@ -43,7 +44,8 @@ const App = () => {
           <Route exact path="/home" element={<HomePage />} />
           <Route exact path="/login" element={<Login />} />
           <Route exact path="/signup" element={<Signup />} />
-          <Route path="/privateUserProfile" element={<PrivateUserProfile />} />
+          <Route path="/privateUserProfile/:username" element={<PrivateUserProfile />} />
+          <Route path="/publicProfilePage/:username" element={<PublicProfilePage />} />
           <Route path="/willowdale" element={<TrailforksWidget />} />
           <Route path="/gordon" element={<GordonCollege />} />
           <Route path="/lynnwoods" element={<LynnWoods />} />

@@ -4,13 +4,64 @@ import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import ReactNavbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
+import Form from 'react-bootstrap/Form';
+import FormControl from 'react-bootstrap/FormControl';
+import Button from 'react-bootstrap/Button';
+import { useNavigate } from 'react-router-dom';
 
 export default function Navbar() {
   const [user, setUser] = useState({});
+  const [searchQuery, setSearchQuery] = useState('');
+  const [users, setUsers] = useState([]);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     setUser(getUserInfo());
+    fetchUsers().then(users => setUsers(users));
   }, []);
+
+  const fetchUsers = async () => {
+    try {
+      const response = await fetch(`${process.env.REACT_APP_BACKEND_SERVER_URI}/user/getAll`);
+      const usersData = await response.json();
+  
+      // Ensure that the received data is an array
+      const usersArray = Array.isArray(usersData) ? usersData : [];
+  
+      setUsers(usersArray);
+      return usersArray;
+    } catch (error) {
+      console.error('Error fetching users:', error);
+      return [];
+    }
+  };
+  
+
+  const handleSearch = () => {
+    // Implement search logic based on the searchQuery
+    // Search should be based on the 'username' property of users
+  
+    // Ensure that users is not empty before filtering
+    if (users.length === 0) {
+      console.log("No users available for search.");
+      return;
+    }
+  
+    const filteredUsers = users.filter(user => {
+      return user.username.toLowerCase().includes(searchQuery.toLowerCase());
+    });
+  
+    // Assuming you want to navigate to the publicProfilePage of the first matching user
+    if (filteredUsers.length > 0) {
+      const usernameToNavigate = filteredUsers[0].username;
+      navigate(`/publicProfilePage/${usernameToNavigate}`);
+    }
+  
+    // Optionally, you can log the filteredUsers for debugging purposes
+    console.log("Filtered Users:", filteredUsers);
+  };
+  
 
   const publicUser = () => {
     const parks = (
@@ -36,7 +87,7 @@ export default function Navbar() {
       return (
         <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-end', color: '#a299a3' }}>
           <Nav.Link style={{ paddingRight: '10px' }} href="/assessmentHome">Assess</Nav.Link>
-          <Nav.Link href="/privateUserProfile">Profile</Nav.Link>
+          <Nav.Link href={`/privateUserProfile/${user.username}`}>Profile</Nav.Link>
         </div>
       );
     } else {
@@ -56,6 +107,20 @@ export default function Navbar() {
         <Nav>
           {publicUser()}
         </Nav>
+
+        <div className="d-flex align-items-center justify-content-center flex-grow-1">
+          <Form inline>
+            <FormControl
+              type="text"
+              placeholder="Search for a user"
+              className="mr-sm-2"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
+          </Form>
+          <Button variant="outline-light" onClick={handleSearch}>Search</Button>
+        </div>
+
         {getBarDetails()}
       </Container>
     </ReactNavbar>

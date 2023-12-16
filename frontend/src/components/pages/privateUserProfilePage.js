@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Button } from "react-bootstrap";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import getUserInfo from "../../utilities/decodeJwt";
 
 const PrivateUserProfile = () => {
@@ -9,6 +9,7 @@ const PrivateUserProfile = () => {
   const [profilePicture, setProfilePicture] = useState("");
   const [publicAssessments, setPublicAssessments] = useState([]);
   const navigate = useNavigate();
+  const { username } = useParams();
 
   // handle logout button
   const handleLogout = () => {
@@ -48,7 +49,7 @@ const PrivateUserProfile = () => {
     // Fetch public assessments
     const fetchPublicAssessments = async () => {
       try {
-        const response = await axios.get(`${process.env.REACT_APP_BACKEND_SERVER_URI}/api/public-assessments`);
+        const response = await axios.get(`${process.env.REACT_APP_BACKEND_SERVER_URI}/api/results/user/${username}`);
         // Log the data to the console for debugging
         console.log("Response data:", response.data);
 
@@ -62,7 +63,7 @@ const PrivateUserProfile = () => {
             assessment.segmentName = segmentData.segmentName;
             assessment.difficulty = segmentData.difficulty;
           }
-
+          
           updatedPublicAssessments.push(assessment);
         }
 
@@ -105,7 +106,7 @@ const PrivateUserProfile = () => {
           publicAssessments.map((assessment) => (
             <div key={assessment._id} style={assessmentCardStyle}>
               <h2>Assessment Date: {new Date(assessment.Date).toDateString()}</h2>
-              <p>User: {user.username}</p>
+              <p>User: {username}</p>
               <p>Segment: {assessment.segmentName}</p>
               <p>Difficulty: {assessment.difficulty}</p>
               <p>Line Choices: {assessment.featureLines.map((line) => line.lineChoice).join(', ')}</p>

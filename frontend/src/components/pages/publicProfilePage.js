@@ -67,7 +67,7 @@ export default function PublicUserList() {
 
   const fetchPublicAssessments = async () => {
     try {
-      const response = await axios.get(`${process.env.REACT_APP_BACKEND_SERVER_URI}/api/public-assessments`);
+      const response = await axios.get(`${process.env.REACT_APP_BACKEND_SERVER_URI}/api/results/user/${username}`);
       // Log the data to the console for debugging
       console.log("Response data:", response.data);
 
@@ -134,7 +134,7 @@ export default function PublicUserList() {
           publicAssessments.map((assessment) => (
             <div key={assessment._id} style={assessmentCardStyle}>
               <h2>Assessment Date: {new Date(assessment.Date).toDateString()}</h2>
-              <p>User: {user.username}</p>
+              <p>User: {username}</p>
               <p>Segment: {assessment.segmentName}</p>
               <p>Difficulty: {assessment.difficulty}</p>
               <p>Line Choices: {assessment.featureLines.map((line) => line.lineChoice).join(', ')}</p>
