@@ -57,7 +57,7 @@ const Landingpage = () => {
   `;
 
   return (
-    <div className="landing-container">
+    <div className="landing-container" style={{background: "#5A5A5A"}}>
       <Card className="landing-card">
         <Card.Body>
           <Card.Title className="landing-title">Welcome to AssessMTB</Card.Title>

@@ -21,6 +21,10 @@ export default function Navbar() {
     fetchUsers().then(users => setUsers(users));
   }, []);
 
+  const navigateToHome = () => {
+    navigate("/");
+  };
+
   const fetchUsers = async () => {
     try {
       const response = await fetch(`${process.env.REACT_APP_BACKEND_SERVER_URI}/user/getAll`);
@@ -64,16 +68,28 @@ export default function Navbar() {
   
 
   const publicUser = () => {
-    const parks = (
-      <NavDropdown title="View Parks" id="nav-dropdown">
-        <NavDropdown.Item href="/willowdale">Willowdale State Park</NavDropdown.Item>
-        <NavDropdown.Item href="/gordon">Gordon College</NavDropdown.Item>
-        <NavDropdown.Item href="/lynnwoods">Lynn Woods</NavDropdown.Item>
-      </NavDropdown>
+  const parks = (
+    <NavDropdown title="View Parks" id="nav-dropdown" style={{ color: '#FFF' }}>
+      <NavDropdown.Item href="/willowdale">Willowdale State Park</NavDropdown.Item>
+      <NavDropdown.Item href="/gordon">Gordon College</NavDropdown.Item>
+      <NavDropdown.Item href="/lynnwoods">Lynn Woods</NavDropdown.Item>
+    </NavDropdown>
+  );
+
+
+    const imageLink = (
+      <Nav.Link href="#" onClick={navigateToHome} style={{ display: 'flex', alignItems: 'center' }}>
+        <img
+          src="https://icon2.cleanpng.com/20181128/ugw/kisspng-portable-network-graphics-clip-art-silhouette-imag-5bff6f9bbe3338.4270034315434669077791.jpg"
+          alt="Mountain silhouette"
+          style={{ width: '30px', height: '30px', marginRight: '10px' }}
+        />
+      </Nav.Link>
     );
 
     return (
-      <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'end' }}>
+      <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+        {imageLink}
         <nav>
           {parks}
         </nav>
@@ -85,15 +101,18 @@ export default function Navbar() {
     if (user) {
       // If logged in, show "Assess," "Profile," and "Logout" links
       return (
-        <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-end', color: '#a299a3' }}>
-          <Nav.Link style={{ paddingRight: '10px' }} href="/assessmentHome">Assess</Nav.Link>
-          <Nav.Link href={`/privateUserProfile/${user.username}`}>Profile</Nav.Link>
+        <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-end', color: '#FFF' }}>
+          <NavDropdown title="Assess" style={{ paddingRight: '10px' }}>
+            <NavDropdown.Item href="/newAssessment">New Assessment</NavDropdown.Item>
+            <NavDropdown.Item href={`/assessmentLibrary/${user.username}`}>Assessment Library</NavDropdown.Item>
+          </NavDropdown>
+          <Nav.Link href={`/privateUserProfile/${user.username}`}>{user.username}</Nav.Link>
         </div>
-      );
+      );      
     } else {
       // If not logged in, show "Login" and "Register" links
       return (
-        <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-end', color: '#a299a3' }}>
+        <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-end', color: '#FFF' }}>
           <Nav.Link href="/login" style={{ marginRight: '10px' }}>Login</Nav.Link>
           <Nav.Link href="/signup">Register</Nav.Link>
         </div>
@@ -102,7 +121,7 @@ export default function Navbar() {
   };
 
   return (
-    <ReactNavbar bg="dark" variant="dark" style={{ position: 'sticky', top: 0, zIndex: 100 }}>
+    <ReactNavbar variant="dark" style={{ background:"#000000", position: 'sticky', top: 0, zIndex: 100 }}>
       <Container>
         <Nav>
           {publicUser()}
