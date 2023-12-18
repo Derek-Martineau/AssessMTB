@@ -27,7 +27,10 @@ GET http://localhost:8081/user/getAll
 Content-Type: application/json
 
 ###
+Get http://localhost:8081/user/DerekMartineau
+Content-Type: application/json
 
+###
 POST http://localhost:8081/user/editUser
 Content-Type: application/json 
 
@@ -216,3 +219,15 @@ GET {{baseurl}}/images/656f872b19113e0adce02c8a
 
 ### Get photo by segementID
 {{baseurl}}/images/getImages/65721b5a21ec846e04be6bf7
+
+### Follow a user
+{{baseurl}}/following/followers/follow
+
+{
+  "userId": "654e930f78f09598d1a80561",
+  "targetUserId": "640e316ceebb6807bae74c7b"
+}
+
+### get following count
+
+{{baseurl}}/following/following/count/DerekMartineau

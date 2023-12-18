@@ -19,7 +19,6 @@ import getUserInfo from "./utilities/decodeJwt";
 import CallSegments from "./components/pages/selectSegment";
 import CallFeature from "./components/pages/selectFeature";
 import PostResults from "./components/pages/assessResultPage";
-import ViewOrCreateAssessment from "./components/pages/asessmentHome";
 import ViewLibrary from "./components/pages/assessmentLibrary";
 import UploadImages from "./components/images/uploadImages";
 import ViewImages from "./components/images/viewImages";
@@ -54,7 +53,6 @@ const App = () => {
           <Route path="/selectSegment/:trailparkId" element={<CallSegments />}/>
           <Route path="/selectSegment/:segmentId/:userId/selectFeature" element={<CallFeature />}/>
           <Route path="/results/:assessmentId" element={<PostResults />}/>
-          <Route path="/assessmentHome" element={<ViewOrCreateAssessment />}/>
           <Route path="/assessmentLibrary/:username" element={<ViewLibrary />}/>
           <Route path="/uploadImages" element={<UploadImages />} />
           <Route path="/viewImages" element={<ViewImages />} />
