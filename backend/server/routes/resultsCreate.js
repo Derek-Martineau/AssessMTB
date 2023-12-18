@@ -79,6 +79,26 @@ router.get('/results/user/:username', async (req, res) => {
   }
 });
 
+// get all public results by username
+router.get('/results/user/public/:username', async (req, res) => {
+  try {
+    const username = req.params.username;
+
+    // First, find the user with the provided username
+    const user = await User.findOne({ username });
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    // Now, use the user's _id to query only the public assessments
+    const results = await Result.find({ User: user._id, PublicStatus: true });
+    res.status(200).json(results);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 // GET public assessments
 router.get('/public-assessments', async (req, res) => {
   try {

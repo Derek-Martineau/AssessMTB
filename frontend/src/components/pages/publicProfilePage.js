@@ -13,61 +13,52 @@ export default function PublicUserList() {
   const [publicPosts, setPublicPosts] = useState([]); // Add this line
   const { username } = useParams();
 
-  // const fetchUserInfoAndAssessments = useCallback(async () => {
-  //   try {
-  //     const response = await axios.get(`${process.env.REACT_APP_BACKEND_SERVER_URI}/api/results/user/${username}`);
-  //     const sortedAssessments = response.data.sort((a, b) => new Date(b.date) - new Date(a.date));
-  //     setPublicAssessments(sortedAssessments);
+  /*const fetchUserFollowData = useCallback(async () => {
+    try {
+      // Fetch follower count
+      const followerResponse = await axios.get(
+        `${process.env.REACT_APP_BACKEND_SERVER_URI}/followers/count/${username}`
+      );
+      setFollowerCount(followerResponse.data.count);
 
-  //     // Check if response.data.publicPosts is defined before setting it
-  //     if (response.data.publicPosts) {
-  //       setPublicPosts(response.data.publicPosts);
-  //     }
-
-  //     // Fetch follower count
-  //     const followerResponse = await axios.get(
-  //       `${process.env.REACT_APP_BACKEND_SERVER_URI}/followers/count/${username}`
-  //     );
-  //     setFollowerCount(followerResponse.data.count);
-
-  //     // Fetch following count
-  //     const followingResponse = await axios.get(
-  //       `${process.env.REACT_APP_BACKEND_SERVER_URI}/following/count/${username}`
-  //     );
-  //     setFollowingCount(followingResponse.data.count);
-  //   } catch (error) {
-  //     if (error.response) {
-  //       // The request was made and the server responded with a status code
-  //       // that falls out of the range of 2xx
-  //       console.error('Server responded with error status:', error.response.status);
-  //       console.error('Response data:', error.response.data);
-  //     } else if (error.request) {
-  //       // The request was made but no response was received
-  //       console.error('No response received from the server.');
-  //     } else {
-  //       // Something happened in setting up the request that triggered an Error
-  //       console.error('Error setting up the request:', error.message);
-  //     }
-  //   }
-  // }, [username]);
-  
+      // Fetch following count
+      const followingResponse = await axios.get(
+        `${process.env.REACT_APP_BACKEND_SERVER_URI}/following/count/${username}`
+      );
+      setFollowingCount(followingResponse.data.count);
+    } catch (error) {
+      if (error.response) {
+        // The request was made and the server responded with a status code
+        // that falls out of the range of 2xx
+        console.error('Server responded with error status:', error.response.status);
+        console.error('Response data:', error.response.data);
+      } else if (error.request) {
+        // The request was made but no response was received
+        console.error('No response received from the server.');
+      } else {
+        // Something happened in setting up the request that triggered an Error
+        console.error('Error setting up the request:', error.message);
+      }
+    }
+  }, [username]);
+ */ 
 
   // Ensures the page starts at the top when the component is first rendered
   useLayoutEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
-  // Fetch posts and user info when the component is mounted
-  // useLayoutEffect(() => {
-  //   fetchUserInfoAndAssessments();
-
-  //   const userInfo = getUserInfo();
-  //   setUser(userInfo);
-  // }, [fetchUserInfoAndAssessments]);
+  useEffect(() => {
+    const userInfo = getUserInfo();
+    if (userInfo) {
+      setUser(userInfo);
+    }
+  }, []);
+  
 
   const fetchPublicAssessments = async () => {
     try {
-      const response = await axios.get(`${process.env.REACT_APP_BACKEND_SERVER_URI}/api/results/user/${username}`);
+      const response = await axios.get(`${process.env.REACT_APP_BACKEND_SERVER_URI}/api/results/user/public/${username}`);
       // Log the data to the console for debugging
       console.log("Response data:", response.data);
 
