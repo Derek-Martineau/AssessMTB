@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { Button } from "react-bootstrap";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
@@ -10,6 +10,8 @@ const PrivateUserProfile = () => {
   const [publicAssessments, setPublicAssessments] = useState([]);
   const navigate = useNavigate();
   const { username } = useParams();
+  const [followerCount, setFollowerCount] = useState(0);
+  const [followingCount, setFollowingCount] = useState(0);
 
   // handle logout button
   const handleLogout = () => {
@@ -17,6 +19,24 @@ const PrivateUserProfile = () => {
     navigate("/willowdale");
     window.location.reload();
   };
+
+  const fetchUserFollowData = useCallback(async () => {
+    try {
+      // Fetch follower count
+      const followerResponse = await axios.get(
+        `${process.env.REACT_APP_BACKEND_SERVER_URI}/following/followers/count/${username}`
+      );
+      setFollowerCount(followerResponse.data.followerCount);
+
+      // Fetch following count
+      const followingResponse = await axios.get(
+        `${process.env.REACT_APP_BACKEND_SERVER_URI}/following/following/count/${username}`
+      );
+      setFollowingCount(followingResponse.data.followingCount);
+    } catch (error) {
+      console.error('Error fetching user follow data:', error);
+    }
+  }, [username]);
 
   // handle profile picture upload
   const handleProfilePictureUpload = async (event) => {
@@ -42,6 +62,10 @@ const PrivateUserProfile = () => {
   const handleEditProfile = () => {
     navigate("/editUserProfile");
   };
+
+  useEffect(() => {
+    fetchUserFollowData();
+  }, [fetchUserFollowData]);
 
   useEffect(() => {
     setUser(getUserInfo());
@@ -84,8 +108,8 @@ const PrivateUserProfile = () => {
         {profilePicture && <img src={profilePicture} alt="Profile" width="200" />}
         <h1>{user.username}</h1>
         <h3>{user.role}</h3>
-        <h3>Followers: 0{user.followers}</h3>
-        <h3>Following: 0{user.following}</h3>
+        <h3>Followers: {followerCount}</h3>
+        <h3>Following: {followingCount}</h3>
         <h3>Posts: {publicAssessments.length}</h3>
         <div style={{ display: "flex", justifyContent: "flex-end", padding: "0px" }}>
           <Button className="me-2" onClick={handleLogout}>

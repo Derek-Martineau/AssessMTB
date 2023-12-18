@@ -1,49 +1,36 @@
 import React, { useState, useCallback, useLayoutEffect, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { Container, Row, Col, Card, Image } from 'react-bootstrap';
+import { Container, Row, Col, Card, Image, Spinner } from 'react-bootstrap';
 import axios from 'axios';
 import getUserInfo from '../../utilities/decodeJwt';
 import FollowButton from '../following/followButton';
 
 export default function PublicUserList() {
-  const [publicAssessments, setPublicAssessments] = useState([]);
   const [followerCount, setFollowerCount] = useState(0);
   const [followingCount, setFollowingCount] = useState(0);
   const [user, setUser] = useState({});
-  const [publicPosts, setPublicPosts] = useState([]); // Add this line
+  const [publicAssessments, setPublicAssessments] = useState([]);
+  const [loading, setLoading] = useState(true);
   const { username } = useParams();
 
-  /*const fetchUserFollowData = useCallback(async () => {
+  const fetchUserFollowData = useCallback(async () => {
     try {
       // Fetch follower count
       const followerResponse = await axios.get(
-        `${process.env.REACT_APP_BACKEND_SERVER_URI}/followers/count/${username}`
+        `${process.env.REACT_APP_BACKEND_SERVER_URI}/following/followers/count/${username}`
       );
-      setFollowerCount(followerResponse.data.count);
+      setFollowerCount(followerResponse.data.followerCount);
 
       // Fetch following count
       const followingResponse = await axios.get(
-        `${process.env.REACT_APP_BACKEND_SERVER_URI}/following/count/${username}`
+        `${process.env.REACT_APP_BACKEND_SERVER_URI}/following/following/count/${username}`
       );
-      setFollowingCount(followingResponse.data.count);
+      setFollowingCount(followingResponse.data.followingCount);
     } catch (error) {
-      if (error.response) {
-        // The request was made and the server responded with a status code
-        // that falls out of the range of 2xx
-        console.error('Server responded with error status:', error.response.status);
-        console.error('Response data:', error.response.data);
-      } else if (error.request) {
-        // The request was made but no response was received
-        console.error('No response received from the server.');
-      } else {
-        // Something happened in setting up the request that triggered an Error
-        console.error('Error setting up the request:', error.message);
-      }
+      console.error('Error fetching user follow data:', error);
     }
   }, [username]);
- */ 
 
-  // Ensures the page starts at the top when the component is first rendered
   useLayoutEffect(() => {
     window.scrollTo(0, 0);
   }, []);
@@ -54,19 +41,18 @@ export default function PublicUserList() {
       setUser(userInfo);
     }
   }, []);
-  
 
   const fetchPublicAssessments = async () => {
     try {
-      const response = await axios.get(`${process.env.REACT_APP_BACKEND_SERVER_URI}/api/results/user/public/${username}`);
-      // Log the data to the console for debugging
-      console.log("Response data:", response.data);
-
-      // Fetch segment data for each assessment and update the state
+      const response = await axios.get(
+        `${process.env.REACT_APP_BACKEND_SERVER_URI}/api/results/user/public/${username}`
+      );
       const updatedPublicAssessments = [];
 
       for (const assessment of response.data) {
-        const segmentResponse = await axios.get(`${process.env.REACT_APP_BACKEND_SERVER_URI}/api/segments/${assessment.Segment}`);
+        const segmentResponse = await axios.get(
+          `${process.env.REACT_APP_BACKEND_SERVER_URI}/api/segments/${assessment.Segment}`
+        );
         if (segmentResponse.data) {
           const segmentData = segmentResponse.data;
           assessment.segmentName = segmentData.segmentName;
@@ -78,17 +64,20 @@ export default function PublicUserList() {
 
       setPublicAssessments(updatedPublicAssessments);
     } catch (error) {
-      console.error("Error fetching public assessments:", error);
+      console.error('Error fetching public assessments:', error);
+    } finally {
+      setLoading(false);
     }
   };
 
   useEffect(() => {
+    fetchUserFollowData();
     fetchPublicAssessments();
-  }, []); // Empty dependency array to run only once
+  }, [fetchUserFollowData]);
 
   if (!user) {
     return (
-      <div style={{ textAlign: "center" }}>
+      <div style={{ textAlign: 'center' }}>
         <h4>
           You must <a href="/login">log in</a> or <a href="/signup">register</a> to view this page
         </h4>
@@ -102,16 +91,12 @@ export default function PublicUserList() {
         <Row>
           <Col md={4} className="text-center mb-3">
             <Image
-              src={"https://robohash.org/" + username + "?set=set5"}
+              src={`https://robohash.org/${username}?set=set5`}
               roundedCircle
               style={{ width: '150px', height: '150px' }}
             />
             <h3>{username}</h3>
-            <FollowButton
-              className="mt-2 btn-sm"
-              username={user.username}
-              targetUserId={username}
-            />
+            <FollowButton className="mt-2 btn-sm" username={user.username} targetUserId={username} />
             <div className="mt-2">
               <div>Followers: {followerCount}</div>
               <div>Following: {followingCount}</div>
@@ -120,22 +105,28 @@ export default function PublicUserList() {
         </Row>
       </Container>
 
-      <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", fontFamily: "sans-serif", fontSize: "18px" }}>
-        {publicAssessments.length > 0 ? (
-          publicAssessments.map((assessment) => (
-            <div key={assessment._id} style={assessmentCardStyle}>
-              <h2>Assessment Date: {new Date(assessment.Date).toDateString()}</h2>
-              <p>User: {username}</p>
-              <p>Segment: {assessment.segmentName}</p>
-              <p>Difficulty: {assessment.difficulty}</p>
-              <p>Line Choices: {assessment.featureLines.map((line) => line.lineChoice).join(', ')}</p>
-              <p>Score: {assessment.Score}</p>
-            </div>
-          ))
-        ) : (
-          <p>No public assessments found.</p>
-        )}
-      </div>
+      {loading ? (
+        <Spinner animation="border" role="status" className="mt-5">
+          <span className="sr-only">Loading...</span>
+        </Spinner>
+      ) : (
+        <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', fontFamily: 'sans-serif', fontSize: '18px' }}>
+          {publicAssessments.length > 0 ? (
+            publicAssessments.map((assessment) => (
+              <div key={assessment._id} style={assessmentCardStyle}>
+                <h2>Assessment Date: {new Date(assessment.Date).toDateString()}</h2>
+                <p>User: {username}</p>
+                <p>Segment: {assessment.segmentName}</p>
+                <p>Difficulty: {assessment.difficulty}</p>
+                <p>Line Choices: {assessment.featureLines.map((line) => line.lineChoice).join(', ')}</p>
+                <p>Score: {assessment.Score}</p>
+              </div>
+            ))
+          ) : (
+            <p>No public assessments found.</p>
+          )}
+        </div>
+      )}
     </div>
   );
 }

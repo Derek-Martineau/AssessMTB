@@ -60,6 +60,8 @@ export default function Navbar() {
     if (filteredUsers.length > 0) {
       const usernameToNavigate = filteredUsers[0].username;
       navigate(`/publicProfilePage/${usernameToNavigate}`);
+      // Reload the page after navigation
+    window.location.reload();
     }
   
     // Optionally, you can log the filteredUsers for debugging purposes

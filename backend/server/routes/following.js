@@ -29,6 +29,14 @@ followerRoutes.get("/followers/:id", (req, res) => {
     .catch((err) => res.status(404).json({ User: "No user found." }));
 });
 
+// Retrieves all the followers of a user by id.
+followerRoutes.get("/followers/:username", (req, res) => {
+  followerModel
+    .find({ userId: req.params.id })
+    .then((followers) => res.json(followers))
+    .catch((err) => res.status(404).json({ User: "No user found." }));
+});
+
 // Retrieves all the users that a certain user is following by id.
 followerRoutes.get("/following/:id", (req, res) => {
   followingModel
@@ -76,4 +84,27 @@ followerRoutes.delete("/followers/unfollow", async (req, res) => {
   res.status(200).json({Success: "Unfollowed User."})
 });
 
+// Get the count of followers for a given username
+followerRoutes.get('/followers/count/:username', async (req, res) => {
+  const { username } = req.params;
+
+  try {
+    const followerCount = await followerModel.findOne({ userId: username }).countDocuments();
+    res.status(200).json({ followerCount });
+  } catch (error) {
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+// Get the count of users following for a given username
+followerRoutes.get('/following/count/:username', async (req, res) => {
+  const { username } = req.params;
+
+  try {
+    const followingCount = await followingModel.findOne({ userId: username }).countDocuments();
+    res.status(200).json({ followingCount });
+  } catch (error) {
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
 module.exports = followerRoutes;
