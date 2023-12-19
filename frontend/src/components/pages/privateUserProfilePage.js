@@ -73,7 +73,7 @@ const PrivateUserProfile = () => {
     // Fetch public assessments
     const fetchPublicAssessments = async () => {
       try {
-        const response = await axios.get(`${process.env.REACT_APP_BACKEND_SERVER_URI}/api/results/user/${username}`);
+        const response = await axios.get(`${process.env.REACT_APP_BACKEND_SERVER_URI}/api/results/user/public/${username}`);
         // Log the data to the console for debugging
         console.log("Response data:", response.data);
 
