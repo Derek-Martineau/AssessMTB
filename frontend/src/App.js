@@ -5,24 +5,25 @@ import { createContext, useState, useEffect } from "react";
 
 // We import all the components we need in our app
 import Navbar from "./components/navbar";
-import LandingPage from "./components/pages/landingPage";
-import HomePage from "./components/pages/homePage";
-import Login from "./components/pages/loginPage";
+import LandingPage from "./components/pages/publicFeatures/landingPage";
+import HomePage from "./components/pages/publicFeatures/homePage";
+import Login from "./components/pages/publicFeatures/loginPage";
 import Signup from "./components/pages/registerPage";
-import TrailforksWidget from "./components/pages/mapPage";
+import TrailforksWidget from "./components/pages/publicFeatures/mapPage";
 import EditUserProfile from "./components/pages/editUserPage";
-import GordonCollege from "./components/pages/gordonCollege";
-import LynnWoods from "./components/pages/lynnWoods";
-import CallParks from "./components/pages/newAssessment"
+import GordonCollege from "./components/pages/publicFeatures/gordonCollege";
+import LynnWoods from "./components/pages/publicFeatures/lynnWoods";
+import CallParks from "./components/pages/assessmentWalkthrough/newAssessment"
 import PrivateUserProfile from "./components/pages/privateUserProfilePage";
 import getUserInfo from "./utilities/decodeJwt";
-import CallSegments from "./components/pages/selectSegment";
-import CallFeature from "./components/pages/selectFeature";
-import PostResults from "./components/pages/assessResultPage";
+import CallSegments from "./components/pages/assessmentWalkthrough/selectSegment";
+import CallFeature from "./components/pages/assessmentWalkthrough/selectFeature";
+import PostResults from "./components/pages/assessmentWalkthrough/assessResultPage";
 import ViewLibrary from "./components/pages/assessmentLibrary";
 import UploadImages from "./components/images/uploadImages";
 import ViewImages from "./components/images/viewImages";
 import PublicProfilePage from "./components/pages/publicProfilePage";
+import FeedPage from "./components/pages/feedPage/feedPage";
 
 export const UserContext = createContext();
 //test change
@@ -56,6 +57,8 @@ const App = () => {
           <Route path="/assessmentLibrary/:username" element={<ViewLibrary />}/>
           <Route path="/uploadImages" element={<UploadImages />} />
           <Route path="/viewImages" element={<ViewImages />} />
+          <Route path="/followingFeed" element={<FeedPage />} />
+          
         </Routes>
       </UserContext.Provider>
     </>

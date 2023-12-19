@@ -101,16 +101,17 @@ export default function Navbar() {
 
   const getBarDetails = () => {
     if (user) {
-      // If logged in, show "Assess," "Profile," and "Logout" links
+      // If logged in, show "Assess," "Profile," "Feed," and "Logout" links
       return (
         <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-end', color: '#FFF' }}>
           <NavDropdown title="Assess" style={{ paddingRight: '10px' }}>
             <NavDropdown.Item href="/newAssessment">New Assessment</NavDropdown.Item>
             <NavDropdown.Item href={`/assessmentLibrary/${user.username}`}>Assessment Library</NavDropdown.Item>
           </NavDropdown>
+          <Nav.Link href="/followingFeed" style={{ marginRight: '10px' }}>Activity Feed</Nav.Link>
           <Nav.Link href={`/privateUserProfile/${user.username}`}>{user.username}</Nav.Link>
         </div>
-      );      
+      );
     } else {
       // If not logged in, show "Login" and "Register" links
       return (

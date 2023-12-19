@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Card, Button, Modal } from "react-bootstrap";
 import { Navigate, useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import getUserInfo from "../../utilities/decodeJwt";
+import getUserInfo from "../../../utilities/decodeJwt";
 
 const CallSegments = () => {
   const { trailparkId } = useParams();
