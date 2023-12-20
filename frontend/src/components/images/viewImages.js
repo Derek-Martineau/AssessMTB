@@ -87,6 +87,7 @@ export default function ViewImages() {
               alt={image.name}
               style={{ maxWidth: '100%', height: 'auto', marginTop: '10px' }}
             />
+            <p>{image._id}</p>
             <button
               style={{
                 background: 'none',
