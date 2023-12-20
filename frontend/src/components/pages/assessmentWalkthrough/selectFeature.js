@@ -166,9 +166,11 @@ function CallFeature() {
 
   const buttonWrapperStyle = {
     display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center"
+    justifyContent: "center",
+    gap: "25px", 
+    alignItems: "center",
   };
+  
 
   if (redirectToResults) {
     return <Navigate to={`/results/${assessmentId}`} />;
@@ -185,16 +187,16 @@ function CallFeature() {
     <div style={{ background: '#5A5A5A', minHeight: "100vh", display: "flex", justifyContent: "center", alignItems: "center" }}>
       <Card style={{ width: "60rem" }}>
         <Card.Body>
-          <h3>Photo {currentPhotoIndex + 1}/{photoFilePaths.length}</h3>
+          <h3>Feature: {currentPhotoIndex + 1}/{photoFilePaths.length}</h3>
+          <div style={{ display: "flex", justifyContent: "center" }}>
+            <Card.Title>Which line did you choose?</Card.Title>
+          </div>
           <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', margin: 'auto', width: '400px', height: '400px' }}>
             <img
               src={photoFilePaths[currentPhotoIndex]}
               alt={`Image ${currentPhotoIndex + 1}`}
               style={{ width: '100%', height: '100%', objectFit: 'contain', borderRadius: '8px' }}
             />
-          </div>
-          <div style={{ display: "flex", justifyContent: "center" }}>
-            <Card.Title>Which line did you choose?</Card.Title>
           </div>
           <br />
           <div style={buttonWrapperStyle}>
@@ -229,7 +231,7 @@ function CallFeature() {
           </div>
           <br />
 
-          <div style={{ display: "flex", justifyContent: "flex-end", padding: '5px' }}>
+          <div style={{ display: "flex", justifyContent: "center", padding: '5px' }}>
             <Button variant="info" onClick={handleInstructionsShow}>Help</Button>
             <Button variant="danger" onClick={handleDiscardClick}>Change Segment</Button>
             <Button
