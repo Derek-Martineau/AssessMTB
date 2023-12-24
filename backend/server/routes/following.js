@@ -30,7 +30,7 @@ followerRoutes.get("/followers/:id", (req, res) => {
 });
 
 // Retrieves all the followers of a user by id.
-followerRoutes.get("/followers/:username", (req, res) => {
+followerRoutes.get("/following/:username", (req, res) => {
   followerModel
     .find({ userId: req.params.id })
     .then((followers) => res.json(followers))

@@ -2,8 +2,8 @@ import React, { useState, useCallback, useLayoutEffect, useEffect } from 'react'
 import { useParams } from 'react-router-dom';
 import { Container, Row, Col, Card, Image, Spinner } from 'react-bootstrap';
 import axios from 'axios';
-import getUserInfo from '../../utilities/decodeJwt';
-import FollowButton from '../following/followButton';
+import getUserInfo from '../../../utilities/decodeJwt';
+import FollowButton from '../../following/followButton';
 
 export default function PublicUserList() {
   const [followerCount, setFollowerCount] = useState(0);

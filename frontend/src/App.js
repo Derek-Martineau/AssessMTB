@@ -8,21 +8,21 @@ import Navbar from "./components/navbar";
 import LandingPage from "./components/pages/publicFeatures/landingPage";
 import HomePage from "./components/pages/publicFeatures/homePage";
 import Login from "./components/pages/publicFeatures/loginPage";
-import Signup from "./components/pages/registerPage";
+import Signup from "./components/pages/user/registerPage";
 import TrailforksWidget from "./components/pages/publicFeatures/mapPage";
-import EditUserProfile from "./components/pages/editUserPage";
+import EditUserProfile from "./components/pages/user/editUserPage";
 import GordonCollege from "./components/pages/publicFeatures/gordonCollege";
 import LynnWoods from "./components/pages/publicFeatures/lynnWoods";
 import CallParks from "./components/pages/assessmentWalkthrough/newAssessment"
-import PrivateUserProfile from "./components/pages/privateUserProfilePage";
+import PrivateUserProfile from "./components/pages/user/privateUserProfilePage";
 import getUserInfo from "./utilities/decodeJwt";
 import CallSegments from "./components/pages/assessmentWalkthrough/selectSegment";
 import CallFeature from "./components/pages/assessmentWalkthrough/selectFeature";
 import PostResults from "./components/pages/assessmentWalkthrough/assessResultPage";
-import ViewLibrary from "./components/pages/assessmentLibrary";
+import ViewLibrary from "./components/pages/user/assessmentLibrary";
 import UploadImages from "./components/images/uploadImages";
 import ViewImages from "./components/images/viewImages";
-import PublicProfilePage from "./components/pages/publicProfilePage";
+import PublicProfilePage from "./components/pages/user/publicProfilePage";
 import FeedPage from "./components/pages/feedPage/feedPage";
 
 export const UserContext = createContext();

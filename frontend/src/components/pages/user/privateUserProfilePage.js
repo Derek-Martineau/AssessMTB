@@ -1,8 +1,10 @@
+// Inside PrivateUserProfile.js
 import React, { useState, useEffect, useCallback } from "react";
-import { Button } from "react-bootstrap";
+import { Button, Image } from "react-bootstrap";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
-import getUserInfo from "../../utilities/decodeJwt";
+import getUserInfo from "../../../utilities/decodeJwt";
+import "./privateProfile.css"; // Import the CSS file
 
 const PrivateUserProfile = () => {
   const [user, setUser] = useState({});
@@ -38,27 +40,6 @@ const PrivateUserProfile = () => {
     }
   }, [username]);
 
-  // handle profile picture upload
-  const handleProfilePictureUpload = async (event) => {
-    const file = event.target.files[0];
-    const formData = new FormData();
-    formData.append("profilePicture", file);
-
-    try {
-      // Send the file to the API endpoint for uploading
-      const response = await axios.post("/api/upload-profile-picture", formData);
-
-      // Get the uploaded image URL from the response
-      const imageUrl = response.data.imageUrl;
-
-      // Set the profile picture URL in the state
-      setProfilePicture(imageUrl);
-    } catch (error) {
-      // Handle error
-      console.error(error);
-    }
-  };
-
   const handleEditProfile = () => {
     navigate("/editUserProfile");
   };
@@ -74,10 +55,6 @@ const PrivateUserProfile = () => {
     const fetchPublicAssessments = async () => {
       try {
         const response = await axios.get(`${process.env.REACT_APP_BACKEND_SERVER_URI}/api/results/user/public/${username}`);
-        // Log the data to the console for debugging
-        console.log("Response data:", response.data);
-
-        // Fetch segment data for each assessment and update the state
         const updatedPublicAssessments = [];
 
         for (const assessment of response.data) {
@@ -103,32 +80,52 @@ const PrivateUserProfile = () => {
   if (!user) return <div><h4>Log in to view this page.</h4></div>;
 
   return (
-    <div style={{ background: "#5A5A5A", minHeight: "100vh", overflowX: "hidden" }}>
-      <div style={{ textAlign: "center", padding: "20px", color: "#fff" }}>
-        {profilePicture && <img src={profilePicture} alt="Profile" width="200" />}
-        <h1>{user.username}</h1>
-        <h3>{user.role}</h3>
-        <h3>Followers: {followerCount}</h3>
-        <h3>Following: {followingCount}</h3>
-        <h3>Posts: {publicAssessments.length}</h3>
-        <div style={{ display: "flex", justifyContent: "flex-end", padding: "0px" }}>
-          <Button className="me-2" onClick={handleLogout}>
-            Log Out
-          </Button>
-          <Button className="me-2" onClick={handleEditProfile}>
-            Edit Profile
-          </Button>
+    <div className="profile-container">
+      <div className="profile-header">
+        <div className="profile-image">
+          {profilePicture && <img src={profilePicture} alt="Profile" width="200" />}
+        </div>
+        <div className="user-info">
+          <Image
+            src={`https://robohash.org/${username}?set=set5`}
+            roundedCircle
+            style={{ width: '150px', height: '150px' }}
+          />
+          <div className="user-details">
+            <h1>{user.username}</h1>
+            <h3>{user.role}</h3>
+            <div className="user-stats">
+              <div>
+                <h3>Followers: {followerCount}</h3>
+              </div>
+              <div>
+                <h3>Following: {followingCount}</h3>
+              </div>
+              <div>
+                <h3>Posts: {publicAssessments.length}</h3>
+              </div>
+            </div>
+            <div className="logout-edit-button">
+              <Button className="me-2" onClick={handleLogout}>
+              Log Out
+            </Button>
+            <Button className="me-2" onClick={handleEditProfile}>
+              Edit Profile
+            </Button>
+            </div>
+          </div>
         </div>
       </div>
 
       {/* Divider and Header */}
-      <hr style={{ margin: "20px 0", border: "4px solid #000000", width: "100%" }} />
-      <h1 style={{ color: "#fff", textAlign: "center" }}>Assessments</h1>
+      <hr className="hr-divider" />
+      <h1 className="assessments-header">Assessments</h1>
+
       {/* Public Assessments */}
-      <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", fontFamily: "sans-serif", fontSize: "18px" }}>
+      <div className="assessments-container">
         {publicAssessments.length > 0 ? (
           publicAssessments.map((assessment) => (
-            <div key={assessment._id} style={assessmentCardStyle}>
+            <div key={assessment._id} className="assessment-card">
               <h2>Assessment Date: {new Date(assessment.Date).toDateString()}</h2>
               <p>User: {username}</p>
               <p>Segment: {assessment.segmentName}</p>
@@ -143,21 +140,6 @@ const PrivateUserProfile = () => {
       </div>
     </div>
   );
-};
-
-const assessmentCardStyle = {
-  width: '300px',
-  minHeight: '200px',
-  padding: '20px',
-  margin: '20px',
-  background: 'white',
-  borderRadius: '10px',
-  boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
-  display: 'flex',
-  flexDirection: 'column',
-  alignItems: 'center',
-  justifyContent: 'space-between',
-  textAlign: 'center',
 };
 
 export default PrivateUserProfile;
