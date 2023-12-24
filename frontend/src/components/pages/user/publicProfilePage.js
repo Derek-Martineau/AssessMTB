@@ -1,9 +1,10 @@
 import React, { useState, useCallback, useLayoutEffect, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { Container, Row, Col, Card, Image, Spinner } from 'react-bootstrap';
+import { Container, Row, Col, Image, Spinner } from 'react-bootstrap';
 import axios from 'axios';
 import getUserInfo from '../../../utilities/decodeJwt';
 import FollowButton from '../../following/followButton';
+import "./publicProfile.css"; 
 
 export default function PublicUserList() {
   const [followerCount, setFollowerCount] = useState(0);
@@ -12,6 +13,7 @@ export default function PublicUserList() {
   const [publicAssessments, setPublicAssessments] = useState([]);
   const [loading, setLoading] = useState(true);
   const { username } = useParams();
+  const [profilePicture, setProfilePicture] = useState("");
 
   const fetchUserFollowData = useCallback(async () => {
     try {
@@ -86,35 +88,49 @@ export default function PublicUserList() {
   }
 
   return (
-  
-    <div>
-      <Container className="mt-5">
-        <Row>
-          <Col md={4} className="text-center mb-3">
-            <Image
-              src={`https://robohash.org/${username}?set=set5`}
-              roundedCircle
-              style={{ width: '150px', height: '150px' }}
-            />
-            <h3>{username}</h3>
-            <FollowButton className="mt-2 btn-sm" username={user.username} targetUserId={username} />
-            <div className="mt-2">
-              <div>Followers: {followerCount}</div>
-              <div>Following: {followingCount}</div>
-            </div>
-          </Col>
-        </Row>
-      </Container>
+    <div className="profile-container">
+      <div className="profile-header">
+        <div className="user-info">
+        <div className="profile-image">
+          {profilePicture && <img src={profilePicture} alt="Profile" width="200" />}
+        </div>
+          <Image
+            src={`https://robohash.org/${username}?set=set5`}
+            roundedCircle
+            style={{ width: '150px', height: '150px' }}
+          />
+          <h1>{username}</h1>
+          <div className="user-stats">
+          <div>
+                <h3>Followers: {followerCount}</h3>
+              </div>
+              <div>
+                <h3>Following: {followingCount}</h3>
+              </div>
+              <div>
+                <h3>Posts: {publicAssessments.length}</h3>
+              </div>
+          </div>
+          <div className="follow-button">
+            <FollowButton className="me-2" username={user.username} targetUserId={username} />
+          </div>
+          </div>
+      </div>
+
+      {/* Divider and Header */}
+      <hr className="hr-divider" />
+      <h1 className="assessments-header">Assessments</h1>
+
 
       {loading ? (
         <Spinner animation="border" role="status" className="mt-5">
           <span className="sr-only">Loading...</span>
         </Spinner>
       ) : (
-        <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', fontFamily: 'sans-serif', fontSize: '18px' }}>
+        <div className="assessments-container">
           {publicAssessments.length > 0 ? (
             publicAssessments.map((assessment) => (
-              <div key={assessment._id} style={assessmentCardStyle}>
+              <div key={assessment._id} className="assessment-card">
                 <h2>Assessment Date: {new Date(assessment.Date).toDateString()}</h2>
                 <p>User: {username}</p>
                 <p>Segment: {assessment.segmentName}</p>
@@ -131,18 +147,3 @@ export default function PublicUserList() {
     </div>
   );
 }
-
-const assessmentCardStyle = {
-  width: '300px',
-  minHeight: '200px',
-  padding: '20px',
-  margin: '20px',
-  background: 'white',
-  borderRadius: '10px',
-  boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
-  display: 'flex',
-  flexDirection: 'column',
-  alignItems: 'center',
-  justifyContent: 'space-between',
-  textAlign: 'center',
-};

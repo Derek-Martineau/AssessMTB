@@ -16,11 +16,15 @@
   #followButton {
     width: 180px;
     height: 48px;
+    background-color: #007bff;
+    color: white;
   }
   
   #unfollowButton {
     width: 180px;
     height: 48px;
+    background-color: #007bff;
+    color: white;
   }
   
   #editProfileButton {
