@@ -62,8 +62,8 @@ function PostResults() {
         if (response.ok) {
           const assessmentData = await response.json();
           if (assessmentData.featureLines) {
-            setFeatureLines(assessmentData.featureLines); // Set featureLines from the data
-            calculateScore(); // Calculate the score after setting featureLines
+            setFeatureLines(assessmentData.featureLines);
+            calculateScore();
           }
         } else {
           console.error("Error fetching assessment data:", response.status);
@@ -72,8 +72,10 @@ function PostResults() {
         console.error("Error fetching assessment data:", error);
       }
     }
+  
     fetchAssessmentData();
-  }, [assessmentId, calculateScore]);
+  }, [assessmentId]); // Only assessmentId is in the dependency array
+  
   
 
   const handleMovingTimeChange = (e) => {

@@ -86,22 +86,23 @@ const CallSegments = () => {
         <Card.Body>
           <Card.Title style={{ fontSize: "1.5rem", marginBottom: "15px", textAlign: "center", color: "#333" }}>Which Segment Did You Ride?</Card.Title>
           <div style={{ maxHeight: "300px", overflowY: "auto" }}>
-            {data.map(el => (
-              <Button
-                key={el.id}
-                variant={selectedSegment === el ? "success" : "primary"}
-                style={{
-                  margin: "5px 0",
-                  width: "100%",
-                  whiteSpace: "nowrap",
-                  overflow: "hidden",
-                  textOverflow: "ellipsis",
-                }}
-                onClick={() => handleSegmentSelection(el)}
-              >
-                {el.segmentName}
-              </Button>
-            ))}
+          {data.map(el => (
+  <Button
+    key={el.segmentId}
+    variant={selectedSegment === el ? "success" : "primary"}
+    style={{
+      margin: "5px 0",
+      width: "100%",
+      whiteSpace: "nowrap",
+      overflow: "hidden",
+      textOverflow: "ellipsis",
+    }}
+    onClick={() => handleSegmentSelection(el)}
+  >
+    {el.segmentName}
+  </Button>
+))}
+
           </div>
           <div style={{ display: "flex", justifyContent: "space-between", marginTop: "20px" }}>
             <Button variant="info" onClick={handleInstructionsShow}>Help</Button>
