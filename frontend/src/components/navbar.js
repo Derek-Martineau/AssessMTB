@@ -41,6 +41,11 @@ export default function Navbar() {
     }
   };
   
+  const handleLogout = () => {
+    localStorage.clear();
+    navigate("/willowdale");
+    window.location.reload();
+  };
 
   const handleSearch = () => {
     // Implement search logic based on the searchQuery
@@ -109,7 +114,12 @@ export default function Navbar() {
             <NavDropdown.Item href="/newAssessment">New Assessment</NavDropdown.Item>
             <NavDropdown.Item href={`/assessmentLibrary/${user.username}`}>Assessment Library</NavDropdown.Item>
           </NavDropdown>
-          <Nav.Link href={`/privateUserProfile/${user.username}`}>{user.username}</Nav.Link>
+          <NavDropdown title={user.username}>
+            <NavDropdown.Item href={`/privateUserProfile/${user.username}`}>View Profile</NavDropdown.Item>
+            <NavDropdown.Item href={`/editUserProfile`}>Edit Profile</NavDropdown.Item>
+            <NavDropdown.Item onClick={handleLogout} href="/">Logout</NavDropdown.Item>
+
+          </NavDropdown>
         </div>
       );
     } else {

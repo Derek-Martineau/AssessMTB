@@ -1,26 +1,17 @@
 // Inside PrivateUserProfile.js
 import React, { useState, useEffect, useCallback } from "react";
-import { Button, Image } from "react-bootstrap";
+import { Image } from "react-bootstrap";
 import axios from "axios";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import getUserInfo from "../../../utilities/decodeJwt";
-import "./privateProfile.css"; // Import the CSS file
+import "./privateProfile.css"; 
 
 const PrivateUserProfile = () => {
   const [user, setUser] = useState({});
-  const [profilePicture, setProfilePicture] = useState("");
   const [publicAssessments, setPublicAssessments] = useState([]);
-  const navigate = useNavigate();
   const { username } = useParams();
   const [followerCount, setFollowerCount] = useState(0);
   const [followingCount, setFollowingCount] = useState(0);
-
-  // handle logout button
-  const handleLogout = () => {
-    localStorage.clear();
-    navigate("/willowdale");
-    window.location.reload();
-  };
 
   const fetchUserFollowData = useCallback(async () => {
     try {
@@ -40,23 +31,19 @@ const PrivateUserProfile = () => {
     }
   }, [username]);
 
-  const handleEditProfile = () => {
-    navigate("/editUserProfile");
-  };
-
   useEffect(() => {
     fetchUserFollowData();
   }, [fetchUserFollowData]);
 
   useEffect(() => {
     setUser(getUserInfo());
-
+  
     // Fetch public assessments
     const fetchPublicAssessments = async () => {
       try {
         const response = await axios.get(`${process.env.REACT_APP_BACKEND_SERVER_URI}/api/results/user/public/${username}`);
         const updatedPublicAssessments = [];
-
+  
         for (const assessment of response.data) {
           const segmentResponse = await axios.get(`${process.env.REACT_APP_BACKEND_SERVER_URI}/api/segments/${assessment.Segment}`);
           if (segmentResponse.data) {
@@ -64,27 +51,24 @@ const PrivateUserProfile = () => {
             assessment.segmentName = segmentData.segmentName;
             assessment.difficulty = segmentData.difficulty;
           }
-          
+  
           updatedPublicAssessments.push(assessment);
         }
-
+  
         setPublicAssessments(updatedPublicAssessments);
       } catch (error) {
         console.error("Error fetching public assessments:", error);
       }
     };
-
+  
     fetchPublicAssessments();
-  }, []);
+  }, [username]);
 
   if (!user) return <div><h4>Log in to view this page.</h4></div>;
 
   return (
     <div className="profile-container">
       <div className="profile-header">
-        <div className="profile-image">
-          {profilePicture && <img src={profilePicture} alt="Profile" width="200" />}
-        </div>
         <div className="user-info">
           <Image
             src={`https://robohash.org/${username}?set=set5`}
@@ -104,14 +88,6 @@ const PrivateUserProfile = () => {
               <div>
                 <h3>Posts: {publicAssessments.length}</h3>
               </div>
-            </div>
-            <div className="logout-edit-button">
-              <Button className="me-2" onClick={handleLogout}>
-              Log Out
-            </Button>
-            <Button className="me-2" onClick={handleEditProfile}>
-              Edit Profile
-            </Button>
             </div>
           </div>
         </div>

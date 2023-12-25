@@ -12,7 +12,7 @@
   padding: 20px;
   color: #fff;
   display: flex;
-  justify-content: flex-start; /* Keep it on the left */
+  justify-content: flex-start;
   align-items: flex-start;
 }
 
