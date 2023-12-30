@@ -1,6 +1,6 @@
-import React, { useState, useCallback, useLayoutEffect, useEffect } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { Container, Row, Col, Image, Spinner } from 'react-bootstrap';
+import { Image, Spinner } from 'react-bootstrap';
 import axios from 'axios';
 import getUserInfo from '../../../utilities/decodeJwt';
 import FollowButton from '../../following/followButton';
@@ -13,7 +13,6 @@ export default function PublicUserList() {
   const [publicAssessments, setPublicAssessments] = useState([]);
   const [loading, setLoading] = useState(true);
   const { username } = useParams();
-  const [profilePicture, setProfilePicture] = useState("");
 
   const fetchUserFollowData = useCallback(async () => {
     try {
@@ -33,10 +32,6 @@ export default function PublicUserList() {
     }
   }, [username]);
 
-  useLayoutEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
-
   useEffect(() => {
     const userInfo = getUserInfo();
     if (userInfo) {
@@ -44,7 +39,7 @@ export default function PublicUserList() {
     }
   }, []);
 
-  const fetchPublicAssessments = async () => {
+  const fetchPublicAssessments = useCallback(async () => {
     try {
       const response = await axios.get(
         `${process.env.REACT_APP_BACKEND_SERVER_URI}/api/results/user/public/${username}`
@@ -70,12 +65,12 @@ export default function PublicUserList() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [username]);
 
   useEffect(() => {
     fetchUserFollowData();
     fetchPublicAssessments();
-  }, [fetchUserFollowData]);
+  }, [fetchUserFollowData, fetchPublicAssessments]); 
 
   if (!user) {
     return (
@@ -91,36 +86,34 @@ export default function PublicUserList() {
     <div className="profile-container">
       <div className="profile-header">
         <div className="user-info">
-        <div className="profile-image">
-          {profilePicture && <img src={profilePicture} alt="Profile" width="200" />}
-        </div>
-          <Image
-            src={`https://robohash.org/${username}?set=set5`}
-            roundedCircle
-            style={{ width: '150px', height: '150px' }}
-          />
+          <div className="profile-image">
+            <Image
+              src={`https://robohash.org/${username}?set=set5`}
+              roundedCircle
+              style={{ width: '150px', height: '150px' }}
+            />
+          </div>
           <h1>{username}</h1>
           <div className="user-stats">
-          <div>
-                <h3>Followers: {followerCount}</h3>
-              </div>
-              <div>
-                <h3>Following: {followingCount}</h3>
-              </div>
-              <div>
-                <h3>Posts: {publicAssessments.length}</h3>
-              </div>
+            <div>
+              <h3>Followers: {followerCount}</h3>
+            </div>
+            <div>
+              <h3>Following: {followingCount}</h3>
+            </div>
+            <div>
+              <h3>Posts: {publicAssessments.length}</h3>
+            </div>
           </div>
           <div className="follow-button">
             <FollowButton className="me-2" username={user.username} targetUserId={username} />
           </div>
-          </div>
+        </div>
       </div>
 
       {/* Divider and Header */}
       <hr className="hr-divider" />
       <h1 className="assessments-header">Assessments</h1>
-
 
       {loading ? (
         <Spinner animation="border" role="status" className="mt-5">
