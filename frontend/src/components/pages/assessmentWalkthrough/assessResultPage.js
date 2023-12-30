@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { Card, Button, Modal, Form } from "react-bootstrap";
 import { Navigate, useParams } from "react-router-dom";
 
@@ -10,8 +10,9 @@ function PostResults() {
   const { assessmentId } = useParams();
   const [redirectToWillowdale, setRedirectToWillowdale] = useState(false);
   const [featureLines, setFeatureLines] = useState([]); // Define featureLines in the component's state
+  const [scoreCalculated, setScoreCalculated] = useState(false);
 
-  const calculateScore = () => {
+  const calculateScore = useCallback(() => {
     if (confirmedMovingTime && featureLines.length > 0) {
       const movingTimeInSeconds = convertMovingTimeToSeconds(confirmedMovingTime);
       console.log("Moving Time in Seconds:", movingTimeInSeconds);
@@ -52,18 +53,24 @@ function PostResults() {
   
       setScore(finalScore.toFixed(2)); // Convert to a string with 2 decimal places
       console.log("Calculated Score:", finalScore); // Log the final score here
+      setScoreCalculated(true);
     }
-  };
+  }, [confirmedMovingTime, featureLines]);
 
   useEffect(() => {
+    let isMounted = true;
+  
     async function fetchAssessmentData() {
       try {
         const response = await fetch(`${process.env.REACT_APP_BACKEND_SERVER_URI}/api/results/${assessmentId}`);
         if (response.ok) {
           const assessmentData = await response.json();
-          if (assessmentData.featureLines) {
+          if (assessmentData.featureLines && isMounted) {
             setFeatureLines(assessmentData.featureLines);
-            calculateScore();
+            if (!scoreCalculated) {
+              // Only calculate the score if it hasn't been calculated yet
+              calculateScore();
+            }
           }
         } else {
           console.error("Error fetching assessment data:", response.status);
@@ -73,8 +80,20 @@ function PostResults() {
       }
     }
   
+    if (!scoreCalculated) {
+      // Only calculate the score if it hasn't been calculated yet
+      calculateScore();
+    }
+  
     fetchAssessmentData();
-  }, [assessmentId]); // Only assessmentId is in the dependency array
+  
+    // Cleanup function to handle component unmounting
+    return () => {
+      isMounted = false;
+    };
+  }, [assessmentId, confirmedMovingTime, featureLines, calculateScore, scoreCalculated]);
+  
+  
   
   
 
