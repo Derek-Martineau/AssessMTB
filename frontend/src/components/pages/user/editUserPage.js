@@ -6,7 +6,7 @@ import Card from 'react-bootstrap/Card';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import axios from 'axios'
-import { Link, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import getUserInfo from '../../../utilities/decodeJwt';
 
 const EditUserPage = () =>{
@@ -61,19 +61,18 @@ const EditUserPage = () =>{
         localStorage.setItem("accessToken", accessToken);
         navigate("/privateuserprofile");
       } catch (error) {
-      if (
-        error.response &&
-        error.response.status != 409 &&
-        error.response.status >= 400 &&
-        error.response.status <= 500
-      ) {
-        window.alert(error.response.data.message);
-      }
-      if (error.response &&
-        error.response.status === 409
-      ) {
-        setErrors({name : "Username is taken, pick another"})
-      }
+        if (
+          error.response &&
+          error.response.status !== 409 &&
+          error.response.status >= 400 &&
+          error.response.status <= 500
+        ) {
+          window.alert(error.response.data.message);
+        }
+    
+        if (error.response && error.response.status === 409) {
+          setErrors({ name: "Username is taken, pick another" });
+        }
     }
     }
   }

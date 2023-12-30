@@ -46,6 +46,7 @@ const Register = () => {
     try {
       alert(`Do not leave this page until registration is confirmed. ${url}`);
       const { data: res } = await axios.post(url, data);
+      console.log(res);
       alert("Your account has been created.");
 
       // const {accessToken} = res
@@ -67,7 +68,6 @@ const Register = () => {
   };
 
   return (
-    <>
       <section className="vh-100">
         <div className="container-fluid h-custom vh-100">
           <div
@@ -145,7 +145,6 @@ const Register = () => {
           </div>
         </div>
       </section>
-    </>
   );
 };
 

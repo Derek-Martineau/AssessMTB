@@ -32,15 +32,6 @@ const LandingPage = () => {
     navigate(selectedPark.link);
   };
 
-  const smoothScroll = (sectionId) => {
-    const element = document.getElementById(sectionId);
-    if (element) {
-      element.scrollIntoView({
-        behavior: 'smooth',
-      });
-    }
-  };
-
   return (
     <div>
       <div className="hero-section">
