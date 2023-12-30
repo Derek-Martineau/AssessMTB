@@ -75,15 +75,20 @@ export default function Navbar() {
   
 
   const publicUser = () => {
-  const parks = (
-    <NavDropdown title="View Parks" id="nav-dropdown" style={{ color: '#FFF' }}>
-      <NavDropdown.Item href="/willowdale">Willowdale State Park</NavDropdown.Item>
-      <NavDropdown.Item href="/gordon">Gordon College</NavDropdown.Item>
-      <NavDropdown.Item href="/lynnwoods">Lynn Woods</NavDropdown.Item>
-    </NavDropdown>
-  );
 
-
+    const homeLink = (
+      <Nav.Link href="#" onClick={navigateToHome} style={{ display: 'flex', alignItems: 'center', marginRight: '15px', color: '#FFF' }}>
+        Home
+      </Nav.Link>
+    );
+    
+    const parks = (
+  <NavDropdown title="View Parks" id="nav-dropdown" style={{ color: '#FFF' }}>
+    <NavDropdown.Item href="/willowdale">Willowdale State Park</NavDropdown.Item>
+    <NavDropdown.Item href="/gordon">Gordon College</NavDropdown.Item>
+    <NavDropdown.Item href="/lynnwoods">Lynn Woods</NavDropdown.Item>
+  </NavDropdown>
+);
     const imageLink = (
       <Nav.Link href="#" onClick={navigateToHome} style={{ display: 'flex', alignItems: 'center' }}>
         <img
@@ -97,6 +102,7 @@ export default function Navbar() {
     return (
       <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
         {imageLink}
+        {homeLink}
         <nav>
           {parks}
         </nav>
