@@ -24,6 +24,7 @@ import UploadImages from "./components/images/uploadImages";
 import ViewImages from "./components/images/viewImages";
 import PublicProfilePage from "./components/pages/user/publicProfilePage";
 import FeedPage from "./components/pages/feedPage/feedPage";
+import ExplorePage from "./components/pages/feedPage/explore";
 
 export const UserContext = createContext();
 //test change
@@ -58,6 +59,7 @@ const App = () => {
           <Route path="/uploadImages" element={<UploadImages />} />
           <Route path="/viewImages" element={<ViewImages />} />
           <Route path="/followingFeed" element={<FeedPage />} />
+          <Route path="/explore" element={<ExplorePage />} />
           
         </Routes>
       </UserContext.Provider>

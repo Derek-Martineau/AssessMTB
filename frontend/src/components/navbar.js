@@ -83,12 +83,12 @@ export default function Navbar() {
     );
     
     const parks = (
-  <NavDropdown title="View Parks" id="nav-dropdown" style={{ color: '#FFF' }}>
-    <NavDropdown.Item href="/willowdale">Willowdale State Park</NavDropdown.Item>
-    <NavDropdown.Item href="/gordon">Gordon College</NavDropdown.Item>
-    <NavDropdown.Item href="/lynnwoods">Lynn Woods</NavDropdown.Item>
-  </NavDropdown>
-);
+      <NavDropdown title="View Parks" id="nav-dropdown">
+        <NavDropdown.Item href="/willowdale">Willowdale State Park</NavDropdown.Item>
+        <NavDropdown.Item href="/gordon">Gordon College</NavDropdown.Item>
+        <NavDropdown.Item href="/lynnwoods">Lynn Woods</NavDropdown.Item>
+      </NavDropdown>
+    );
     const imageLink = (
       <Nav.Link href="#" onClick={navigateToHome} style={{ display: 'flex', alignItems: 'center' }}>
         <img
@@ -116,6 +116,7 @@ export default function Navbar() {
       return (
         <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-end', color: '#FFF' }}>
           <Nav.Link href="/followingFeed" style={{ marginRight: '15px' }}> Feed</Nav.Link>
+          <Nav.Link href="/explore" style={{ marginRight: '15px' }}> Explore</Nav.Link>
           <NavDropdown title="Assess" style={{ paddingRight: '15px' }}>
             <NavDropdown.Item href="/newAssessment">New Assessment</NavDropdown.Item>
             <NavDropdown.Item href={`/assessmentLibrary/${user.username}`}>Assessment Library</NavDropdown.Item>
