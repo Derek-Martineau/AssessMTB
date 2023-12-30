@@ -25,9 +25,6 @@ const newUserSchema = new mongoose.Schema(
     role: {
       type: String,
     }
-  
-    /*friends: [{type: mongoose.Schema.Types.ObjectsId, ref: 'Friends'}]
-  }, //{timestamps: true}*/
   }
 );
 

@@ -229,5 +229,17 @@ GET {{baseurl}}/images/656f872b19113e0adce02c8a
 }
 
 ### get following count
-
 {{baseurl}}/following/following/count/DerekMartineau
+
+### get all public assessments
+{{baseurl}}/api/public-assessments
+
+### Gets a list of the users that are followed from the logged-in users
+{{baseurl}}/following/following/640e316ceebb6807bae74c7b
+
+### get all post by userID
+{{baseurl}}/results/user/public/640e316ceebb6807bae74c7b
+
+###get all posts from users their following
+
+{{baseurl}}/feed/assessment-results/testbikes
