@@ -25,7 +25,8 @@ const LynnWoods = () => {
 
       if (park) {
         // Set description
-        setParkDescription(park.description || 'No description available');
+        const formattedDescription = formatDescriptionText(park.description) || 'No description available';
+        setParkDescription(formattedDescription);
       } else {
         setParkDescription('Park not found');
       }
@@ -33,6 +34,14 @@ const LynnWoods = () => {
       console.error("Error fetching data:", error);
     }
   }
+
+  // Function to format the description text
+function formatDescriptionText(description) {
+  // Replace both '\n' and '\\n' with <br> tags for line breaks
+  const formattedText = description.replace(/\\n/g, '<br>').replace(/\n/g, '<br>');
+
+  return formattedText;
+}
 
   return (
     <div style={{ background: '#5A5A5A'}}>
@@ -76,7 +85,7 @@ const LynnWoods = () => {
           <div>
             <h2>Description</h2>
             <div style={{ backgroundColor: '#333', padding: '15px', borderRadius: '5px', marginBottom: '20px' }}>
-              <p style={{ color: '#FFF', fontSize: '16px', lineHeight: '1.5' }}>{parkDescription}</p>
+            <p style={{ color: '#FFF', fontSize: '16px', lineHeight: '1.5' }} dangerouslySetInnerHTML={{ __html: parkDescription }}></p>
             </div>
           </div>
         </div>

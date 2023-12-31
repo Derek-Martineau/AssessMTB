@@ -18,11 +18,14 @@ const TrailforksWidget = () => {
     try {
       const response = await fetch(`${process.env.REACT_APP_BACKEND_SERVER_URI}/parks/trailparks`);
       const data = await response.json();
-
-      const willowdalePark = data.find(park => park.parkName === "Willowdale State Forest");
-
+  
+      const willowdalePark = data.find((park) => park.parkName === "Willowdale State Forest");
+  
       if (willowdalePark) {
-        setParkDescription(willowdalePark.description || 'No description available');
+        console.log("Retrieved Description:", willowdalePark.description);
+  
+        const formattedDescription = formatDescriptionText(willowdalePark.description) || 'No description available';
+        setParkDescription(formattedDescription);
       } else {
         setParkDescription('Park not found');
       }
@@ -30,6 +33,15 @@ const TrailforksWidget = () => {
       console.error("Error fetching data:", error);
     }
   }
+  
+  
+// Function to format the description text
+function formatDescriptionText(description) {
+  // Replace both '\n' and '\\n' with <br> tags for line breaks
+  const formattedText = description.replace(/\\n/g, '<br>').replace(/\n/g, '<br>');
+
+  return formattedText;
+}
 
   return (
     <div style={{ background: '#5A5A5A', minHeight: '100vh', overflowX: 'hidden' }}>
@@ -63,12 +75,13 @@ const TrailforksWidget = () => {
             data-hideunsanctioned="0"
           ></div>
           {/* Description */}
-          <div style={{ marginTop: '30px' }}>
-            <h2>Description</h2>
-            <div style={{ backgroundColor: '#333', padding: '15px', borderRadius: '5px', marginBottom: '20px' }}>
-              <p style={{ color: '#FFF', fontSize: '16px', lineHeight: '1.5' }}>{parkDescription}</p>
-            </div>
-          </div>
+<div style={{ marginTop: '30px' }}>
+  <h2>Description</h2>
+  <div style={{ backgroundColor: '#333', padding: '15px', borderRadius: '5px', marginBottom: '20px' }}>
+    <p style={{ color: '#FFF', fontSize: '16px', lineHeight: '1.5' }} dangerouslySetInnerHTML={{ __html: parkDescription }}></p>
+  </div>
+</div>
+
         </div>
       </div>
     </div>
