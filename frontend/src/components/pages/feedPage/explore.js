@@ -22,13 +22,13 @@ const PublicAssessments = () => {
       return null;
     }
   };
-  
-  
 
   useEffect(() => {
     const fetchPublicAssessments = async () => {
       try {
+        console.log('Fetching public assessments...');
         const response = await axios.get(`${process.env.REACT_APP_BACKEND_SERVER_URI}/api/public-assessments`);
+        console.log('Fetched assessments data:', response.data);
 
         const updatedPublicAssessments = await Promise.all(
           response.data.map(async (assessment) => {
@@ -39,27 +39,22 @@ const PublicAssessments = () => {
               assessment.difficulty = segmentData.difficulty;
             }
         
-            try {
-              // Fetch username using the user ID
-              const userId = assessment.User._id;
-              const username = await fetchUsername(userId);
-              assessment.userId = userId || 'User ID Not Found'; // Use userId instead of username
-            } catch (userError) {
-              console.error(`Error fetching user ID for user ID ${assessment.User._id}:`, userError);
-            }
+            // Use user ID directly without accessing _id property
+            const userId = assessment.User;
+            console.log(`Assessment ID: ${assessment._id}, User ID: ${userId}`);
+            assessment.userId = userId || 'User ID Not Found';
         
             return assessment;
           })
         );
         
-        setPublicAssessments(updatedPublicAssessments);
-        
-
+        console.log('Updated assessments data:', updatedPublicAssessments);
         setPublicAssessments(updatedPublicAssessments);
       } catch (error) {
         console.error("Error fetching public assessments:", error);
       } finally {
         setLoading(false);
+        console.log('Assessments fetching completed.');
       }
     };
 
