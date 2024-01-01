@@ -77,7 +77,7 @@ const TrailforksWidget = () => {
         </div>
 
           <h3>Explore the trails in Willowdale State Forest and assess your abilities.</h3>
-
+        <div class = "border"> </div>
           {/* Skill Assessment Section */}
         <div className="skill-assessment-section">
           <h2>Want to assess your skills?</h2>
@@ -86,7 +86,7 @@ const TrailforksWidget = () => {
             Assess Your Skills
           </button>
         </div>
-        <h3> </h3>
+        <div class = "border"> </div>
           <h2>Trail Map</h2>
         {/* Trailforks Widget Region Info */}
         <div

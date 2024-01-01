@@ -17,10 +17,7 @@
     text-align: center;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   }
-  
-  .col:hover {
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-  }
+
   
   .TrailforksWidgetMap {
     width: 100%;
@@ -76,8 +73,8 @@
     border-radius: 0px;
   }
 
-  h3 {
-    font-size: 1.5rem; /* Adjust the font size as needed */
-    border-bottom: 2px solid #333; /* Add a 2px solid border below the h3 */
-    padding-bottom: 10px; /* Add some padding for spacing */
+  .border {
+    border-bottom: 2px solid black;
+    margin-bottom: 20px;
+    margin-top: 20px;
   }
