@@ -12,14 +12,12 @@ const PublicAssessments = () => {
         throw new Error('Invalid user ID');
       }
   
-      const response = await axios.get(`${process.env.REACT_APP_BACKEND_SERVER_URI}/user/getUserById`, {
-        params: { userId },
-      });
+      const response = await axios.get(`${process.env.REACT_APP_BACKEND_SERVER_URI}/user/userID/${userId}`);
   
-      return response.data._id; // Return user ID directly
+      return response.data.username || 'Username Not Found'; // Use the username or a default value
     } catch (error) {
-      console.error(`Error fetching user ID for user ID ${userId}:`, error);
-      return null;
+      console.error(`Error fetching username for user ID ${userId}:`, error);
+      return 'Username Not Found';
     }
   };
 
@@ -42,7 +40,10 @@ const PublicAssessments = () => {
             // Use user ID directly without accessing _id property
             const userId = assessment.User;
             console.log(`Assessment ID: ${assessment._id}, User ID: ${userId}`);
-            assessment.userId = userId || 'User ID Not Found';
+            
+            // Fetch username using the user ID
+            const username = await fetchUsername(userId);
+            assessment.username = username;
         
             return assessment;
           })
@@ -77,7 +78,7 @@ const PublicAssessments = () => {
                     alt="User Avatar"
                     style={{ width: '150px', height: '150px', borderRadius: '50%' }}
                   />
-                  <p className="username">{assessment.userId}</p>
+                  <p className="username">{assessment.username}</p>
                 </div>
                 <h2 className="cardTitle">Assessment Date: {new Date(assessment.Date).toDateString()}</h2>
                 <p>Segment: {assessment.segmentName}</p>

@@ -20,4 +20,18 @@ router.get('/:username', async (req, res) => {
   }
 });
 
+// Get username from userID
+router.get('/userid/:userId', async (req, res) => {
+  try {
+    const user = await newUserModel.findById(req.params.userId);
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    res.status(200).json({ username: user.username });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
 module.exports = router;
