@@ -74,7 +74,7 @@ const PublicAssessments = () => {
               <div key={assessment._id} className="assessmentCard">
                 <div className="userInfo">
                   <img
-                    src={`https://robohash.org/${assessment.userId}?set=set5`} // Displaying user ID in the image URL
+                    src={`https://robohash.org/${assessment.User}?set=set5`} // Displaying user ID in the image URL
                     alt="User Avatar"
                     style={{ width: '150px', height: '150px', borderRadius: '50%' }}
                   />
