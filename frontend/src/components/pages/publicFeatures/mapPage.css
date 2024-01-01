@@ -64,11 +64,18 @@
   
   .media-section img {
     width: 100%;
-    max-width: 400px; /* Set your desired maximum width */
+    max-width: 400px;
     height: auto;
     border-radius: 10px;
   }
   
+  .media-section-gordon img {
+    width: 50%;
+    max-width: 600px;
+    height: auto;
+    border-radius: 0px;
+  }
+
   h3 {
     font-size: 1.5rem; /* Adjust the font size as needed */
     border-bottom: 2px solid #333; /* Add a 2px solid border below the h3 */

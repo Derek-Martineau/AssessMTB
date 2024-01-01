@@ -1,8 +1,13 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import './mapPage.css';
 
-const TrailforksParkComponent = ({ parkName }) => {
+const TrailforksParkComponent = () => {
   const [parkDescription, setParkDescription] = useState('');
+  const [showFullDescription, setShowFullDescription] = useState(false);
 
+  const navigate = useNavigate();
+  
   useEffect(() => {
     const script = document.createElement('script');
     script.setAttribute(
@@ -40,65 +45,84 @@ const TrailforksParkComponent = ({ parkName }) => {
     return formattedText;
   }
 
+  const handleAssessButtonClick = () => {
+    navigate('/selectSegment/6503d0cd52bfd3de00f04c47');
+    console.log('Assess Gordon College button clicked');
+  };
+
+  const toggleDescription = () => {
+    setShowFullDescription(!showFullDescription);
+  };
+
+  const getDescriptionDisplay = () => {
+    if (showFullDescription || parkDescription.length <= 250) {
+      return parkDescription;
+    } else {
+      return parkDescription.slice(0, 250) + '...';
+    }
+  };
+
   return (
-    <div style={{ background: '#5A5A5A' }}>
-      <div
-        className='container h-100 style'
-        style={{
-          color: 'white',
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          height: '300px',
-          width: '2000px',
-        }}
-      >
-        <div className='col'>
-          <div
-            className='TrailforksRegionInfo'
-            data-w='100%'
-            data-h='130px'
-            data-rid='23926'
-            data-counts='1'
-            data-stats='1'
-          ></div>
-          <div
-            className='TrailforksWidgetMap'
-            data-w='100%'
-            data-h='800px'
-            data-rid='23926'
-            data-activitytype='1'
-            data-maptype='trailforks'
-            data-trailstyle='difficulty'
-            data-controls='1'
-            data-list='0'
-            data-dml='1'
-            data-layers='labels,poi,polygon,directory,region'
-            data-z=''
-            data-lat=''
-            data-lon=''
-            data-hideunsanctioned='0'
-          ></div>
-          <div>
-            <h2>Description</h2>
-            <div
-              style={{
-                backgroundColor: '#333',
-                padding: '15px',
-                borderRadius: '5px',
-                marginBottom: '20px',
-              }}
-            >
-              <p
-                style={{
-                  color: '#FFF',
-                  fontSize: '16px',
-                  lineHeight: '1.5',
-                }}
-                dangerouslySetInnerHTML={{ __html: parkDescription }}
-              ></p>
-            </div>
+    <div className="trailforks-widget-container">
+      <div className="col">
+      <header>
+          <h1>Gordon College Trails</h1>
+        </header>
+
+        <div className="media-section-gordon">
+          <img src="images/gordon-lake.jpg" alt="Gordon College Lake View" />
+         
+        </div>
+
+          <h3>Explore the trails in Gordon College and assess your abilities.</h3>
+
+          {/* Skill Assessment Section */}
+        <div className="skill-assessment-section">
+          <h2>Want to assess your skills?</h2>
+          <p>Ready to take your trail riding to the next level? Assess your skills at Gordon College! Navigate through diverse terrains, conquer challenging trails, and enjoy the thrill of the ride.</p>
+          <button className="assess-button" onClick={handleAssessButtonClick}>
+            Assess Your Skills
+          </button>
+        </div>
+        <h3> </h3>
+          <h2>Trail Map</h2>
+
+        <div
+          className="TrailforksRegionInfo"
+          data-w="100%"
+          data-h="130px"
+          data-rid="23926"
+          data-counts="1"
+          data-stats="1"
+        ></div>
+        <div
+          className="TrailforksWidgetMap"
+          data-w="100%"
+          data-h="500px"
+          data-rid="23926"
+          data-activitytype="1"
+          data-maptype="trailforks"
+          data-trailstyle="difficulty"
+          data-controls="1"
+          data-list="0"
+          data-dml="1"
+          data-layers="labels,poi,polygon,directory,region"
+          data-z=""
+          data-lat=""
+          data-lon=""
+          data-hideunsanctioned="0"
+        ></div>
+        {/* Description */}
+        <div className="description-section">
+          <h2>Description</h2>
+          <div className="description-content">
+            <p dangerouslySetInnerHTML={{ __html: getDescriptionDisplay() }}></p>
           </div>
+          {parkDescription.length > 100 && (
+            <button className="show-more-button" onClick={toggleDescription}>
+              {showFullDescription ? 'Show Less' : 'Show More'}
+            </button>
+          )}
         </div>
       </div>
     </div>
