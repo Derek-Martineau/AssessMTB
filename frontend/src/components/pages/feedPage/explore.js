@@ -62,6 +62,25 @@ const PublicAssessments = () => {
     fetchPublicAssessments();
   }, []);
 
+  // Function to map numbers to letters
+const mapNumberToLetter = (number) => {
+  // Parse the number as an integer
+  const parsedNumber = parseInt(number, 10);
+
+  switch (parsedNumber) {
+    case 8:
+      return 'A';
+    case 6:
+      return 'B';
+    case 4:
+      return 'C';
+    case 1:
+      return 'Walked';
+    default:
+      return '';
+  }
+};
+
   return (
     <div className="feedContainer">
       <h1 className="heading">Welcome To The Explore Page!</h1>
@@ -83,7 +102,14 @@ const PublicAssessments = () => {
                 <h2 className="cardTitle">Assessment Date: {new Date(assessment.Date).toDateString()}</h2>
                 <p>Segment: {assessment.segmentName}</p>
                 <p>Difficulty: {assessment.difficulty}</p>
-                <p>Line Choices: {assessment.featureLines.map((line) => line.lineChoice).join(', ')}</p>
+                <p>
+              Line Choices: {assessment.featureLines.map((line) => {
+                console.log('line', line); // Add this console log
+                const letter = mapNumberToLetter(line.lineChoice);
+                console.log('letter', letter); // Add this console log
+                return letter;
+              }).join(', ')}
+            </p>
                 <p>Score: {assessment.Score}</p>
               </div>
             ))) : (
