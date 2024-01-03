@@ -14,38 +14,38 @@ const LynnWoods = () => {
   useEffect(() => {
     setUser(getUserInfo());
   }, []);
-  
+
   useEffect(() => {
-    const script = document.createElement("script");
-    script.setAttribute(
-      "src",
-      "https://es.pinkbike.org/ttl-86400/sprt/j/trailforks/widget.js"
-    );
-    document.getElementsByTagName("head")[0].appendChild(script);
+    const fetchDataAndScript = async () => {
+      try {
+        // Fetch data
+        const response = await fetch(`${process.env.REACT_APP_BACKEND_SERVER_URI}/parks/trailparks`);
+        const data = await response.json();
 
-    fetchData();
-  }, []);
+        // Find the description for Lynn Woods
+        const park = data.find(park => park.parkName === "Lynn Woods");
 
-  async function fetchData() {
-    try {
-      // Fetch data
-      const response = await fetch(`${process.env.REACT_APP_BACKEND_SERVER_URI}/parks/trailparks`);
-      const data = await response.json();
-
-      // Find the description for Lynn Woods
-      const park = data.find(park => park.parkName === "Lynn Woods");
-
-      if (park) {
-        // Set description
-        const formattedDescription = formatDescriptionText(park.description) || 'No description available';
-        setParkDescription(formattedDescription);
-      } else {
-        setParkDescription('Park not found');
+        if (park) {
+          // Set description
+          const formattedDescription = formatDescriptionText(park.description) || 'No description available';
+          setParkDescription(formattedDescription);
+        } else {
+          setParkDescription('Park not found');
+        }
+      } catch (error) {
+        console.error("Error fetching data:", error);
       }
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    }
-  }
+
+      const script = document.createElement("script");
+      script.setAttribute(
+        "src",
+        "https://es.pinkbike.org/ttl-86400/sprt/j/trailforks/widget.js"
+      );
+      document.getElementsByTagName("head")[0].appendChild(script);
+    };
+
+    fetchDataAndScript();
+  }, []);
 
   // Function to format the description text
   function formatDescriptionText(description) {
@@ -57,7 +57,7 @@ const LynnWoods = () => {
 
   const handleAssessButtonClick = () => {
     if (!user) {
-      // Display alert if user is not logged in
+      // Display alert if the user is not logged in
       setShowLoginAlert(true);
     } else {
       // Navigate to the assessment page if the user is logged in
@@ -72,7 +72,6 @@ const LynnWoods = () => {
       <button onClick={onClose}>Close</button>
     </div>
   );
-  
 
   const toggleDescription = () => {
     setShowFullDescription(!showFullDescription);
@@ -99,7 +98,7 @@ const LynnWoods = () => {
         </div>
 
         <h3>Explore the trails in Lynn Woods and assess your abilities.</h3>
-        <div class = "border"> </div>
+        <div className="border"> </div>
         {/* Skill Assessment Section */}
         <div className="skill-assessment-section">
           <h2>Want to assess your skills?</h2>
@@ -111,7 +110,8 @@ const LynnWoods = () => {
 
         {showLoginAlert && <LoginAlertModal onClose={() => setShowLoginAlert(false)} />}
 
-        <div class = "border"> </div>
+        <div className="border"></div>
+
         <h2>Trail Map</h2>
 
         {/* Trailforks Widget Region Info */}

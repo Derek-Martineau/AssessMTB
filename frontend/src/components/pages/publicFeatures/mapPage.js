@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import getUserInfo from "../../../utilities/decodeJwt";
 import './mapPage.css';
@@ -14,19 +14,8 @@ const TrailforksWidget = () => {
   useEffect(() => {
     setUser(getUserInfo());
   }, []);
-  
-  useEffect(() => {
-    const script = document.createElement("script");
-    script.setAttribute(
-      "src",
-      "https://es.pinkbike.org/ttl-86400/sprt/j/trailforks/widget.js"
-    );
-    document.getElementsByTagName("head")[0].appendChild(script);
 
-    fetchData();
-  }, []);
-
-  async function fetchData() {
+  const fetchData = useCallback(async () => {
     try {
       const response = await fetch(`${process.env.REACT_APP_BACKEND_SERVER_URI}/parks/trailparks`);
       const data = await response.json();
@@ -44,22 +33,28 @@ const TrailforksWidget = () => {
     } catch (error) {
       console.error("Error fetching data:", error);
     }
-  }
+  }, []);
 
-  // Function to format the description text
+  useEffect(() => {
+    const script = document.createElement("script");
+    script.setAttribute(
+      "src",
+      "https://es.pinkbike.org/ttl-86400/sprt/j/trailforks/widget.js"
+    );
+    document.getElementsByTagName("head")[0].appendChild(script);
+
+    fetchData();
+  }, [fetchData]);
+
   function formatDescriptionText(description) {
-    // Replace both '\n' and '\\n' with <br> tags for line breaks
     const formattedText = description.replace(/\\n/g, '<br>').replace(/\n/g, '<br>');
-
     return formattedText;
   }
 
   const handleAssessButtonClick = () => {
     if (!user) {
-      // Display alert if user is not logged in
       setShowLoginAlert(true);
     } else {
-      // Navigate to the assessment page if the user is logged in
       navigate('/selectSegment/6504c6fe69cfb7afbaebedc6');
       console.log('Assess Willowdale button clicked');
     }
@@ -93,12 +88,11 @@ const TrailforksWidget = () => {
 
         <div className="media-section">
           <img src="/images/Willowdale-west-sign.jpg" alt="Willowdale State Forest" />
-         
         </div>
 
-          <h3>Explore the trails in Willowdale State Forest and assess your abilities.</h3>
-        <div class = "border"> </div>
-          {/* Skill Assessment Section */}
+        <h3>Explore the trails in Willowdale State Forest and assess your abilities.</h3>
+        <div className="border"> </div>
+        {/* Skill Assessment Section */}
         <div className="skill-assessment-section">
           <h2>Want to assess your skills?</h2>
           <p>Ready to take your trail riding to the next level? Assess your skills at Willowdale State Park! Navigate through diverse terrains, conquer challenging trails, and enjoy the thrill of the ride.</p>
@@ -109,8 +103,8 @@ const TrailforksWidget = () => {
 
         {showLoginAlert && <LoginAlertModal onClose={() => setShowLoginAlert(false)} />}
 
-        <div class = "border"> </div>
-          <h2>Trail Map</h2>
+        <div className="border"></div>
+        <h2>Trail Map</h2>
         {/* Trailforks Widget Region Info */}
         <div
           className="TrailforksRegionInfo"
@@ -158,3 +152,4 @@ const TrailforksWidget = () => {
 };
 
 export default TrailforksWidget;
+

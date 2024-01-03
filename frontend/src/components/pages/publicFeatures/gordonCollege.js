@@ -10,12 +10,33 @@ const TrailforksParkComponent = () => {
   const [showFullDescription, setShowFullDescription] = useState(false);
 
   const navigate = useNavigate();
-  
+
   useEffect(() => {
     setUser(getUserInfo());
   }, []);
 
   useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch(
+          `${process.env.REACT_APP_BACKEND_SERVER_URI}/parks/trailparks`
+        );
+        const data = await response.json();
+
+        const park = data.find((park) => park.parkName === "Gordon College");
+
+        if (park) {
+          const formattedDescription =
+            formatDescriptionText(park.description) || 'No description available';
+          setParkDescription(formattedDescription);
+        } else {
+          setParkDescription('Park not found');
+        }
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+
     const script = document.createElement('script');
     script.setAttribute(
       'src',
@@ -26,27 +47,6 @@ const TrailforksParkComponent = () => {
     fetchData();
   }, []);
 
-  async function fetchData() {
-    try {
-      const response = await fetch(
-        `${process.env.REACT_APP_BACKEND_SERVER_URI}/parks/trailparks`
-      );
-      const data = await response.json();
-
-      const park = data.find((park) => park.parkName === "Gordon College");
-
-      if (park) {
-        const formattedDescription =
-          formatDescriptionText(park.description) || 'No description available';
-        setParkDescription(formattedDescription);
-      } else {
-        setParkDescription('Park not found');
-      }
-    } catch (error) {
-      console.error('Error fetching data:', error);
-    }
-  }
-
   function formatDescriptionText(description) {
     const formattedText = description.replace(/\\n/g, '<br>').replace(/\n/g, '<br>');
     return formattedText;
@@ -54,10 +54,8 @@ const TrailforksParkComponent = () => {
 
   const handleAssessButtonClick = () => {
     if (!user) {
-      // Display alert if user is not logged in
       setShowLoginAlert(true);
     } else {
-      // Navigate to the assessment page if the user is logged in
       navigate('/selectSegment/6504c6fe69cfb7afbaebedc6');
       console.log('Assess Willowdale button clicked');
     }
@@ -85,18 +83,17 @@ const TrailforksParkComponent = () => {
   return (
     <div className="trailforks-widget-container">
       <div className="col">
-      <header>
+        <header>
           <h1>Gordon College Trails</h1>
         </header>
 
         <div className="media-section-gordon">
           <img src="/images/gordon-lake.jpg" alt="Gordon College Lake View" />
-         
         </div>
 
-          <h3>Explore the trails in Gordon College and assess your abilities.</h3>
-          <div class = "border"> </div>
-          {/* Skill Assessment Section */}
+        <h3>Explore the trails in Gordon College and assess your abilities.</h3>
+        <div className="border"></div>
+
         <div className="skill-assessment-section">
           <h2>Want to assess your skills?</h2>
           <p>Ready to take your trail riding to the next level? Assess your skills at Gordon College! Navigate through diverse terrains, conquer challenging trails, and enjoy the thrill of the ride.</p>
@@ -107,8 +104,8 @@ const TrailforksParkComponent = () => {
 
         {showLoginAlert && <LoginAlertModal onClose={() => setShowLoginAlert(false)} />}
 
-        <div class = "border"> </div>
-          <h2>Trail Map</h2>
+        <div className="border"></div>
+        <h2>Trail Map</h2>
 
         <div
           className="TrailforksRegionInfo"
@@ -135,7 +132,7 @@ const TrailforksParkComponent = () => {
           data-lon=""
           data-hideunsanctioned="0"
         ></div>
-        {/* Description */}
+
         <div className="description-section">
           <h2>Description</h2>
           <div className="description-content">
