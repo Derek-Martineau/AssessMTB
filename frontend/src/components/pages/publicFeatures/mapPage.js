@@ -1,13 +1,20 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import getUserInfo from "../../../utilities/decodeJwt";
 import './mapPage.css';
 
 const TrailforksWidget = () => {
+  const [user, setUser] = useState({});
+  const [showLoginAlert, setShowLoginAlert] = useState(false);
   const [parkDescription, setParkDescription] = useState('');
   const [showFullDescription, setShowFullDescription] = useState(false);
 
   const navigate = useNavigate();
 
+  useEffect(() => {
+    setUser(getUserInfo());
+  }, []);
+  
   useEffect(() => {
     const script = document.createElement("script");
     script.setAttribute(
@@ -48,9 +55,22 @@ const TrailforksWidget = () => {
   }
 
   const handleAssessButtonClick = () => {
-    navigate('/selectSegment/6503bc298626465bf656c7e0');
-    console.log('Assess Willowdale button clicked');
+    if (!user) {
+      // Display alert if user is not logged in
+      setShowLoginAlert(true);
+    } else {
+      // Navigate to the assessment page if the user is logged in
+      navigate('/selectSegment/6504c6fe69cfb7afbaebedc6');
+      console.log('Assess Willowdale button clicked');
+    }
   };
+
+  const LoginAlertModal = ({ onClose }) => (
+    <div className="login-alert-modal">
+      <p>Please log in to use the Assess Your Skills feature.</p>
+      <button onClick={onClose}>Close</button>
+    </div>
+  );
 
   const toggleDescription = () => {
     setShowFullDescription(!showFullDescription);
@@ -86,6 +106,9 @@ const TrailforksWidget = () => {
             Assess Your Skills
           </button>
         </div>
+
+        {showLoginAlert && <LoginAlertModal onClose={() => setShowLoginAlert(false)} />}
+
         <div class = "border"> </div>
           <h2>Trail Map</h2>
         {/* Trailforks Widget Region Info */}
