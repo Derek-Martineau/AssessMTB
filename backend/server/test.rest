@@ -30,6 +30,9 @@ Content-Type: application/json
 Get http://localhost:8081/user/DerekMartineau
 Content-Type: application/json
 
+### GET USERNAME FROM ID
+Get {{baseurl}}/user/useriD/654e930f78f09598d1a80561
+
 ###
 POST http://localhost:8081/user/editUser
 Content-Type: application/json 
@@ -45,7 +48,7 @@ GET  http://localhost:8081/user/getUserById
 Content-Type: application/json 
 
 {
-    "userId" : "635ab8dfc407faf9f73deaf1"
+    "userId" : "640e316ceebb6807bae74c7b"
 }
 
 ###
@@ -218,21 +221,21 @@ GET {{baseurl}}/images/getAll
 GET {{baseurl}}/images/656f872b19113e0adce02c8a
 
 ### Get photo by segementID
-{{baseurl}}/images/getImages/65721b5a21ec846e04be6bf7
+GET {{baseurl}}/images/getImages/65721b5a21ec846e04be6bf7
 
 ### Follow a user
 {{baseurl}}/following/followers/follow
-
+Content-Type: application/json
 {
   "userId": "654e930f78f09598d1a80561",
   "targetUserId": "640e316ceebb6807bae74c7b"
 }
 
 ### get following count
-{{baseurl}}/following/following/count/DerekMartineau
+GET {{baseurl}}/following/following/count/DerekMartineau
 
 ### get all public assessments
-{{baseurl}}/api/public-assessments
+GET {{baseurl}}/api/public-assessments
 
 ### Gets a list of the users that are followed from the logged-in users
 {{baseurl}}/following/following/640e316ceebb6807bae74c7b
@@ -243,3 +246,19 @@ GET {{baseurl}}/images/656f872b19113e0adce02c8a
 ###get all posts from users their following
 
 {{baseurl}}/feed/assessment-results/testbikes
+
+### get username from userID
+{{baseurl}}/user/userid/654e93c078f09598d1a80646
+
+### get all feedback
+GET {{baseurl}}/feedback/getAll
+
+### create a feedback message
+POST {{baseurl}}/feedback/create
+Content-Type: application/json
+
+{
+    "Name": "Test",
+    "Email": "test@test.com",
+    "Message": "This is a Test"
+}

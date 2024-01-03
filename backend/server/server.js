@@ -5,6 +5,7 @@ const loginRoute = require('./routes/users/userLogin')
 const getAllUsersRoute = require('./routes/users/userGetAllUsers')
 const registerRoute = require('./routes/users/userSignUp')
 const getUserByIdRoute = require('./routes/users/userGetUserById')
+const userGetByUsername = require('./routes/users/userGetByUsername');
 const dbConnection = require('./config/db.config')
 const editUser = require('./routes/users/userEditUser')
 const deleteUser = require('./routes/users/userDeleteAll')
@@ -16,7 +17,8 @@ const updateFeature = require('./routes/updateFeature');
 const resultsCreate = require('./routes/resultsCreate');
 const imagesRoute = require('./routes/images');
 const followerRoutes = require('./routes/following');
-const userGetByUsername = require('./routes/users/userGetByUsername');
+const feedGetFeed = require('./routes/feed');
+const feedback = require('./routes/feedback');
                                
 
 require('dotenv').config();
@@ -39,8 +41,9 @@ app.use('/api', createFeature)
 app.use('/api', updateFeature)
 app.use('/api', resultsCreate)
 app.use('/images', imagesRoute)
-app.use('/following', followerRoutes);
-
+app.use('/following', followerRoutes)
+app.use('/feed', feedGetFeed)
+app.use('/feedback', feedback)
 
 
 app.listen(SERVER_PORT, (req, res) => {
