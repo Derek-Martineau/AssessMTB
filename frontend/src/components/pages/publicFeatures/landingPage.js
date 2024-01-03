@@ -8,19 +8,19 @@ const LandingPage = () => {
 
   const parks = [
     {
-      image: 'images/GordonCollege.jpg',
+      image: '/images/GordonCollege.jpg',
       name: 'Gordon College Park',
       buttonText: 'Explore Gordon College Park',
       link: '/gordon',
     },
     {
-      image: 'images/LynnWoods.jpg',
+      image: '/images/LynnWoods.jpg',
       name: 'Lynn Woods Park',
       buttonText: 'Explore Lynn Woods Park',
       link: '/lynnwoods',
     },
     {
-      image: 'images/willowdale-west-sign.jpg',
+      image: '/images/willowdale-west-sign.jpg',
       name: 'Willowdale State Forest',
       buttonText: 'Explore Willowdale State Forest',
       link: '/willowdale',
