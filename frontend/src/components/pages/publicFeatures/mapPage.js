@@ -92,7 +92,7 @@ const TrailforksWidget = () => {
         </header>
 
         <div className="media-section">
-          <img src="images/willowdale-west-sign.jpg" alt="Willowdale State Forest" />
+          <img src="/images/willowdale-west-sign.jpg" alt="Willowdale State Forest" />
          
         </div>
 

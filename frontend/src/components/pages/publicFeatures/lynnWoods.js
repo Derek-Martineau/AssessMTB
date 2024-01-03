@@ -95,7 +95,7 @@ const LynnWoods = () => {
         </header>
 
         <div className="media-section">
-          <img src="images/LynnWoods.jpg" alt="Lynn Woods" />
+          <img src="/images/LynnWoods.jpg" alt="Lynn Woods" />
         </div>
 
         <h3>Explore the trails in Lynn Woods and assess your abilities.</h3>

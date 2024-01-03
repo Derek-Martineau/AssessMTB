@@ -90,7 +90,7 @@ const TrailforksParkComponent = () => {
         </header>
 
         <div className="media-section-gordon">
-          <img src="images/gordon-lake.jpg" alt="Gordon College Lake View" />
+          <img src="/images/gordon-lake.jpg" alt="Gordon College Lake View" />
          
         </div>
 
@@ -106,7 +106,7 @@ const TrailforksParkComponent = () => {
         </div>
 
         {showLoginAlert && <LoginAlertModal onClose={() => setShowLoginAlert(false)} />}
-        
+
         <div class = "border"> </div>
           <h2>Trail Map</h2>
 
