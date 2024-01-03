@@ -20,7 +20,7 @@ const LandingPage = () => {
       link: '/lynnwoods',
     },
     {
-      image: '/images/willowdale-west-sign.jpg',
+      image: '/images/Willowdale-west-sign.jpg',
       name: 'Willowdale State Forest',
       buttonText: 'Explore Willowdale State Forest',
       link: '/willowdale',
