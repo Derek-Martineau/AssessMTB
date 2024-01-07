@@ -1,10 +1,69 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Button, Container, Row, Col, Carousel } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import './landingPage.css';
 
 const LandingPage = () => {
   const navigate = useNavigate();
+
+  const [feedback, setFeedback] = useState({
+    Name: '',
+    Email: '',
+    IssueType: '',
+    Message: '',
+  });
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    console.log(`name: ${name}, value: ${value}`);
+    
+    // Validate 'Name' field
+    if (name === 'name' && value.length < 3) {
+      // Handle validation error, e.g., display an error message
+      console.error('Name must be 3 characters or more');
+      return;
+    }
+  
+    setFeedback((prevFeedback) => ({
+      ...prevFeedback,
+      [name]: value,
+    }));
+  };
+  
+
+  const handleSendMessage = async () => {
+    try {
+      // Ensure that 'issueType' is included in the payload
+      const payload = {
+        Name: feedback.name,
+        Email: feedback.email,
+        IssueType: feedback.issueType,  
+        Message: feedback.message,
+      };      
+      console.log('Payload:', payload);
+      await axios.post(
+        `${process.env.REACT_APP_BACKEND_SERVER_URI}/feedback/create`,
+        payload,
+        { headers: { 'Content-Type': 'application/json' } }
+      );
+      console.log('Message sent successfully!');
+    } catch (error) {
+      console.error('Error sending message:', error);
+  
+      // Additional error handling
+      if (error.response) {
+        // The request was made, but the server responded with a non-2xx status
+        console.error('Server responded with:', error.response.status, error.response.data);
+      } else if (error.request) {
+        // The request was made but no response was received
+        console.error('No response received:', error.request);
+      } else {
+        // Something happened in setting up the request that triggered an Error
+        console.error('Error during request setup:', error.message);
+      }
+    }
+  };
 
   const parks = [
     {
@@ -117,14 +176,45 @@ const LandingPage = () => {
         <Row id="contact" className="contact-section">
           <Col md={12}>
             <h2>Contact Us</h2>
-            <p className="landing-text">
-              Have questions or feedback? Reach out to us!
-            </p>
+            <p className="landing-text">Have questions or feedback? Reach out to us!</p>
             <div className="contact-form">
-              <input type="text" placeholder="Your Name" />
-              <input type="email" placeholder="Your Email" />
-              <textarea placeholder="Your Message"></textarea>
-              <button type="button">Send Message</button>
+              <input
+                type="text"
+                placeholder="Your Name"
+                name="name"  // Ensure the name attribute is set to "name"
+                value={feedback.name}
+                onChange={handleChange}
+              />
+              <input
+                type="email"
+                placeholder="Your Email"
+                name="email"  // Ensure the name attribute is set to "email"
+                value={feedback.email}
+                onChange={handleChange}
+              />
+              <select
+                id="issueType"
+                name="issueType"
+                className="feedback-input feedback-select" // Add the feedback-input class for consistent styling
+                defaultValue=""
+                onChange={handleChange}
+              >
+                <option disabled value="">
+                  Issue Type
+                </option>
+                <option value="general">General Inquiry</option>
+                <option value="bug">Bug Report</option>
+                <option value="feedback">Feedback</option>
+              </select>
+              <textarea
+  placeholder="Your Message"
+  name="message"  // Ensure the name attribute is set to "message"
+  value={feedback.message}
+  onChange={handleChange}
+></textarea>
+              <button type="button" onClick={handleSendMessage}>
+                Send Message
+              </button>
             </div>
           </Col>
         </Row>

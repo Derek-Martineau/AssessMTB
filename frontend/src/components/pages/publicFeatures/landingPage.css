@@ -148,3 +148,19 @@ body {
 .contact-form button:hover {
   background-color: #45a049;
 }
+
+.feedback-select {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc; /* Match input border styling */
+  border-radius: 4px; /* Match input border-radius styling */
+  color: #555; /* Match input text color */
+  font-size: 1rem; /* Match input font-size */
+  box-sizing: border-box;
+}
+
+.feedback-select::placeholder {
+  color: #ccc; /* Match input placeholder color */
+  font-style: italic; /* Optionally add italic style */
+}
