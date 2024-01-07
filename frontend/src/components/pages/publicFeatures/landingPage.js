@@ -17,20 +17,20 @@ const LandingPage = () => {
   const handleChange = (e) => {
     const { name, value } = e.target;
     console.log(`name: ${name}, value: ${value}`);
-    
+
     // Validate 'Name' field
     if (name === 'name' && value.length < 3) {
       // Handle validation error, e.g., display an error message
       console.error('Name must be 3 characters or more');
       return;
     }
-  
+
     setFeedback((prevFeedback) => ({
       ...prevFeedback,
       [name]: value,
     }));
   };
-  
+
 
   const handleSendMessage = async () => {
     try {
@@ -38,19 +38,20 @@ const LandingPage = () => {
       const payload = {
         Name: feedback.name,
         Email: feedback.email,
-        IssueType: feedback.issueType,  
+        IssueType: feedback.issueType,
         Message: feedback.message,
-      };      
+      };
       console.log('Payload:', payload);
       await axios.post(
         `${process.env.REACT_APP_BACKEND_SERVER_URI}/feedback/create`,
         payload,
         { headers: { 'Content-Type': 'application/json' } }
       );
-      console.log('Message sent successfully!');
+      alert('Message sent successfully!');
     } catch (error) {
       console.error('Error sending message:', error);
-  
+      alert('Error sending message:', error);
+
       // Additional error handling
       if (error.response) {
         // The request was made, but the server responded with a non-2xx status
@@ -207,11 +208,11 @@ const LandingPage = () => {
                 <option value="feedback">Feedback</option>
               </select>
               <textarea
-  placeholder="Your Message"
-  name="message"  // Ensure the name attribute is set to "message"
-  value={feedback.message}
-  onChange={handleChange}
-></textarea>
+                placeholder="Your Message"
+                name="message"  // Ensure the name attribute is set to "message"
+                value={feedback.message}
+                onChange={handleChange}
+              ></textarea>
               <button type="button" onClick={handleSendMessage}>
                 Send Message
               </button>
