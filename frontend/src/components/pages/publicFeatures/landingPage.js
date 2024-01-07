@@ -68,7 +68,7 @@ const LandingPage = () => {
 
   const parks = [
     {
-      image: '/images/GordonCollege.jpg',
+      image: '/images/gordon-lake.jpg',
       name: 'Gordon College Park',
       buttonText: 'Explore Gordon College Park',
       link: '/gordon',
