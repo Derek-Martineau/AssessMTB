@@ -13,12 +13,16 @@ const feedbackSchema = new mongoose.Schema({
         required: true,
         label: "Email of user giving feedback"
     },
-    Message: {
+    IssueType: {
+        type: String,
+        label: "Issue type provided by the user",
+      },
+      Message: {
         type: String,
         max: 250,
         required: true,
         label: "feedback message from the user"
-    }
+    },
 });
 
 const feedbackModel = mongoose.model('feedback', feedbackSchema);

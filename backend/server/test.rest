@@ -260,5 +260,6 @@ Content-Type: application/json
 {
     "Name": "Test",
     "Email": "test@test.com",
+    "issueType": "Feedback",
     "Message": "This is a Test"
 }
