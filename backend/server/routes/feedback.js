@@ -7,9 +7,10 @@ router.post('/create', async (req, res) => {
   const { error } = newFeedbackValidation(req.body);
   if (error) return res.status(400).send({ message: error.errors[0].message });
 
-  const { Name, Email, Message, IssueType } = req.body;
+  const { Star, Name, Email, Message, IssueType } = req.body;
 
   const createFeedback = new feedbackModel({
+    Star: Star,
     Name: Name,
     Email: Email,
     IssueType: IssueType,

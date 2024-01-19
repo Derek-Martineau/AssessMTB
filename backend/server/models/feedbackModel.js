@@ -3,6 +3,13 @@
 const mongoose = require('mongoose');
 
 const feedbackSchema = new mongoose.Schema({
+    Star: {
+        type: Number,
+        minimum: 1,
+        maximum: 5,
+        required:true,
+        label: "number of starts given for feedback"
+    },
     Name: {
         type: String,
         required: true,

@@ -258,8 +258,9 @@ POST {{baseurl}}/feedback/create
 Content-Type: application/json
 
 {
+    "Star": 1,
     "Name": "Test",
     "Email": "test@test.com",
-    "issueType": "Feedback",
+    "IssueType": "Feedback",
     "Message": "This is a Test"
 }
