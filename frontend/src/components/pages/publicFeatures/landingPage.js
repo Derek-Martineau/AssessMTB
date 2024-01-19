@@ -3,11 +3,14 @@ import { Button, Container, Row, Col, Carousel } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './landingPage.css';
+import { FaStar } from "react-icons/fa";
 
 const LandingPage = () => {
+  const [star, setStar] = useState(null);
   const navigate = useNavigate();
 
   const [feedback, setFeedback] = useState({
+    Star: null,
     Name: '',
     Email: '',
     IssueType: '',
@@ -36,12 +39,14 @@ const LandingPage = () => {
     try {
       // Ensure that 'issueType' is included in the payload
       const payload = {
+        Star: feedback.Star,
         Name: feedback.name,
         Email: feedback.email,
         IssueType: feedback.issueType,
         Message: feedback.message,
       };
       console.log('Payload:', payload);
+      
       await axios.post(
         `${process.env.REACT_APP_BACKEND_SERVER_URI}/feedback/create`,
         payload,
@@ -90,6 +95,14 @@ const LandingPage = () => {
   const navigateToCarouselItem = (index) => {
     const selectedPark = parks[index];
     navigate(selectedPark.link);
+  };
+
+  const handleStarClick = (selectedStars) => {
+    setStar(selectedStars);
+    setFeedback((prevFeedback) => ({
+      ...prevFeedback,
+      Star: selectedStars,
+    }));
   };
 
   return (
@@ -179,6 +192,15 @@ const LandingPage = () => {
             <h2>Contact Us</h2>
             <p className="landing-text">Have questions or feedback? Reach out to us!</p>
             <div className="contact-form">
+            <div className="star-container">
+              {Array.from({ length: 5 }).map((_, index) => (
+                <FaStar
+                  key={index}
+                  className={`star ${index < star ? 'star-selected' : ''}`}
+                  onClick={() => handleStarClick(index + 1)}
+                />
+              ))}
+            </div>
               <input
                 type="text"
                 placeholder="Your Name"

@@ -168,3 +168,19 @@ body {
   color: #ccc; /* Match input placeholder color */
   font-style: italic; /* Optionally add italic style */
 }
+
+.star-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.star {
+  font-size: 3em; 
+  cursor: pointer;
+  margin-bottom: 20px;
+}
+
+.star-selected {
+  color: gold;
+}
