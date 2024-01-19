@@ -30,4 +30,18 @@ router.get('/getAll', async (req, res) => {
   res.status(200).json(allFeedback);
 });
 
+// DELETE route to delete feedback by ID
+router.delete('/delete/:resultId', async (req, res) => {
+  try {
+    const result = await feedbackModel.findByIdAndRemove(req.params.resultId);
+    if (result) {
+      res.status(204).end(); // Success: 204 No Content
+    } else {
+      res.status(404).json({ message: 'Result not found' }); // Not Found: 404
+    }
+  } catch (error) {
+    res.status(500).json({ message: 'Server error' }); // Internal Server Error: 500
+  }
+});
+
 module.exports = router;

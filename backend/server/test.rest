@@ -264,3 +264,6 @@ Content-Type: application/json
     "IssueType": "Feedback",
     "Message": "This is a Test"
 }
+
+### delete feedback by ID
+DELETE {{baseurl}}/feedback/delete/65aad714064d1834f8b6ca8c
