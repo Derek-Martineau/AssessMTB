@@ -19,6 +19,7 @@ const imagesRoute = require('./routes/images');
 const followerRoutes = require('./routes/following');
 const feedGetFeed = require('./routes/feed');
 const feedback = require('./routes/feedback');
+const createTournaments = require('./routes/tournaments/tournamentsCreate');
                                
 
 require('dotenv').config();
@@ -44,6 +45,7 @@ app.use('/images', imagesRoute)
 app.use('/following', followerRoutes)
 app.use('/feed', feedGetFeed)
 app.use('/feedback', feedback)
+app.use('/tournaments', createTournaments)
 
 
 app.listen(SERVER_PORT, (req, res) => {

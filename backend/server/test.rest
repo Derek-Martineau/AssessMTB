@@ -267,3 +267,16 @@ Content-Type: application/json
 
 ### delete feedback by ID
 DELETE {{baseurl}}/feedback/delete/65aad714064d1834f8b6ca8c
+
+### create tournament
+POST {{baseurl}}/tournaments/create
+Content-Type: application/json
+
+{
+    "locationPark": "Bike Park A",
+    "locationSegment": "65721b5a21ec846e04be6bf7",
+    "startDate": "2024-02-28T17:00:00.000Z",  
+    "endDate": "2024-02-28T17:00:00.000Z",    
+    "gender": "male",
+    "age": "18-35"
+}
