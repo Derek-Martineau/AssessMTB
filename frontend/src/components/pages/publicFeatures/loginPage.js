@@ -5,29 +5,38 @@ import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import getUserInfo from "../../../utilities/decodeJwt";
 
-const PRIMARY_COLOR = "#cc5c99";
-const SECONDARY_COLOR = '#0c0c1f'
+const PRIMARY_COLOR = "#0066ff"; 
+const SECONDARY_COLOR = '#f0f0f0'; 
+const TEXT_COLOR = '#d9d4d4'; 
 const url = `${process.env.REACT_APP_BACKEND_SERVER_URI}/user/login`;
 
 const Login = () => {
   const [user, setUser] = useState(null)
   const [data, setData] = useState({ username: "", password: "" });
   const [error, setError] = useState("");
-  const [light, setLight] = useState(false);
   const [bgColor, setBgColor] = useState(SECONDARY_COLOR);
-  const [bgText, setBgText] = useState('Light Mode')
   const navigate = useNavigate();
 
   let labelStyling = {
-    color: PRIMARY_COLOR,
+    color: TEXT_COLOR,
     fontWeight: "bold",
     textDecoration: "none",
   };
-  let backgroundStyling = { background: bgColor };
+  let backgroundStyling = { 
+    background: `url('https://www.shutterstock.com/image-photo/clear-rays-light-shining-through-260nw-10425574.jpg')`,
+    backgroundSize: 'cover',
+    backgroundRepeat: 'no-repeat',
+    backgroundPosition: 'center',
+  };
   let buttonStyling = {
     background: PRIMARY_COLOR,
     borderStyle: "none",
     color: bgColor,
+  };
+  let formStyling = {
+    backgroundColor: 'rgba(41, 40, 36, 0.5)',
+    padding: '20px',
+    borderRadius: '10px',
   };
 
   const handleChange = ({ currentTarget: input }) => {
@@ -39,14 +48,7 @@ const Login = () => {
     const obj = getUserInfo(user)
     setUser(obj)
 
-    if (light) {
-      setBgColor("white");
-      setBgText('Dark mode')
-    } else {
-      setBgColor(SECONDARY_COLOR);
-      setBgText('Light mode')
-    }
-  }, [light]);
+  }, );
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -81,7 +83,7 @@ const Login = () => {
             className="row d-flex justify-content-center align-items-center h-100 "
             style={backgroundStyling}>
             <div className="col-md-8 col-lg-6 col-xl-4 offset-xl-1">
-              <Form>
+              <Form style={formStyling}>
                 <Form.Group className="mb-3" controlId="formBasicEmail">
                   <Form.Label style={labelStyling}>Username</Form.Label>
                   <Form.Control
@@ -102,24 +104,13 @@ const Login = () => {
                 </Form.Group>
                 <Form.Group className="mb-3" controlId="formBasicCheckbox">
                   <Form.Text className="text-muted pt-1">
-                    Dont have an account?
+                    <span style={{ color: '#d9d4d4' }}>Don't have an account?</span>
                     <span>
                       <Link to="/signup" style={labelStyling}> Sign up
                       </Link>
                     </span>
                   </Form.Text>
                 </Form.Group>
-                <div class="form-check form-switch">
-                  <input
-                    class="form-check-input"
-                    type="checkbox"
-                    id="flexSwitchCheckDefault"
-                    onChange={() => { setLight(!light) }}
-                  />
-                  <label class="form-check-label" for="flexSwitchCheckDefault" className='text-muted'>
-                    {bgText}
-                  </label>
-                </div>
                 {error && <div style={labelStyling} className='pt-3'>{error}</div>}
                 <Button
                   variant="primary"
