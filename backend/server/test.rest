@@ -250,6 +250,8 @@ GET {{baseurl}}/api/public-assessments
 ### get username from userID
 {{baseurl}}/user/userid/654e93c078f09598d1a80646
 
+######################################Feedback##########################
+
 ### get all feedback
 GET {{baseurl}}/feedback/getAll
 
@@ -268,6 +270,7 @@ Content-Type: application/json
 ### delete feedback by ID
 DELETE {{baseurl}}/feedback/delete/65aad714064d1834f8b6ca8c
 
+####################################Tournaments######################
 ### create tournament
 POST {{baseurl}}/tournaments/create
 Content-Type: application/json
@@ -280,3 +283,10 @@ Content-Type: application/json
     "gender": "male",
     "age": "18-35"
 }
+
+### Delete All Tournaments ###
+DELETE {{baseurl}}/tournaments/deleteAll
+
+### Delete Tournament By ID ###
+# Replace ":id" with the ID of the tournament you want to delete
+DELETE {{baseurl}}/tournaments/deleteById/:id

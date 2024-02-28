@@ -20,7 +20,7 @@ const followerRoutes = require('./routes/following');
 const feedGetFeed = require('./routes/feed');
 const feedback = require('./routes/feedback');
 const createTournaments = require('./routes/tournaments/tournamentsCreate');
-                               
+const deleteTournaments = require('./routes/tournaments/tournamentsDelete');
 
 require('dotenv').config();
 const SERVER_PORT = 8081
@@ -46,6 +46,7 @@ app.use('/following', followerRoutes)
 app.use('/feed', feedGetFeed)
 app.use('/feedback', feedback)
 app.use('/tournaments', createTournaments)
+app.use('/tournaments', deleteTournaments)
 
 
 app.listen(SERVER_PORT, (req, res) => {
