@@ -184,7 +184,7 @@ function CallFeature() {
   };
 
   return (
-    <div style={{ background: '#5A5A5A', minHeight: "100vh", display: "flex", justifyContent: "center", alignItems: "center" }}>
+    <div style={{ minHeight: "100vh", display: "flex", justifyContent: "center", alignItems: "center" }}>
       <Card style={{ width: "60rem" }}>
         <Card.Body>
           <h3>Feature: {currentPhotoIndex + 1}/{photoFilePaths.length}</h3>

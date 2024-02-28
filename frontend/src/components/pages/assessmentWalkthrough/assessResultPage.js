@@ -196,7 +196,7 @@ function PostResults() {
   }
 
   return (
-    <div style={{ background: "#5A5A5A", minHeight: "100vh", display: "flex", justifyContent: "center", alignItems: "center" }}>
+    <div style={{ minHeight: "100vh", display: "flex", justifyContent: "center", alignItems: "center" }}>
       <Card style={{ width: "45rem" }}>
         <Card.Body>
           <div style={{ display: "flex", justifyContent: "center" }}>

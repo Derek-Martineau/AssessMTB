@@ -81,7 +81,7 @@ const CallSegments = () => {
   }
 
   return (
-    <div style={{ background: '#5A5A5A', minHeight: "100vh", display: "flex", justifyContent: "center", alignItems: "center" }}>
+    <div style={{ minHeight: "100vh", display: "flex", justifyContent: "center", alignItems: "center" }}>
       <Card style={{ width: "30rem", borderRadius: "10px", boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)", background: '#f4f4f4' }}>
         <Card.Body>
           <Card.Title style={{ fontSize: "1.5rem", marginBottom: "15px", textAlign: "center", color: "#333" }}>Which Segment Did You Ride?</Card.Title>

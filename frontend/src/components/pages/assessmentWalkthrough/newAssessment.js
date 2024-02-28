@@ -131,7 +131,7 @@ const CallParks = () => {
   };
 
   return (
-    <div style={{ background: "#5A5A5A", minHeight: "100vh", display: "flex", justifyContent: "center", alignItems: "center" }}>
+    <div style={{ minHeight: "100vh", display: "flex", justifyContent: "center", alignItems: "center" }}>
       <Card style={cardStyle}>
         <Card.Body>
           <Card.Title style={{ fontSize: "1.5rem", marginBottom: "15px", textAlign: "center", color: "#333" }}>Which Park Did You Ride?</Card.Title>
