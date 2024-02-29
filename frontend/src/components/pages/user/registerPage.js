@@ -12,9 +12,7 @@ const Register = () => {
   const [data, setData] = useState({ username: "", email: "", password: "" });
   const [error, setError] = useState("");
   const navigate = useNavigate();
-  const [light, setLight] = useState(false);
   const [bgColor, setBgColor] = useState(SECONDARY_COLOR);
-  const [bgText, setBgText] = useState("Light Mode");
 
   const handleChange = ({ currentTarget: input }) => {
     setData({ ...data, [input.name]: input.value });
@@ -96,10 +94,10 @@ const Register = () => {
                     type="email"
                     name="email"
                     onChange={handleChange}
-                    placeholder="Enter Email Please"
+                    placeholder="Enter email "
                   />
                   <Form.Text className="text-muted">
-                  <span style={{ color: '#d9d4d4' }}> Please enter your password</span>
+                  <span style={{ color: '#d9d4d4' }}> Please enter your email</span>
                   </Form.Text>
                 </Form.Group>
                 <Form.Group className="mb-3" controlId="formBasicPassword">
@@ -107,7 +105,7 @@ const Register = () => {
                   <Form.Control
                     type="password"
                     name="password"
-                    placeholder="Password"
+                    placeholder=" Enter Password"
                     onChange={handleChange}
                   />
                 </Form.Group>
