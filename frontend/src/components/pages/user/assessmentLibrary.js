@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Modal } from 'react-bootstrap';
 import { useParams } from 'react-router-dom';
+import './cardStyles.css'
 
 const ViewLibrary = () => {
   const [assessments, setAssessments] = useState([]);
@@ -112,34 +113,34 @@ const ViewLibrary = () => {
   };
 
   return (
-    <div style={{ minHeight: '100vh', overflowX: 'hidden', fontFamily: 'Arial, sans-serif', color: '#333' }}>
-      <h1 style={{ textAlign: 'center', color: '#333', fontSize: '3rem', margin: '20px 0', textShadow: '0 2px 4px rgba(0, 0, 0, 0.1)', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)' }}>Assessment Library</h1>
-      <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center' }}>
+    <div className="card-container">
+      <h1 className="card-title">Assessment Library</h1>
+      <div className="card-grid" style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center' }}>
         {assessments.length > 0 ? (
           assessments.reverse().map((assessment) => (
-            <div key={assessment._id} style={assessmentCardStyle}>
-  <div style={sideBySideContainer}>
-    <p style={{ fontSize: '1.4rem', fontWeight: 'bold', margin: '0', color: '#222' }}>User: {username}</p>
-    <p style={{ fontSize: '1.4rem', fontWeight: 'bold', margin: '0', color: '#222' }}>Score: {assessment.Score}</p>
-  </div>
-    <p style={{ fontSize: '1.2rem', color: '#555', borderBottom: '1px solid #000000', width: '100%' }}>Created: {new Date(assessment.Date).toDateString()}</p>
-  <p style={{ fontSize: '1.2rem',  color: '#000000' }}>Line Choices: {assessment.featureLines.map((line, index) => mapNumberToLetter(line.lineChoice)).join(', ')}</p>
-  <p style={{ fontSize: '1.2rem',  color: '#000000' }}>Segment: {assessment.segmentName}</p>
-  <p style={{ fontSize: '1.2rem',  color: '#000000' }}>Difficulty: {assessment.difficulty}</p>
-  <p style={{ fontSize: '1.2rem', margin: '0px 0', color: '#000000', borderTop: '1px solid #000000', width: '100%' }}>Public Status: {assessment.PublicStatus ? 'Public' : 'Private'}</p>
-  <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '20px' }}>
-    <Button variant="danger" style={{ fontSize: '1.2rem' }} onClick={() => handleDeleteAssessment(assessment._id)}>Delete</Button>
-    <div style={{ marginLeft: '10px' }}>
-      <Button
-        variant={assessment.PublicStatus ? 'warning' : 'success'}
-        style={{ fontSize: '1.2rem' }}
-        onClick={() => handleSetPublic(assessment._id, assessment.PublicStatus)}
-      >
-        {assessment.PublicStatus ? "Set Private" : "Set Public"}
-      </Button>
-    </div>
-  </div>
-</div>
+            <div key={assessment._id} className="card">
+              <div className="side-by-side-container">
+                <p className="card-content-bold">User: {username}</p>
+                <p className="card-content-bold">Score: {assessment.Score}</p>
+              </div>
+              <p className="card-content-small">Created: {new Date(assessment.Date).toDateString()}</p>
+              <p className="card-content">Line Choices: {assessment.featureLines.map((line, index) => mapNumberToLetter(line.lineChoice)).join(', ')}</p>
+              <p className="card-content">Segment: {assessment.segmentName}</p>
+              <p className="card-content">Difficulty: {assessment.difficulty}</p>
+              <p className="card-content" style={{ borderTop: '1px solid #000000', width: '100%' }}>Public Status: {assessment.PublicStatus ? 'Public' : 'Private'}</p>
+              <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '20px' }}>
+                <Button variant="danger" className="card-button" onClick={() => handleDeleteAssessment(assessment._id)}>Delete</Button>
+                <div style={{ marginLeft: '10px' }}>
+                  <Button
+                    variant={assessment.PublicStatus ? 'warning' : 'success'}
+                    className="card-button"
+                    onClick={() => handleSetPublic(assessment._id, assessment.PublicStatus)}
+                  >
+                    {assessment.PublicStatus ? "Set Private" : "Set Public"}
+                  </Button>
+                </div>
+              </div>
+            </div>
           ))
         ) : (
           <p style={{ fontSize: '1.6rem', textAlign: 'center', color: '#555' }}>No assessments found for the specified user.</p>
@@ -164,27 +165,6 @@ const ViewLibrary = () => {
       </Modal>
     </div>
   );
-};
-
-const assessmentCardStyle = {
-  width: '100%',
-  maxWidth: '450px',
-  padding: '20px',
-  margin: '20px',
-  background: '#f7f7f7',
-  borderRadius: '10px',
-  boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
-  display: 'flex',
-  flexDirection: 'column',
-  alignItems: 'flex-start',
-  justifyContent: 'space-between',
-  textAlign: 'left',
-};
-
-const sideBySideContainer = {
-  display: 'flex',
-  justifyContent: 'space-between',
-  width: '100%',
 };
 
 export default ViewLibrary;
