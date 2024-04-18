@@ -20,7 +20,9 @@ const CallSegments = () => {
       try {
         const response = await fetch(`${process.env.REACT_APP_BACKEND_SERVER_URI}/parks/trailparks/getsegments/${trailparkId}`);
         const json = await response.json();
-        setData(json);
+        // Filter segments with more than one feature
+        const filteredData = json.filter(segment => segment.features.length > 1);
+        setData(filteredData);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -80,29 +82,35 @@ const CallSegments = () => {
     return <Navigate to="/newAssessment" />;
   }
 
+  // Filter data to only display the segment named "walls"
+  const filteredSegments = data.filter(segment => segment.segmentName.toLowerCase() === "walls");
+
   return (
     <div style={{ minHeight: "100vh", display: "flex", justifyContent: "center", alignItems: "center" }}>
       <Card style={{ width: "30rem", borderRadius: "10px", boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)", background: '#f4f4f4' }}>
         <Card.Body>
           <Card.Title style={{ fontSize: "1.5rem", marginBottom: "15px", textAlign: "center", color: "#333" }}>Which Segment Did You Ride?</Card.Title>
           <div style={{ maxHeight: "300px", overflowY: "auto" }}>
-          {data.map(el => (
-  <Button
-    key={el.segmentId}
-    variant={selectedSegment === el ? "success" : "primary"}
-    style={{
-      margin: "5px 0",
-      width: "100%",
-      whiteSpace: "nowrap",
-      overflow: "hidden",
-      textOverflow: "ellipsis",
-    }}
-    onClick={() => handleSegmentSelection(el)}
-  >
-    {el.segmentName}
-  </Button>
-))}
-
+            {filteredSegments.length > 0 ? (
+              filteredSegments.map(el => (
+                <Button
+                  key={el.segmentId}
+                  variant={selectedSegment === el ? "success" : "primary"}
+                  style={{
+                    margin: "5px 0",
+                    width: "100%",
+                    whiteSpace: "nowrap",
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                  }}
+                  onClick={() => handleSegmentSelection(el)}
+                >
+                  {el.segmentName}
+                </Button>
+              ))
+            ) : (
+              <p>No segment named "walls" found.</p>
+            )}
           </div>
           <div style={{ display: "flex", justifyContent: "space-between", marginTop: "20px" }}>
             <Button variant="info" onClick={handleInstructionsShow}>Help</Button>
